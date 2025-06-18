@@ -9,13 +9,10 @@ import java.util.List;
 public class AirportView implements IAirportsView {
     private IAirportsRepository repository;
 
-
     public void AirportsView(IAirportsRepository repository) {
         this.repository = repository;
     }
-
     public List<Airport> getAll() {
         return this.repository.findAll();
     }
-
 }

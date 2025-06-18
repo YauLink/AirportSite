@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Airports</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<table border="1">
+  <tbody>
+  <tr th:each="airport : ${airports}">
+    <td width="20%" th:text="${airport.code}">Code</td>
+    <td width="20%" th:text="${airport.name}">Name</td>
+    <td width="20%" th:text="${airport.city}">City</td>
+    <td width="20%" th:text="${airport.timezone}">Timezone</td>
+  </tr>
+  </tbody>
+</table>
+<p><input type="button" th:onclick="'location.href=\'' + @{/} + '\'" value="index" /></p>
+</body>
+</html>

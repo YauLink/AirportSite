@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Server main page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<p>Choose from the following:</p>
+<p><input type="button" th:onclick="'location.href=\'' + @{/airports} + '\'" value="View airports" /></p>
+<p><input type="button" th:onclick="'location.href=\'' + @{/filters} + '\'" value="View flights" /></p>
+<p><input type="button" th:onclick="'location.href=\'' + @{/admin} + '\'" value="Admin login" /></p>
+</body>
+</html>
