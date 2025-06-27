@@ -10,11 +10,9 @@ public class AirportView implements IAirportsView {
     private IAirportsRepository repository;
 
     public AirportView(IAirportsRepository repository) {
-    }
-
-    public void AirportsView(IAirportsRepository repository) {
         this.repository = repository;
     }
+
     public List<Airport> getAll() {
         return this.repository.findAll();
     }
