@@ -37,7 +37,7 @@ class AirportControllerTest {
                 .andExpect(model().attributeExists("airports"));
     }
 
-    @Test
+    /*@Test
     void shouldReturnSingleAirportView() throws Exception {
         when(airportView.getAll()).thenReturn(List.of());
 
@@ -45,5 +45,5 @@ class AirportControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("airport"))
                 .andExpect(model().attributeExists("airports"));
-    }
+    }*/
 }

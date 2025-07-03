@@ -9,7 +9,8 @@ import org.springframework.web.bind.annotation.*;
 import com.myapp.Airports.view.*;
 import java.util.List;
 
-
+@Controller
+@RequestMapping("/airports")
 public class AirportController {
 
     private IAirportsView airportView;
@@ -24,10 +25,10 @@ public class AirportController {
         return "airports";
     }
 
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     protected String getOne(Model model, @PathVariable Long id) {
         model.addAttribute("airports", this.airportView.getAll());
         return "airport";
-    }
+    }*/
 
 }

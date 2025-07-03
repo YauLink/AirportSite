@@ -14,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 import java.util.Collections;
 
@@ -53,7 +54,8 @@ class FilterControllerTest {
         mockMvc.perform(get("/filters")
                         .param("airport_out", "JFK")
                         .param("airport_in", "LAX")
-                        .param("page", "1"))
+                        .param("page", "1")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("filters"))
                 .andExpect(model().attributeExists(
@@ -70,7 +72,8 @@ class FilterControllerTest {
         mockMvc.perform(post("/filters")
                         .param("airport_out", "JFK")
                         .param("airport_in", "LAX")
-                        .param("page", "1"))
+                        .param("page", "1")
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("filters"));
     }
