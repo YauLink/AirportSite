@@ -34,7 +34,20 @@ class FlyingsViewTest {
         verify(repository).countByArrivalAirportOrDepartureAirport("JFK", "LAX");
     }
 
-    //TODO:get list call test
+    @Test
+    void getList_ShouldCallRepositoryWithCorrectParams() {
+        FlyingFilter filter = new FlyingFilter("JFK", "LAX", 0);
+        List<Flying> expectedList = List.of(new Flying(), new Flying());
+
+        when(repository.findAllByArrivalAirportOrDepartureAirport(
+                "JFK", "LAX", PageRequest.of(0, 20))
+        ).thenReturn(expectedList);
+
+        List<Flying> result = view.getList(filter);
+
+        assertEquals(expectedList, result);
+        verify(repository).findAllByArrivalAirportOrDepartureAirport("JFK", "LAX", PageRequest.of(0, 20));
+    }
 
     @Test
     void get_ShouldCallGetById() {
