@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Flight List</title>
+</head>
+<body>
+<h1>All Flights</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Flight No</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+        <th>Scheduled Departure</th>
+        <th>Scheduled Arrival</th>
+        <th>Status</th>
+        <th>Aircraft</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="flight : ${flights}">
+        <td th:text="${flight.flightNo}">FN001</td>
+        <td th:text="${flight.departureAirport}">JFK</td>
+        <td th:text="${flight.arrivalAirport}">LAX</td>
+        <td th:text="${flight.scheduledDeparture}">2025-07-17 10:00</td>
+        <td th:text="${flight.scheduledArrival}">2025-07-17 13:00</td>
+        <td th:text="${flight.status}">On Time</td>
+        <td th:text="${flight.aircraftCode}">A320</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

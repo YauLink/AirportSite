@@ -1,4 +1,4 @@
-package com.myapp.Airports.mapper;
+package com.myapp.Airports.dto;
 
 import com.myapp.Airports.dto.FlyingDTO;
 import com.myapp.Airports.model.Flying;
