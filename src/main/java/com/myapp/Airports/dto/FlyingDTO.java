@@ -35,7 +35,18 @@ public class FlyingDTO {
 
     private LocalDateTime actualArrival;
 
-    // Getters and Setters
+    public FlyingDTO(Integer flightId, String flightNo, LocalDateTime scheduledDeparture, LocalDateTime scheduledArrival, String departureAirport, String arrivalAirport, String status, String aircraftCode, LocalDateTime actualDeparture, LocalDateTime actualArrival) {
+        this.flightId = flightId;
+        this.flightNo = flightNo;
+        this.scheduledDeparture = scheduledDeparture;
+        this.scheduledArrival = scheduledArrival;
+        this.departureAirport = departureAirport;
+        this.arrivalAirport = arrivalAirport;
+        this.status = status;
+        this.aircraftCode = aircraftCode;
+        this.actualDeparture = actualDeparture;
+        this.actualArrival = actualArrival;
+    }
 
     public Integer getFlightId() {
         return flightId;
