@@ -15,9 +15,7 @@ public class BookingDTO {
         this.totalAmount = totalAmount;
     }
 
-    public BookingDTO() {
-
-    }
+    public BookingDTO() {}
 
     public String getBookRef() {
         return bookRef;

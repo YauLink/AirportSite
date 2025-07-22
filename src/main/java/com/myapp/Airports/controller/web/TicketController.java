@@ -1,7 +1,7 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.dto.TicketDTO;
-import com.myapp.Airports.dto.TicketMapper;
+import com.myapp.Airports.mapper.TicketMapper;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.service.TicketService;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("tickets")
+@RequestMapping("/tickets")
 public class TicketController {
 
     private final TicketService service;

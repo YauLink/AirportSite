@@ -2,9 +2,11 @@ package com.myapp.Airports.service;
 
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.storage.api.IBookingRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class BookingService {
 
     private final IBookingRepository repository;

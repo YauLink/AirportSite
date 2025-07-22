@@ -8,6 +8,16 @@ public class TicketDTO {
     private String passengerName;
     private String contactData;
 
+    public TicketDTO() {}
+
+    public TicketDTO(String ticketNo, String bookRef, String passengerId, String passengerName, String contactData) {
+        this.ticketNo = ticketNo;
+        this.bookRef = bookRef;
+        this.passengerId = passengerId;
+        this.passengerName = passengerName;
+        this.contactData = contactData;
+    }
+
     public String getTicketNo() {
         return ticketNo;
     }

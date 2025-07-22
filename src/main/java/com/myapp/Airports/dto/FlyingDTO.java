@@ -48,6 +48,8 @@ public class FlyingDTO {
         this.actualArrival = actualArrival;
     }
 
+    public FlyingDTO() {}
+
     public Integer getFlightId() {
         return flightId;
     }

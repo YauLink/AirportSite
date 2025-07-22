@@ -2,7 +2,7 @@ package com.myapp.Airports.controller.web;
 
 
 import com.myapp.Airports.dto.BookingDTO;
-import com.myapp.Airports.dto.BookingMapper;
+import com.myapp.Airports.mapper.BookingMapper;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.BookingService;
 import org.springframework.web.bind.annotation.*;

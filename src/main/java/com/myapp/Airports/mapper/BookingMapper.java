@@ -1,5 +1,6 @@
-package com.myapp.Airports.dto;
+package com.myapp.Airports.mapper;
 
+import com.myapp.Airports.dto.BookingDTO;
 import com.myapp.Airports.model.Booking;
 
 public class BookingMapper {

@@ -1,7 +1,7 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.dto.FlyingDTO;
-import com.myapp.Airports.dto.FlyingMapper;
+import com.myapp.Airports.mapper.FlyingMapper;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.service.FlyingService;
 import jakarta.validation.Valid;
