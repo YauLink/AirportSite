@@ -22,6 +22,9 @@ public class Booking {
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets;
 
+    @Column(name = "status")
+    private String status;
+
     public String getBookRef() {
         return bookRef;
     }
