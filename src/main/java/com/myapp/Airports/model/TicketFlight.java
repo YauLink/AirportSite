@@ -28,6 +28,16 @@ public class TicketFlight {
     @Column(name = "amount", nullable = false)
     private BigDecimal amount;
 
+    private String seatNo;
+
+    public String getSeatNo() {
+        return seatNo;
+    }
+
+    public void setSeatNo(String seatNo) {
+        this.seatNo = seatNo;
+    }
+
     public TicketFlightId getId() {
         return id;
     }
