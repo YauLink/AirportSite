@@ -52,29 +52,27 @@ public class BookingController {
     public String editBooking(@PathVariable("ref") String ref, Model model) {
         Booking booking = bookingService.findByBookRef(ref);
         model.addAttribute("booking", booking);
-        //return "bookings/edit";
+        return "bookings/edit";
     }
 
     public String updateBooking(@PathVariable("ref") String ref, @ModelAttribute Booking booking) {
-        bookingService.update(ref, booking);
-        //return "redirect:/my/bookings";
+        bookingService.updateBooking(ref, booking);
+        return "redirect:/my/bookings";
     }
 
     public String cancelBooking(@PathVariable("ref") String ref) {
         bookingService.cancelBooking(ref);
-        //return "redirect:/my/bookings";
+        return "redirect:/my/bookings";
     }
 
-    public String showSeatSelection(@PathVariable String ref, Model model) {
-        Booking booking = bookingService.findByBookRef(ref);
-        List<Seat> availableSeats = seatService.findAvailableForFlight(booking);
-        model.addAttribute("booking", booking);
+    public String showSeatSelection(@PathVariable Integer flight_id, Model model) {
+        List<Seat> availableSeats = seatService.findAvailableForFlight(flight_id);
         model.addAttribute("seats", availableSeats);
         return "bookings/seats";
     }
 
     public String assignSeat(@PathVariable String ref, @RequestParam("seatNo") String seatNo) {
         bookingService.assignSeat(ref, seatNo); // or use service to update TicketFlight
-        //return "redirect:/my/bookings";
+        return "redirect:/my/bookings";
     }
 }

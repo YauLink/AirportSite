@@ -13,6 +13,5 @@ public interface ITicketFlightRepository extends JpaRepository<TicketFlight, Tic
 
     @Query("SELECT DISTINCT tf.booking FROM TicketFlight tf WHERE tf.flight.flightId = :flightId")
     List<Booking> findBookingsByFlight(@Param("flightId") String flightId);
-
     List<TicketFlight> findByBookingRef(String bookRef);
 }

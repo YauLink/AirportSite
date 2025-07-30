@@ -54,7 +54,7 @@ public class BookingService {
     public void assignSeat(String bookRef, String seatNo) {
         List<TicketFlight> ticketFlights = ticketFlightRepository.findByBookingRef(bookRef);
         for (TicketFlight tf : ticketFlights) {
-            tf.setSeatNo(seatNo); // assuming TicketFlight has seatNo
+            tf.setSeatNo(seatNo);
         }
         ticketFlightRepository.saveAll(ticketFlights);
     }
