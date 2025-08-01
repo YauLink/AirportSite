@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Select Seat</title></head>
+<body>
+<h2>Select a Seat</h2>
+<form th:action="@{/bookings/assign}" method="post">
+    <input type="hidden" name="ref" th:value="${bookingRef}" />
+    <select name="seatNo">
+        <option th:each="seat : ${seats}" th:value="${seat.seatNo}" th:text="${seat.seatNo}"></option>
+    </select>
+    <button type="submit">Confirm</button>
+</form>
+</body>
+</html>

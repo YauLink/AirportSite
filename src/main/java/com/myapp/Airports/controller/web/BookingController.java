@@ -57,12 +57,12 @@ public class BookingController {
 
     public String updateBooking(@PathVariable("ref") String ref, @ModelAttribute Booking booking) {
         bookingService.updateBooking(ref, booking);
-        return "redirect:/my/bookings";
+        return "redirect:/bookings/list";
     }
 
     public String cancelBooking(@PathVariable("ref") String ref) {
         bookingService.cancelBooking(ref);
-        return "redirect:/my/bookings";
+        return "redirect:/bookings/list";
     }
 
     public String showSeatSelection(@PathVariable Integer flight_id, Model model) {
@@ -73,6 +73,6 @@ public class BookingController {
 
     public String assignSeat(@PathVariable String ref, @RequestParam("seatNo") String seatNo) {
         bookingService.assignSeat(ref, seatNo); // or use service to update TicketFlight
-        return "redirect:/my/bookings";
+        return "redirect:/bookings/list";
     }
 }
