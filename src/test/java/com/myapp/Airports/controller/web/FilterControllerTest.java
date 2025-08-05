@@ -1,9 +1,5 @@
 package com.myapp.Airports.controller.web;
 
-
-import com.myapp.Airports.controller.web.FilterController;
-import com.myapp.Airports.model.Airport;
-import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
 import com.myapp.Airports.view.api.IFlyingsView.FlyingFilter;

@@ -1,9 +1,7 @@
 package com.myapp.Airports.controller.web;
 
-import com.myapp.Airports.controller.web.AirportController;
 import com.myapp.Airports.view.api.IAirportsView;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,7 +13,6 @@ import java.util.List;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 @WebMvcTest(AirportController.class)
 @WithMockUser
