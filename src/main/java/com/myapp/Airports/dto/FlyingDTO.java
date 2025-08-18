@@ -1,34 +1,39 @@
 package com.myapp.Airports.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.time.LocalDateTime;
 
 public class FlyingDTO {
 
-    //@NotNull(message = "Flight ID is required")
+    @NotNull(message = "Flight ID is required")
     private Integer flightId;
 
-    //@NotBlank(message = "Flight number is required")
-    //@Size(max = 10, message = "Flight number must be up to 10 characters")
+    @NotBlank(message = "Flight number is required")
+    @Size(max = 10, message = "Flight number must be up to 10 characters")
     private String flightNo;
 
-    //@NotNull(message = "Scheduled departure time is required")
+    @NotNull(message = "Scheduled departure time is required")
     private LocalDateTime scheduledDeparture;
 
-    //@NotNull(message = "Scheduled arrival time is required")
+    @NotNull(message = "Scheduled arrival time is required")
     private LocalDateTime scheduledArrival;
 
-    //@NotBlank(message = "Departure airport code is required")
-    //@Pattern(regexp = "^[A-Z]{3}$", message = "Departure airport code must be 3 uppercase letters")
+    @NotBlank(message = "Departure airport code is required")
+    @Pattern(regexp = "^[A-Z]{3}$", message = "Departure airport code must be 3 uppercase letters")
     private String departureAirport;
 
-    //@NotBlank(message = "Arrival airport code is required")
-    //@Pattern(regexp = "^[A-Z]{3}$", message = "Arrival airport code must be 3 uppercase letters")
+    @NotBlank(message = "Arrival airport code is required")
+    @Pattern(regexp = "^[A-Z]{3}$", message = "Arrival airport code must be 3 uppercase letters")
     private String arrivalAirport;
 
-    //@NotBlank(message = "Flight status is required")
+    @NotBlank(message = "Flight status is required")
     private String status;
 
-    //@NotBlank(message = "Aircraft code is required")
+    @NotBlank(message = "Aircraft code is required")
     private String aircraftCode;
 
     private LocalDateTime actualDeparture;

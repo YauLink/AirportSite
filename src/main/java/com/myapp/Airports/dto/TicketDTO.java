@@ -1,11 +1,27 @@
 package com.myapp.Airports.dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
+
 public class TicketDTO {
 
+    @NotBlank(message = "Ticket number is required")
+    @Size(max = 13, message = "Ticket number must be up to 13 characters")
     private String ticketNo;
+
+    @NotBlank(message = "Booking reference is required")
+    @Size(max = 6, message = "Booking reference must be up to 6 characters")
     private String bookRef;
+
+    @NotBlank(message = "Passenger ID is required")
     private String passengerId;
+
+    @NotBlank(message = "Passenger name is required")
+    @Size(max = 100, message = "Passenger name must be up to 100 characters")
     private String passengerName;
+
+
     private String contactData;
 
     public TicketDTO() {}
