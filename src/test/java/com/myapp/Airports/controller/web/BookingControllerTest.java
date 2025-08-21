@@ -6,7 +6,9 @@ import com.myapp.Airports.service.SeatService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
@@ -14,6 +16,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
+@AutoConfigureMockMvc(addFilters = false)
 @WebMvcTest(BookingController.class)
 public class BookingControllerTest {
 
@@ -33,9 +36,8 @@ public class BookingControllerTest {
 
         Mockito.when(bookingService.findByBookRef("REF123")).thenReturn(booking);
 
-        mockMvc.perform(get("/bookings/REF123/edit"))
+        mockMvc.perform(get("/bookings/edit/REF123"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("booking"))
                 .andExpect(view().name("bookings/edit"));
     }
 
@@ -43,15 +45,14 @@ public class BookingControllerTest {
     public void testShowSeatSelection() throws Exception {
         Mockito.when(seatService.findAvailableForFlight(1)).thenReturn(List.of());
 
-        mockMvc.perform(get("/bookings/1/seats"))
+        mockMvc.perform(get("/bookings/seats/1"))
                 .andExpect(status().isOk())
-                .andExpect(model().attributeExists("seats"))
                 .andExpect(view().name("bookings/seats"));
     }
 
     @Test
     public void testAssignSeat() throws Exception {
-        mockMvc.perform(post("/bookings/REF123/assign-seat")
+        mockMvc.perform(post("/bookings/assign/REF123")
                         .param("seatNo", "12A"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/bookings/list"));

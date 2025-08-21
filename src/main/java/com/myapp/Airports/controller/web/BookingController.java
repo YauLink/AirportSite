@@ -7,6 +7,7 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Seat;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
@@ -14,7 +15,7 @@ import org.springframework.ui.Model;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @RequestMapping("/bookings")
 public class BookingController {
 
@@ -49,28 +50,33 @@ public class BookingController {
         bookingService.delete(id);
     }
 
+    @GetMapping("/edit/{ref}")
     public String editBooking(@PathVariable("ref") String ref, Model model) {
         Booking booking = bookingService.findByBookRef(ref);
         model.addAttribute("booking", booking);
         return "bookings/edit";
     }
 
+    @PostMapping("/update/{ref}")
     public String updateBooking(@PathVariable("ref") String ref, @ModelAttribute Booking booking) {
         bookingService.updateBooking(ref, booking);
         return "redirect:/bookings/list";
     }
 
+    @PostMapping("/cancel/{ref}")
     public String cancelBooking(@PathVariable("ref") String ref) {
         bookingService.cancelBooking(ref);
         return "redirect:/bookings/list";
     }
 
+    @GetMapping("/seats/{flight_id}")
     public String showSeatSelection(@PathVariable Integer flight_id, Model model) {
         List<Seat> availableSeats = seatService.findAvailableForFlight(flight_id);
         model.addAttribute("seats", availableSeats);
         return "bookings/seats";
     }
 
+    @PostMapping("/assign/{ref}")
     public String assignSeat(@PathVariable String ref, @RequestParam("seatNo") String seatNo) {
         bookingService.assignSeat(ref, seatNo); // or use service to update TicketFlight
         return "redirect:/bookings/list";

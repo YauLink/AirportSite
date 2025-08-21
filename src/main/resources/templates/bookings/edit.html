@@ -4,8 +4,6 @@
 <body>
 <h2>Edit Booking</h2>
 <form th:action="@{'/bookings/update/' + ${booking.bookRef}}" th:object="${booking}" method="post">
-  <label>Passenger Name: <input th:field="*{passengerName}" /></label><br>
-  <label>Email: <input th:field="*{email}" /></label><br>
   <button type="submit">Update</button>
 </form>
 </body>
