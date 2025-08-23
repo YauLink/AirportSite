@@ -5,12 +5,14 @@ import com.myapp.Airports.mapper.TicketMapper;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.service.TicketService;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.ui.Model;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController
+@Controller
 @RequestMapping("/tickets")
 public class TicketController {
 
@@ -21,26 +23,30 @@ public class TicketController {
     }
 
     @GetMapping
-    public List<TicketDTO> getAll() {
-        return service.findAll().stream()
+    public String showTicketList(Model model) {
+        model.addAttribute("tickets", service.findAll().stream()
                 .map(TicketMapper::toDto)
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()));
+        return "tickets/list";
     }
 
-    @GetMapping("/{ticketNo}")
-    public TicketDTO getById(@PathVariable String ticketNo) {
-        return TicketMapper.toDto(service.findById(ticketNo));
+    @GetMapping("/{ticketNo}/edit")
+    public String showEditForm(@PathVariable String ticketNo, Model model) {
+        model.addAttribute("ticket", TicketMapper.toDto(service.findById(ticketNo)));
+        return "tickets/edit";
     }
 
-    @PostMapping
-    public TicketDTO create(@RequestBody TicketDTO dto) {
+    @PostMapping("/{ticketNo}/update")
+    public String update(@PathVariable String ticketNo, TicketDTO dto) {
         Booking booking = service.getBooking(dto.getBookRef());
         Ticket ticket = TicketMapper.toEntity(dto, booking);
-        return TicketMapper.toDto(service.save(ticket));
+        service.save(ticket);
+        return "redirect:/tickets/list";
     }
 
-    @DeleteMapping("/{ticketNo}")
-    public void delete(@PathVariable String ticketNo) {
+    @PostMapping("/{ticketNo}/delete")
+    public String delete(@PathVariable String ticketNo) {
         service.delete(ticketNo);
+        return "redirect:/tickets/list";
     }
 }

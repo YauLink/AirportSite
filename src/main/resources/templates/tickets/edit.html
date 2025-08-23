@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Edit Ticket</title>
+</head>
+<body>
+<h1>Edit Ticket</h1>
+
+<form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/update'}" th:object="${ticket}" method="post">
+
+  <div>
+    <label>Ticket No:</label>
+    <input type="text" th:field="*{ticketNo}" readonly />
+  </div>
+
+  <div>
+    <label>Booking Reference:</label>
+    <input type="text" th:field="*{bookRef}" />
+  </div>
+
+  <div>
+    <button type="submit">Update Ticket</button>
+  </div>
+</form>
+
+<form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/delete'}" method="post">
+  <button type="submit">Delete Ticket</button>
+</form>
+
+<a th:href="@{/tickets}">Back to Ticket List</a>
+</body>
+</html>
