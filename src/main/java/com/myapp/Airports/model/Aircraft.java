@@ -1,9 +1,6 @@
 package com.myapp.Airports.model;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +8,13 @@ import java.util.List;
 @Entity
 public class Aircraft {
     @Id
+    @Column(name = "airport_code")
     private String aircraftCode;
 
+    @Column(name = "model")
     private String model;
 
+    @Column(name = "range")
     private Integer range;
 
     @OneToMany(mappedBy = "aircraft", cascade = CascadeType.ALL, orphanRemoval = true)

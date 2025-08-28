@@ -22,21 +22,18 @@ public class FlyingController {
         this.flyingService = flyingService;
     }
 
-    // Show list of all flights
     @GetMapping
     public String listFlights(Model model) {
         model.addAttribute("flights", flyingService.findAll());
         return "flight_list";
     }
 
-    // Show create form
     @GetMapping("/new")
     public String showCreateForm(Model model) {
         model.addAttribute("flyingDTO", new FlyingDTO());
         return "flight_form";
     }
 
-    // Handle create flight
     @PostMapping("/new")
     public String createFlight(@Valid @ModelAttribute("flyingDTO") FlyingDTO flyingDTO,
                                BindingResult result) {
@@ -49,7 +46,6 @@ public class FlyingController {
         return "redirect:/flights";
     }
 
-    // Show edit form
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Optional<Flying> flightOpt = flyingService.findById(id);
@@ -62,7 +58,6 @@ public class FlyingController {
         }
     }
 
-    // Handle edit submission
     @PostMapping("/edit")
     public String updateFlight(@Valid @ModelAttribute("flyingDTO") FlyingDTO flyingDTO,
                                BindingResult result) {

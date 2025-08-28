@@ -24,11 +24,4 @@ public class AirportController {
         model.addAttribute("airports", this.airportView.getAll());
         return "airports";
     }
-
-    /*@GetMapping("/{id}")
-    protected String getOne(Model model, @PathVariable Long id) {
-        model.addAttribute("airports", this.airportView.getAll());
-        return "airport";
-    }*/
-
 }
