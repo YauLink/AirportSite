@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -57,10 +58,14 @@ class FlyingControllerTest {
     @Test
     void testCreateFlightValid() throws Exception {
         mockMvc.perform(post("/flights/new")
-                        .param("id", "1")
+                        .param("flightId", "1")
+                        .param("flightNo", "AA123")
+                        .param("scheduledDeparture", "2025-09-02T10:00:00")
+                        .param("scheduledArrival", "2025-09-02T14:00:00")
                         .param("departureAirport", "JFK")
                         .param("arrivalAirport", "LAX")
-                        .param("flightNumber", "AA123"))
+                        .param("status", "SCHEDULED")
+                        .param("aircraftCode", "A320"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/flights"));
 
@@ -71,6 +76,11 @@ class FlyingControllerTest {
     void testShowEditFormFound() throws Exception {
         Flying flight = new Flying();
         flight.setFlightId(1);
+        flight.setDepartureAirport("JFK");
+        flight.setArrivalAirport("LAX");
+        flight.setFlightNumber("AA123");
+        flight.setScheduledDeparture(LocalDateTime.of(2025, 9, 2, 10, 0));
+        flight.setScheduledArrival(LocalDateTime.of(2025, 9, 2, 14, 0));
         when(flyingService.findById(1)).thenReturn(Optional.of(flight));
 
         mockMvc.perform(get("/flights/edit/1"))
@@ -85,16 +95,20 @@ class FlyingControllerTest {
 
         mockMvc.perform(get("/flights/edit/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/flights"));
+                .andExpect(redirectedUrl("/flight_list"));
     }
 
     @Test
     void testUpdateFlightValid() throws Exception {
-        mockMvc.perform(post("/flights/edit")
-                        .param("id", "1")
+        mockMvc.perform(post("/flights/new")
+                        .param("flightId", "1")
+                        .param("flightNo", "AA123")
+                        .param("scheduledDeparture", "2025-09-02T10:00:00")
+                        .param("scheduledArrival", "2025-09-02T14:00:00")
                         .param("departureAirport", "JFK")
                         .param("arrivalAirport", "LAX")
-                        .param("flightNumber", "AA123"))
+                        .param("status", "SCHEDULED")
+                        .param("aircraftCode", "A320"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/flights"));
 
@@ -105,7 +119,7 @@ class FlyingControllerTest {
     void testDeleteFlight() throws Exception {
         mockMvc.perform(post("/flights/delete/1"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/flights"));
+                .andExpect(redirectedUrl("/flight_list"));
 
         verify(flyingService, times(1)).deleteById(1);
     }

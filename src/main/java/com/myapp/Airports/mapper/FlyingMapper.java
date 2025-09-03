@@ -14,8 +14,8 @@ public class FlyingMapper {
         Flying entity = new Flying();
         entity.setFlightId(dto.getFlightId());
         entity.setFlightNo(dto.getFlightNo());
-        entity.setScheduledDeparture(dto.getScheduledDeparture().format(FORMATTER));
-        entity.setScheduledArrival(dto.getScheduledArrival().format(FORMATTER));
+        entity.setScheduledDeparture(dto.getScheduledDeparture());
+        entity.setScheduledArrival(dto.getScheduledArrival());
         entity.setDepartureAirport(dto.getDepartureAirport());
         entity.setArrivalAirport(dto.getArrivalAirport());
         entity.setStatus(dto.getStatus());
@@ -35,8 +35,8 @@ public class FlyingMapper {
         FlyingDTO dto = new FlyingDTO();
         dto.setFlightId(entity.getFlightId());
         dto.setFlightNo(entity.getFlightNo());
-        dto.setScheduledDeparture(LocalDateTime.parse(entity.getScheduledDeparture(), FORMATTER));
-        dto.setScheduledArrival(LocalDateTime.parse(entity.getScheduledArrival(), FORMATTER));
+        dto.setScheduledDeparture(entity.getScheduledDeparture());
+        dto.setScheduledArrival(entity.getScheduledArrival());
         dto.setDepartureAirport(entity.getDepartureAirport());
         dto.setArrivalAirport(entity.getArrivalAirport());
         dto.setStatus(entity.getStatus());

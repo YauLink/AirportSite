@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 @Entity(name = "Flying")
 @Table(name = "flights", schema = "bookings")
@@ -18,10 +19,10 @@ public class Flying implements Serializable{
     private String flightNo; //Flight number
 
     @Column(name = "scheduled_departure")
-    private String scheduledDeparture; //Departure Time
+    private LocalDateTime scheduledDeparture; //Departure Time
 
     @Column(name = "scheduled_arrival")
-    private String scheduledArrival; //Arrival time
+    private LocalDateTime scheduledArrival; //Arrival time
 
     @Column(name = "departure_airport")
     private String departureAirport; //Departure airport
@@ -57,19 +58,19 @@ public class Flying implements Serializable{
         this.flightNo = flightNo;
     }
 
-    public String getScheduledDeparture() {
+    public LocalDateTime getScheduledDeparture() {
         return scheduledDeparture;
     }
 
-    public void setScheduledDeparture(String scheduledDeparture) {
+    public void setScheduledDeparture(LocalDateTime scheduledDeparture) {
         this.scheduledDeparture = scheduledDeparture;
     }
 
-    public String getScheduledArrival() {
+    public LocalDateTime getScheduledArrival() {
         return scheduledArrival;
     }
 
-    public void setScheduledArrival(String scheduledArrival) {
+    public void setScheduledArrival(LocalDateTime scheduledArrival) {
         this.scheduledArrival = scheduledArrival;
     }
 
@@ -121,4 +122,7 @@ public class Flying implements Serializable{
         this.actualArrival = actualArrival;
     }
 
+    public void setFlightNumber(String aa123) {
+
+    }
 }
