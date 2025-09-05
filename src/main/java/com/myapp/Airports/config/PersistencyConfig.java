@@ -29,13 +29,13 @@ public class PersistencyConfig {
 
         LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
         factory.setJpaVendorAdapter(vendorAdapter);
-        factory.setPackagesToScan("by.it_academy.jd2.hw.example.airports.model");
+        factory.setPackagesToScan("com.myapp.Airports.model");
         factory.setDataSource(dataSource);
 
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQL10Dialect");
-        properties.setProperty("hibernate.hbm2ddl", "none");
-        properties.setProperty("show_sql", "true");
+        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.PostgreSQLDialect");
+        properties.setProperty("hibernate.hbm2ddl.auto", "none");
+        properties.setProperty("hibernate.show_sql", "true");
         properties.setProperty("hibernate.default_schema", "bookings");
 
         factory.setJpaProperties(properties);
