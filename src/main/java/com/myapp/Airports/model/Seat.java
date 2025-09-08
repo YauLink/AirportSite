@@ -13,6 +13,7 @@ public class Seat {
     @JoinColumn(name = "aircraft_code")
     private Aircraft aircraft;
 
+    @Column(name = "fare_conditions")
     private String fareConditions;
 
     public Seat() {

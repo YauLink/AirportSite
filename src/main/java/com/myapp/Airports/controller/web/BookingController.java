@@ -27,11 +27,10 @@ public class BookingController {
         this.seatService = sService;
     }
 
-    @GetMapping
-    public List<BookingDTO> getAll() {
-        return bookingService.findAll().stream()
-                .map(BookingMapper::toDto)
-                .collect(Collectors.toList());
+    @GetMapping("/list")
+    public String getAll(Model model) {
+        model.addAttribute("bookings", bookingService.findAll());
+        return "bookings/list";
     }
 
     @GetMapping("/{id}")

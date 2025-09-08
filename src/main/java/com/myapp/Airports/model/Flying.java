@@ -1,9 +1,7 @@
 package com.myapp.Airports.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -33,14 +31,18 @@ public class Flying implements Serializable{
     @Column(name = "status")
     private String status; //Flight status
 
+    @ManyToOne
+    @JoinColumn(name = "aircraft_code", insertable = false, updatable = false)
+    private Aircraft aircraft;
+
     @Column(name = "aircraft_code")
     private String aircraftCode; //Aircraft code, IATA
 
     @Column(name = "actual_departure")
-    private String actualDeparture; //Departure time
+    private LocalDateTime  actualDeparture; //Departure time
 
     @Column(name = "actual_arrival")
-    private String actualArrival; //Arrival time
+    private LocalDateTime  actualArrival; //Arrival time
 
     public Integer getFlightId() {
         return flightId;
@@ -106,19 +108,19 @@ public class Flying implements Serializable{
         this.aircraftCode = aircraftCode;
     }
 
-    public String getActualDeparture() {
+    public LocalDateTime  getActualDeparture() {
         return actualDeparture;
     }
 
-    public void setActualDeparture(String actualDeparture) {
+    public void setActualDeparture(LocalDateTime  actualDeparture) {
         this.actualDeparture = actualDeparture;
     }
 
-    public String getActualArrival() {
+    public LocalDateTime  getActualArrival() {
         return actualArrival;
     }
 
-    public void setActualArrival(String actualArrival) {
+    public void setActualArrival(LocalDateTime  actualArrival) {
         this.actualArrival = actualArrival;
     }
 

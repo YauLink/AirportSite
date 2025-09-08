@@ -12,7 +12,6 @@ import java.io.Serializable;
 public class Airport implements Serializable {
 
     @Id
-    @Generated(GenerationTime.NEVER)
     @Column(name = "airport_code")
     private String code; //Код аэропорта
 

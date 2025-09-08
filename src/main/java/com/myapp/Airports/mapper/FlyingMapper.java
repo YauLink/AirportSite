@@ -22,10 +22,10 @@ public class FlyingMapper {
         entity.setAircraftCode(dto.getAircraftCode());
 
         if (dto.getActualDeparture() != null) {
-            entity.setActualDeparture(dto.getActualDeparture().format(FORMATTER));
+            entity.setActualDeparture(dto.getActualDeparture());
         }
         if (dto.getActualArrival() != null) {
-            entity.setActualArrival(dto.getActualArrival().format(FORMATTER));
+            entity.setActualArrival(dto.getActualArrival());
         }
 
         return entity;
@@ -43,10 +43,10 @@ public class FlyingMapper {
         dto.setAircraftCode(entity.getAircraftCode());
 
         if (entity.getActualDeparture() != null) {
-            dto.setActualDeparture(LocalDateTime.parse(entity.getActualDeparture(), FORMATTER));
+            dto.setActualDeparture(entity.getActualDeparture());
         }
         if (entity.getActualArrival() != null) {
-            dto.setActualArrival(LocalDateTime.parse(entity.getActualArrival(), FORMATTER));
+            dto.setActualArrival(entity.getActualArrival());
         }
 
         return dto;

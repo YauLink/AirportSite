@@ -20,7 +20,7 @@ public class TicketFlight {
     @ManyToOne
     @MapsId("flightId")
     @JoinColumn(name = "flight_id")
-    private Flying flying;
+    private Flying flight;
 
     @Column(name = "fare_conditions", nullable = false)
     private String fareConditions;
@@ -30,36 +30,20 @@ public class TicketFlight {
 
     private String seatNo;
 
+    protected TicketFlight() {}
+
+    public TicketFlight(Long ticketNo, Long flightId, String fareConditions, BigDecimal amount, String seatNo) {
+        this.fareConditions = fareConditions;
+        this.amount = amount;
+        this.seatNo = seatNo;
+    }
+
     public String getSeatNo() {
         return seatNo;
     }
 
     public void setSeatNo(String seatNo) {
         this.seatNo = seatNo;
-    }
-
-    public TicketFlightId getId() {
-        return id;
-    }
-
-    public void setId(TicketFlightId id) {
-        this.id = id;
-    }
-
-    public Ticket getTicket() {
-        return ticket;
-    }
-
-    public void setTicket(Ticket ticket) {
-        this.ticket = ticket;
-    }
-
-    public Flying getFlying() {
-        return flying;
-    }
-
-    public void setFlying(Flying flying) {
-        this.flying = flying;
     }
 
     public String getFareConditions() {

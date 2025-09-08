@@ -59,7 +59,7 @@ public class BookingService {
         ticketFlightRepository.saveAll(ticketFlights);
     }
 
-    public List<Booking> findByFlightId(String flightId) {
+    public List<Booking> findByFlightId(Integer flightId) {
         return ticketFlightRepository.findBookingsByFlight(flightId);
     }
 }

@@ -8,7 +8,7 @@ import java.util.List;
 @Entity
 public class Aircraft {
     @Id
-    @Column(name = "airport_code")
+    @Column(name = "aircraft_code")
     private String aircraftCode;
 
     @Column(name = "model")

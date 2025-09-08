@@ -11,7 +11,12 @@ import java.util.List;
 
 public interface ITicketFlightRepository extends JpaRepository<TicketFlight, TicketFlightId> {
 
-    @Query("SELECT DISTINCT tf.booking FROM TicketFlight tf WHERE tf.flight.flightId = :flightId")
-    List<Booking> findBookingsByFlight(@Param("flightId") String flightId);
-    List<TicketFlight> findByBookingRef(String bookRef);
+    @Query("SELECT DISTINCT t.booking " +
+            "FROM TicketFlight tf " +
+            "JOIN tf.ticket t " +
+            "WHERE tf.flight.flightId = :flightId")
+    List<Booking> findBookingsByFlight(@Param("flightId") Integer flightId);
+
+    @Query("SELECT tf FROM TicketFlight tf WHERE tf.ticket.booking.bookRef = :bookRef")
+    List<TicketFlight> findByBookingRef(@Param("bookRef") String bookRef);
 }
