@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Admin Settings</title>
+  <meta charset="UTF-8"/>
+</head>
+<body>
+<h1>Settings</h1>
+
+<p>Theme: <span th:text="${theme}"></span></p>
+<p>Notifications Enabled: <span th:text="${notificationsEnabled}"></span></p>
+
+<a href="/admin/dashboard">Back to Dashboard</a>
+</body>
+</html>

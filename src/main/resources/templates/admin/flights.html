@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Manage Flights</title>
+  <meta charset="UTF-8"/>
+</head>
+<body>
+<h1>Manage Flights</h1>
+
+<ul>
+  <li th:each="flight : ${flights}" th:text="${flight}"></li>
+</ul>
+
+<a href="/admin/dashboard">Back to Dashboard</a>
+</body>
+</html>
