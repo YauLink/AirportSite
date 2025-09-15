@@ -16,13 +16,12 @@
     <tbody>
     <tr th:each="b : ${bookings}">
         <td th:text="${b.bookRef}"></td>
-        <td th:text="${b.flightNo}"></td>
-        <td th:text="${b.seatNo}">-</td>
-        <td th:text="${b.status}">-</td>
+        <td th:text="${b.bookDate}"></td>
+        <td th:text="${b.totalAmount}"></td>
+
         <td>
             <a th:href="@{'/bookings/edit/' + ${b.bookRef}}">Edit</a> |
             <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}">Cancel</a> |
-            <a th:href="@{'/bookings/seats/' + ${b.flightId}}">Select Seat</a>
         </td>
     </tr>
     </tbody>

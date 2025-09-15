@@ -4,6 +4,15 @@
 <body>
 <h2>Edit Booking</h2>
 <form th:action="@{'/bookings/update/' + ${booking.bookRef}}" th:object="${booking}" method="post">
+  <label>Booking Ref:</label>
+  <input type="text" th:field="*{bookRef}" readonly /><br/>
+
+  <label>Booking Date:</label>
+  <input type="datetime-local" th:field="*{bookDate}" /><br/>
+
+  <label>Total Amount:</label>
+  <input type="number" step="0.01" th:field="*{totalAmount}" /><br/>
+
   <button type="submit">Update</button>
 </form>
 </body>
