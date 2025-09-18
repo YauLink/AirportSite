@@ -7,16 +7,21 @@
 <body>
 <h1>Edit Ticket</h1>
 
-<form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/update'}" th:object="${ticket}" method="post">
-
+<form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/update'}"
+      th:object="${ticket}" method="post">
   <div>
-    <label>Ticket No:</label>
-    <input type="text" th:field="*{ticketNo}" readonly />
+    <label>Passenger ID:</label>
+    <input type="text" th:field="*{passengerId}" />
   </div>
 
   <div>
-    <label>Booking Reference:</label>
-    <input type="text" th:field="*{bookRef}" />
+    <label>Passenger Name:</label>
+    <input type="text" th:field="*{passengerName}" />
+  </div>
+
+  <div>
+    <label>Contact Data:</label>
+    <input type="text" th:field="*{contactData}" />
   </div>
 
   <div>

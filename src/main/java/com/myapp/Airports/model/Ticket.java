@@ -1,6 +1,8 @@
 package com.myapp.Airports.model;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "tickets")
@@ -21,6 +23,7 @@ public class Ticket {
     private String passengerName;
 
     @Column(name = "contact_data")
+    @JdbcTypeCode(SqlTypes.JSON)
     private String contactData;
 
     public String getTicketNo() {

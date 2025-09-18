@@ -1,5 +1,7 @@
 package com.myapp.Airports.controller.web;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myapp.Airports.dto.TicketDTO;
 import com.myapp.Airports.mapper.TicketMapper;
 import com.myapp.Airports.model.Booking;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
@@ -31,15 +34,46 @@ public class TicketController {
     }
 
     @GetMapping("/{ticketNo}/edit")
-    public String showEditForm(@PathVariable String ticketNo, Model model) {
-        model.addAttribute("ticket", TicketMapper.toDto(service.findById(ticketNo)));
+    public String showEditForm(@PathVariable String ticketNo, Model model) throws JsonProcessingException {
+        Ticket ticket = service.findById(ticketNo);
+
+        String contactDisplay = "";
+        if (ticket.getContactData() != null && !ticket.getContactData().isBlank()) {
+            ObjectMapper mapper = new ObjectMapper();
+            Map<String, Object> map = mapper.readValue(ticket.getContactData(), Map.class);
+
+            // If "note" exists and is a map, unwrap it
+            if (map.containsKey("note") && map.get("note") instanceof Map) {
+                map = (Map<String, Object>) map.get("note");
+            }
+
+            contactDisplay = map.entrySet().stream()
+                    .map(e -> e.getKey() + ": " + e.getValue())
+                    .collect(Collectors.joining(", "));
+        }
+
+        TicketDTO dto = TicketMapper.toDto(ticket);
+        dto.setContactData(contactDisplay);
+
+        model.addAttribute("ticket", dto);
         return "tickets/edit";
     }
 
     @PostMapping("/{ticketNo}/update")
-    public String update(@PathVariable String ticketNo, TicketDTO dto) {
-        Booking booking = service.getBooking(dto.getBookRef());
-        Ticket ticket = TicketMapper.toEntity(dto, booking);
+    public String update(@PathVariable String ticketNo, TicketDTO dto) throws JsonProcessingException {
+        Ticket ticket = service.findById(ticketNo);
+        if (ticket == null) throw new RuntimeException("Ticket not found");
+
+        ticket.setPassengerName(dto.getPassengerName());
+
+        // Wrap user input into proper JSON for DB
+        ObjectMapper mapper = new ObjectMapper();
+        Map<String, Object> noteMap = Map.of("phone", dto.getContactData());
+        Map<String, Object> wrapper = Map.of("note", noteMap);
+        String json = mapper.writeValueAsString(wrapper);
+
+        ticket.setContactData(json);
+
         service.save(ticket);
         return "redirect:/tickets/list";
     }
