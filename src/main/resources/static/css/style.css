@@ -9,22 +9,22 @@ body {
 /* --- Main container --- */
 .container {
     max-width: 900px;
-    margin: 40px auto;       /* centers container horizontally */
+    margin: 40px auto;
     padding: 20px;
     background: #ffffff;
     border-radius: 12px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    text-align: center;      /* centers text inside */
+    text-align: center;
 }
 
 /* --- Tables --- */
 .table-wrapper {
     display: flex;
-    justify-content: center; /* centers table horizontally */
+    justify-content: center;
 }
 
 table {
-    width: auto;             /* shrink to content */
+    width: auto;
     border-collapse: collapse;
     margin: 20px 0;
 }
@@ -32,7 +32,7 @@ table {
 th, td {
     padding: 12px;
     border: 1px solid #ddd;
-    text-align: center;      /* center table text */
+    text-align: center;
 }
 
 tr:hover {
@@ -45,10 +45,10 @@ th {
 
 /* --- Forms --- */
 form {
-    display: inline-block;   /* shrink to fit content */
-    text-align: left;        /* form labels aligned left inside */
+    display: inline-block;
+    text-align: left;
     padding: 20px;
-    margin: 20px auto;       /* center the form horizontally */
+    margin: 20px auto;
     border-radius: 8px;
     background: #fdfdfd;
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
