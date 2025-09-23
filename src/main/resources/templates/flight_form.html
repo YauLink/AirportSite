@@ -2,52 +2,53 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
   <title>Create Flight</title>
-  <style>
-    .error { color: red; }
-    .invalid-input { border-color: red; background-color: #ffe6e6; }
-  </style>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h1>Create New Flight</h1>
+  <body>
+    <div class="container">
+      <header><h1>Create New Flight</h1></header>
 
-<form th:action="@{/flights/new}" th:object="${flyingDTO}" method="post">
-  <label>Flight Number:</label>
-  <input type="text" th:field="*{flightNo}" th:classappend="${#fields.hasErrors('flightNo')} ? 'invalid-input'" />
-  <div class="error" th:if="${#fields.hasErrors('flightNo')}" th:errors="*{flightNo}"></div>
+      <form th:action="@{/flights/new}" th:object="${flyingDTO}" method="post">
+        <label>Flight Number:</label>
+        <input type="text" th:field="*{flightNo}" th:classappend="${#fields.hasErrors('flightNo')} ? 'invalid-input'"/>
+        <div class="error" th:if="${#fields.hasErrors('flightNo')}" th:errors="*{flightNo}"></div>
 
-  <label>Departure Airport (3-letter code):</label>
-  <input type="text" th:field="*{departureAirport}" th:classappend="${#fields.hasErrors('departureAirport')} ? 'invalid-input'" />
-  <div class="error" th:if="${#fields.hasErrors('departureAirport')}" th:errors="*{departureAirport}"></div>
+        <label>Departure Airport (3-letter code):</label>
+        <input type="text" th:field="*{departureAirport}" th:classappend="${#fields.hasErrors('departureAirport')} ? 'invalid-input'"/>
+        <div class="error" th:if="${#fields.hasErrors('departureAirport')}" th:errors="*{departureAirport}"></div>
 
-  <label>Arrival Airport (3-letter code):</label>
-  <input type="text" th:field="*{arrivalAirport}" th:classappend="${#fields.hasErrors('arrivalAirport')} ? 'invalid-input'" />
-  <div class="error" th:if="${#fields.hasErrors('arrivalAirport')}" th:errors="*{arrivalAirport}"></div>
+        <label>Arrival Airport (3-letter code):</label>
+        <input type="text" th:field="*{arrivalAirport}" th:classappend="${#fields.hasErrors('arrivalAirport')} ? 'invalid-input'"/>
+        <div class="error" th:if="${#fields.hasErrors('arrivalAirport')}" th:errors="*{arrivalAirport}"></div>
 
-  <label>Scheduled Departure:</label>
-  <input type="datetime-local" th:field="*{scheduledDeparture}" th:classappend="${#fields.hasErrors('scheduledDeparture')} ? 'invalid-input'" />
-  <div class="error" th:if="${#fields.hasErrors('scheduledDeparture')}" th:errors="*{scheduledDeparture}"></div>
+        <label>Scheduled Departure:</label>
+        <input type="datetime-local" th:field="*{scheduledDeparture}" th:classappend="${#fields.hasErrors('scheduledDeparture')} ? 'invalid-input'"/>
+        <div class="error" th:if="${#fields.hasErrors('scheduledDeparture')}" th:errors="*{scheduledDeparture}"></div>
 
-  <label>Scheduled Arrival:</label>
-  <input type="datetime-local" th:field="*{scheduledArrival}" th:classappend="${#fields.hasErrors('scheduledArrival')} ? 'invalid-input'" />
-  <div class="error" th:if="${#fields.hasErrors('scheduledArrival')}" th:errors="*{scheduledArrival}"></div>
+        <label>Scheduled Arrival:</label>
+        <input type="datetime-local" th:field="*{scheduledArrival}" th:classappend="${#fields.hasErrors('scheduledArrival')} ? 'invalid-input'"/>
+        <div class="error" th:if="${#fields.hasErrors('scheduledArrival')}" th:errors="*{scheduledArrival}"></div>
 
-  <label>Status:</label>
-  <input type="text" th:field="*{status}" th:classappend="${#fields.hasErrors('status')} ? 'invalid-input'" />
-  <div class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
+        <label>Status:</label>
+        <input type="text" th:field="*{status}" th:classappend="${#fields.hasErrors('status')} ? 'invalid-input'"/>
+        <div class="error" th:if="${#fields.hasErrors('status')}" th:errors="*{status}"></div>
 
-  <label>Aircraft Code:</label>
-  <input type="text" th:field="*{aircraftCode}" th:classappend="${#fields.hasErrors('aircraftCode')} ? 'invalid-input'" />
-  <div class="error" th:if="${#fields.hasErrors('aircraftCode')}" th:errors="*{aircraftCode}"></div>
+        <label>Aircraft Code:</label>
+        <input type="text" th:field="*{aircraftCode}" th:classappend="${#fields.hasErrors('aircraftCode')} ? 'invalid-input'"/>
+        <div class="error" th:if="${#fields.hasErrors('aircraftCode')}" th:errors="*{aircraftCode}"></div>
 
-  <label>Actual Departure (optional):</label>
-  <input type="datetime-local" th:field="*{actualDeparture}" />
+        <label>Actual Departure (optional):</label>
+        <input type="datetime-local" th:field="*{actualDeparture}"/>
 
-  <label>Actual Arrival (optional):</label>
-  <input type="datetime-local" th:field="*{actualArrival}" />
+        <label>Actual Arrival (optional):</label>
+        <input type="datetime-local" th:field="*{actualArrival}"/>
 
-  <br><br>
-  <button type="submit">Create Flight</button>
-</form>
+        <button type="submit" class="btn btn-add">Create Flight</button>
+      </form>
 
-</body>
+      <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/flights} + '\'" >Back to Flight List</button>
+
+      <footer>&copy; 2025 Airport System</footer>
+    </div>
+  </body>
 </html>

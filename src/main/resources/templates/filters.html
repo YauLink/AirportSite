@@ -2,72 +2,69 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Flights filter</title>
+  <title>Flights Filter</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h2>Filtering</h2>
+  <body>
+    <div class="container">
+      <header><h1>Filtering Flights</h1></header>
 
-<form method="post" th:action="@{/filters}">
-  <label>Departure Airport:
-    <select name="airport_out">
-      <option value="">-- not selected --</option>
-      <option th:each="airport : ${airports}"
-              th:value="${airport.code}"
-              th:text="${airport.name}"
-              th:selected="${airport.code == currentAirportOut}">
-      </option>
-    </select>
-  </label>
+      <form method="post" th:action="@{/filters}">
+        <label>Departure Airport:</label>
+        <select name="airport_out">
+          <option value="">-- not selected --</option>
+          <option th:each="airport : ${airports}"
+                  th:value="${airport.code}"
+                  th:text="${airport.name}"
+                  th:selected="${airport.code == currentAirportOut}">
+          </option>
+        </select>
 
-  <label>Arrival Airport:
-    <select name="airport_in">
-      <option value="">-- not selected --</option>
-      <option th:each="airport : ${airports}"
-              th:value="${airport.code}"
-              th:text="${airport.name}"
-              th:selected="${airport.code == currentAirportIn}">
-      </option>
-    </select>
-  </label>
+        <label>Arrival Airport:</label>
+        <select name="airport_in">
+          <option value="">-- not selected --</option>
+          <option th:each="airport : ${airports}"
+                  th:value="${airport.code}"
+                  th:text="${airport.name}"
+                  th:selected="${airport.code == currentAirportIn}">
+          </option>
+        </select>
 
-  <input type="submit" value="Find Flights" />
-</form>
+        <button type="submit" class="btn btn-add">Find Flights</button>
+      </form>
 
-<hr>
+      <div class="table-wrapper" th:if="${flying != null}">
+        <table>
+          <thead>
+          <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Departure Date</th>
+            <th>Flight Number</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="flight : ${flying}">
+            <td th:text="${flight.airportOut?.name}"></td>
+            <td th:text="${flight.airportIn?.name}"></td>
+            <td th:text="${flight.date}"></td>
+            <td th:text="${flight.flightNumber}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-<h3>Results:</h3>
-<table border="1">
-  <thead>
-  <tr>
-    <th>From</th>
-    <th>To</th>
-    <th>Departure date</th>
-    <th>Flight Number</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="flight : ${flying}">
-    <td th:text="${flight.airportOut?.name}">from</td>
-    <td th:text="${flight.airportIn?.name}">to</td>
-    <td th:text="${flight.date}">date</td>
-    <td th:text="${flight.flightNumber}">number</td>
-  </tr>
-  </tbody>
-</table>
+      <div th:if="${maxCountFlying > 1}">
+        <p>Page <span th:text="${currentPage}"></span> of <span th:text="${maxCountFlying}"></span></p>
+        <div>
+          <a th:href="@{/filters(page=${currentPage - 1}, airport_out=${currentAirportOut}, airport_in=${currentAirportIn})}" th:if="${currentPage > 1}">Previous</a>
+          <a th:href="@{/filters(page=${currentPage + 1}, airport_out=${currentAirportOut}, airport_in=${currentAirportIn})}" th:if="${currentPage < maxCountFlying}">Next</a>
+        </div>
+      </div>
 
-<div th:if="${maxCountFlying > 1}">
-  <p>Page <span th:text="${currentPage}"></span> from
-    <span th:text="${maxCountFlying}"></span></p>
+      <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/} + '\'" >To Main Page</button>
 
-  <div>
-    <a th:href="@{/filters(page=${currentPage - 1}, airport_out=${currentAirportOut}, airport_in=${currentAirportIn})}"
-       th:if="${currentPage > 1}">Previous</a>
-
-    <a th:href="@{/filters(page=${currentPage + 1}, airport_out=${currentAirportOut}, airport_in=${currentAirportIn})}"
-       th:if="${currentPage < maxCountFlying}">Next</a>
-  </div>
-</div>
-
-<p><a th:href="@{/}">To main page</a></p>
-</body>
+      <footer>&copy; 2025 Airport System</footer>
+    </div>
+  </body>
 </html>

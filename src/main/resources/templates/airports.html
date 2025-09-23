@@ -3,19 +3,38 @@
 <head>
   <meta charset="UTF-8">
   <title>Airports</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<table border="1">
-  <tbody>
-  <tr th:each="airport : ${airports}">
-    <td width="20%" th:text="${airport.code}">Code</td>
-    <td width="20%" th:text="${airport.name}">Name</td>
-    <td width="20%" th:text="${airport.city}">City</td>
-    <td width="20%" th:text="${airport.timezone}">Timezone</td>
-  </tr>
-  </tbody>
-</table>
-<p><input type="button" th:onclick="|location.href='@{/}'|" value="index" /></p>
-</body>
+  <body>
+    <div class="container">
+      <header><h1>Airports</h1></header>
+
+      <div class="table-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>City</th>
+            <th>Timezone</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="airport : ${airports}">
+            <td th:text="${airport.code}"></td>
+            <td th:text="${airport.name}"></td>
+            <td th:text="${airport.city}"></td>
+            <td th:text="${airport.timezone}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/} + '\'" >
+        To Main Page
+      </button>
+
+      <footer>&copy; 2025 Airport System</footer>
+    </div>
+  </body>
 </html>

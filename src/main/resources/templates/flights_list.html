@@ -2,34 +2,43 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Flight List</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h1>All Flights</h1>
+    <body>
+        <div class="container">
+            <header><h1>All Flights</h1></header>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>Flight No</th>
-        <th>Departure</th>
-        <th>Arrival</th>
-        <th>Scheduled Departure</th>
-        <th>Scheduled Arrival</th>
-        <th>Status</th>
-        <th>Aircraft</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="flight : ${flights}">
-        <td th:text="${flight.flightNo}">FN001</td>
-        <td th:text="${flight.departureAirport}">JFK</td>
-        <td th:text="${flight.arrivalAirport}">LAX</td>
-        <td th:text="${flight.scheduledDeparture}">2025-07-17 10:00</td>
-        <td th:text="${flight.scheduledArrival}">2025-07-17 13:00</td>
-        <td th:text="${flight.status}">On Time</td>
-        <td th:text="${flight.aircraftCode}">A320</td>
-    </tr>
-    </tbody>
-</table>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Flight No</th>
+                        <th>Departure</th>
+                        <th>Arrival</th>
+                        <th>Scheduled Departure</th>
+                        <th>Scheduled Arrival</th>
+                        <th>Status</th>
+                        <th>Aircraft</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="flight : ${flights}">
+                        <td th:text="${flight.flightNo}"></td>
+                        <td th:text="${flight.departureAirport}"></td>
+                        <td th:text="${flight.arrivalAirport}"></td>
+                        <td th:text="${flight.scheduledDeparture}"></td>
+                        <td th:text="${flight.scheduledArrival}"></td>
+                        <td th:text="${flight.status}"></td>
+                        <td th:text="${flight.aircraftCode}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
 
-</body>
+            <button class="btn btn-add" th:onclick="'location.href=\'' + @{/flights/new} + '\'" >Add Flight</button>
+            <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/} + '\'" >Back to Main Page</button>
+
+            <footer>&copy; 2025 Airport System</footer>
+        </div>
+    </body>
 </html>

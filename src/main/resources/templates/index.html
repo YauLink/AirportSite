@@ -4,11 +4,25 @@
     <meta charset="UTF-8">
     <title>Server main page</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<p>Choose from the following:</p>
-<p><input type="button" th:onclick="'location.href=\'' + @{/airports} + '\'" value="View airports" /></p>
-<p><input type="button" th:onclick="'location.href=\'' + @{/filters} + '\'" value="View flights" /></p>
-<p><input type="button" th:onclick="'location.href=\'' + @{/admin} + '\'" value="Admin login" /></p>
-</body>
+    <body>
+        <div class="container">
+            <header>
+                <h1>Welcome to Airport System</h1>
+            </header>
+
+            <button class="btn btn-add" th:onclick="'location.href=\'' + @{/airports} + '\'" >
+                View Airports
+            </button>
+            <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/filters} + '\'" >
+                View Flights
+            </button>
+            <button class="btn btn-delete" th:onclick="'location.href=\'' + @{/admin} + '\'" >
+                Admin Login
+            </button>
+
+            <footer>&copy; 2025 Airport System</footer>
+        </div>
+    </body>
 </html>
