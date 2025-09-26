@@ -38,7 +38,8 @@ class FilterControllerTest {
         mockMvc.perform(get("/filters"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("filters"))
-                .andExpect(model().attributeExists("airports"));
+                .andExpect(model().attributeExists("airports"))
+                .andExpect(model().attributeDoesNotExist("flying", "currentAirportOut", "currentAirportIn"));
     }
 
     @Test
@@ -50,8 +51,7 @@ class FilterControllerTest {
         mockMvc.perform(get("/filters")
                         .param("airport_out", "JFK")
                         .param("airport_in", "LAX")
-                        .param("page", "1")
-                        .with(csrf()))
+                        .param("page", "1"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("filters"))
                 .andExpect(model().attributeExists(
@@ -71,6 +71,9 @@ class FilterControllerTest {
                         .param("page", "1")
                         .with(csrf()))
                 .andExpect(status().isOk())
-                .andExpect(view().name("filters"));
+                .andExpect(view().name("filters"))
+                .andExpect(model().attributeExists(
+                        "airports", "flying", "maxCountFlying", "currentPage", "currentAirportOut", "currentAirportIn"
+                ));
     }
 }

@@ -30,7 +30,8 @@
         </table>
       </div>
 
-      <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/} + '\'" >
+      <button class="btn btn-edit"
+              th:onclick="|location.href='@{/}'|">
         To Main Page
       </button>
 

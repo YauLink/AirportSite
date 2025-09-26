@@ -62,7 +62,10 @@
         </div>
       </div>
 
-      <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/} + '\'" >To Main Page</button>
+      <button class="btn btn-edit"
+              th:onclick="|location.href='@{/}'|">
+        To Main Page
+      </button>
 
       <footer>&copy; 2025 Airport System</footer>
     </div>
