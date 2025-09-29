@@ -3,13 +3,16 @@
 <head>
   <title>Admin Settings</title>
   <meta charset="UTF-8"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h1>Settings</h1>
+  <body>
+    <div class="container">
+      <h1>Settings</h1>
 
-<p>Theme: <span th:text="${theme}"></span></p>
-<p>Notifications Enabled: <span th:text="${notificationsEnabled}"></span></p>
+      <p><strong>Theme:</strong> <span th:text="${theme}"></span></p>
+      <p><strong>Notifications Enabled:</strong> <span th:text="${notificationsEnabled}"></span></p>
 
-<a href="/admin/dashboard">Back to Dashboard</a>
-</body>
+      <a href="/admin/dashboard" class="btn">Back to Dashboard</a>
+    </div>
+  </body>
 </html>

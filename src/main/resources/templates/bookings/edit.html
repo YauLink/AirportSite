@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Edit Booking</title></head>
-<body>
-<h2>Edit Booking</h2>
-<form th:action="@{'/bookings/update/' + ${booking.bookRef}}" th:object="${booking}" method="post">
-  <label>Booking Ref:</label>
-  <input type="text" th:field="*{bookRef}" readonly /><br/>
+<head>
+  <title>Edit Booking</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+  <body>
+    <div class="container">
+      <h2>Edit Booking</h2>
+      <form th:action="@{'/bookings/update/' + ${booking.bookRef}}" th:object="${booking}" method="post">
+        <div class="form-group">
+          <label>Booking Ref:</label>
+          <input type="text" th:field="*{bookRef}" readonly />
+        </div>
 
-  <label>Booking Date:</label>
-  <input type="datetime-local" th:field="*{bookDate}" /><br/>
+        <div class="form-group">
+          <label>Booking Date:</label>
+          <input type="datetime-local" th:field="*{bookDate}" />
+        </div>
 
-  <label>Total Amount:</label>
-  <input type="number" step="0.01" th:field="*{totalAmount}" /><br/>
+        <div class="form-group">
+          <label>Total Amount:</label>
+          <input type="number" step="0.01" th:field="*{totalAmount}" />
+        </div>
 
-  <button type="submit">Update</button>
-</form>
-</body>
+        <button type="submit" class="btn">Update</button>
+      </form>
+    </div>
+  </body>
 </html>

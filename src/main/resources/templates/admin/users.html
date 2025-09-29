@@ -3,25 +3,30 @@
 <head>
   <title>Manage Users</title>
   <meta charset="UTF-8"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h1>Manage Users</h1>
+  <body>
+    <div class="container">
+      <h1>Manage Users</h1>
 
-<table border="1">
-  <thead>
-  <tr>
-    <th>#</th>
-    <th>Username</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="user, iterStat : ${users}">
-    <td th:text="${iterStat.count}"></td>
-    <td th:text="${user}"></td>
-  </tr>
-  </tbody>
-</table>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th>#</th>
+            <th>Username</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="user, iterStat : ${users}">
+            <td th:text="${iterStat.count}"></td>
+            <td th:text="${user}"></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
 
-<a href="/admin/dashboard">Back to Dashboard</a>
-</body>
+      <a href="/admin/dashboard" class="btn">Back to Dashboard</a>
+    </div>
+  </body>
 </html>

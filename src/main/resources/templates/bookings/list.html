@@ -1,30 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head><title>Booking lists</title></head>
-<body>
-<h2>Booking lists</h2>
-<table>
-    <thead>
-    <tr>
-        <th>Ref</th>
-        <th>Flight</th>
-        <th>Seat</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="b : ${bookings}">
-        <td th:text="${b.bookRef}"></td>
-        <td th:text="${b.bookDate}"></td>
-        <td th:text="${b.totalAmount}"></td>
-
-        <td>
-            <a th:href="@{'/bookings/edit/' + ${b.bookRef}}">Edit</a> |
-            <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}">Cancel</a> |
-        </td>
-    </tr>
-    </tbody>
-</table>
-</body>
+<head>
+    <title>Booking lists</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+    <body>
+        <div class="container">
+            <h2>Booking lists</h2>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Ref</th>
+                        <th>Flight</th>
+                        <th>Seat</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="b : ${bookings}">
+                        <td th:text="${b.bookRef}"></td>
+                        <td th:text="${b.bookDate}"></td>
+                        <td th:text="${b.totalAmount}"></td>
+                        <td>
+                            <a th:href="@{'/bookings/edit/' + ${b.bookRef}}" class="btn">Edit</a>
+                            <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}" class="btn">Cancel</a>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </body>
 </html>

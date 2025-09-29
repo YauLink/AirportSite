@@ -2,10 +2,20 @@
 <html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>Admin dashboard page</title>
+  <title>Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<p>hi, its me - dashboard</p>
-</body>
+  <body>
+    <div class="container">
+      <h1>Admin Dashboard</h1>
+      <p>Welcome to admin dashboard</p>
+
+      <div>
+        <a href="/admin/users" class="btn">Manage Users</a>
+        <a href="/admin/flights" class="btn">Manage Flights</a>
+        <a href="/admin/settings" class="btn">Settings</a>
+      </div>
+    </div>
+  </body>
 </html>

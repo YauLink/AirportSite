@@ -3,39 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <title>Tickets</title>
-  <link rel="stylesheet" href="/css/style.css"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body>
-<h1>Tickets</h1>
+  <body>
+    <div class="container">
+      <h1>Tickets</h1>
 
-<table border="1">
-  <thead>
-  <tr>
-    <th>Ticket No</th>
-    <th>Book Ref</th>
-    <th>Passenger ID</th>
-    <th>Passenger Name</th>
-    <th>Contact Data</th>
-    <th>Actions</th>
-  </tr>
-  </thead>
-  <tbody>
-  <tr th:each="ticket : ${tickets}">
-    <td th:text="${ticket.ticketNo}"></td>
-    <td th:text="${ticket.bookRef}"></td>
-    <td th:text="${ticket.passengerId}"></td>
-    <td th:text="${ticket.passengerName}"></td>
-    <td th:text="${ticket.contactData}"></td>
-    <td>
-      <a th:href="@{/tickets/{ticketNo}/edit(ticketNo=${ticket.ticketNo})}">Edit</a>
-      <form th:action="@{/tickets/{ticketNo}/delete(ticketNo=${ticket.ticketNo})}" method="post"
-            style="display:inline">
-        <button type="submit" onclick="return confirm('Delete this ticket?')">Delete</button>
-      </form>
-    </td>
-  </tr>
-  </tbody>
-</table>
-
-</body>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+          <tr>
+            <th>Ticket No</th>
+            <th>Book Ref</th>
+            <th>Passenger ID</th>
+            <th>Passenger Name</th>
+            <th>Contact Data</th>
+            <th>Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="ticket : ${tickets}">
+            <td th:text="${ticket.ticketNo}"></td>
+            <td th:text="${ticket.bookRef}"></td>
+            <td th:text="${ticket.passengerId}"></td>
+            <td th:text="${ticket.passengerName}"></td>
+            <td th:text="${ticket.contactData}"></td>
+            <td>
+              <a th:href="@{/tickets/{ticketNo}/edit(ticketNo=${ticket.ticketNo})}" class="btn">Edit</a>
+              <form th:action="@{/tickets/{ticketNo}/delete(ticketNo=${ticket.ticketNo})}" method="post" style="display:inline">
+                <button type="submit" class="btn" style="background:#dc3545;"
+                        onclick="return confirm('Delete this ticket?')">Delete</button>
+              </form>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
 </html>
