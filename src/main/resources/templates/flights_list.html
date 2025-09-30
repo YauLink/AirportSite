@@ -35,8 +35,14 @@
                 </table>
             </div>
 
-            <button class="btn btn-add" th:onclick="'location.href=\'' + @{/flights/new} + '\'" >Add Flight</button>
-            <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/} + '\'" >Back to Main Page</button>
+            <button class="btn btn-add"
+                    th:onclick="|location.href='@{/flights/new}'|">
+                Add Flight
+            </button>
+            <button class="btn btn-edit"
+                    th:onclick="|location.href='@{/}'|">
+                Back to Main Page
+            </button>
 
             <footer>&copy; 2025 Airport System</footer>
         </div>

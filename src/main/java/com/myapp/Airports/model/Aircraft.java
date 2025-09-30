@@ -6,15 +6,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "aircrafts_data", schema = "bookings")
 public class Aircraft {
     @Id
     @Column(name = "aircraft_code")
     private String aircraftCode;
 
-    @Column(name = "model")
+    @Column(name = "model", columnDefinition = "jsonb")
     private String model;
 
-    @Column(name = "range")
+    @Column(name = "range", nullable = false)
     private Integer range;
 
     @OneToMany(mappedBy = "aircraft", cascade = CascadeType.ALL, orphanRemoval = true)

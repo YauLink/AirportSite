@@ -46,7 +46,10 @@
         <button type="submit" class="btn btn-add">Create Flight</button>
       </form>
 
-      <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/flights} + '\'" >Back to Flight List</button>
+      <button class="btn btn-edit"
+              th:onclick="|location.href='@{/flights}'|">
+        Back to Flight List
+      </button>
 
       <footer>&copy; 2025 Airport System</footer>
     </div>

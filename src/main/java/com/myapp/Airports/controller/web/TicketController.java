@@ -4,14 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.myapp.Airports.dto.TicketDTO;
 import com.myapp.Airports.mapper.TicketMapper;
-import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.service.TicketService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -42,7 +40,6 @@ public class TicketController {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> map = mapper.readValue(ticket.getContactData(), Map.class);
 
-            // If "note" exists and is a map, unwrap it
             if (map.containsKey("note") && map.get("note") instanceof Map) {
                 map = (Map<String, Object>) map.get("note");
             }
@@ -66,7 +63,6 @@ public class TicketController {
 
         ticket.setPassengerName(dto.getPassengerName());
 
-        // Wrap user input into proper JSON for DB
         ObjectMapper mapper = new ObjectMapper();
         Map<String, Object> noteMap = Map.of("phone", dto.getContactData());
         Map<String, Object> wrapper = Map.of("note", noteMap);
