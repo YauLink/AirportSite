@@ -41,7 +41,7 @@ class FlyingControllerTest {
 
         mockMvc.perform(get("/flights"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("flight_list"))
+                .andExpect(view().name("flights_list"))
                 .andExpect(model().attributeExists("flights"));
 
         verify(flyingService, times(1)).findAll();

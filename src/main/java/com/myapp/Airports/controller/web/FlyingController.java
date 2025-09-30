@@ -25,7 +25,7 @@ public class FlyingController {
     @GetMapping
     public String listFlights(Model model) {
         model.addAttribute("flights", flyingService.findAll());
-        return "flight_list";
+        return "flights_list";
     }
 
     @GetMapping("/new")
