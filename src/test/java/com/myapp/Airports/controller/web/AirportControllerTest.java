@@ -33,14 +33,4 @@ class AirportControllerTest {
                 .andExpect(view().name("airports"))
                 .andExpect(model().attributeExists("airports"));
     }
-
-    /*@Test
-    void shouldReturnSingleAirportView() throws Exception {
-        when(airportView.getAll()).thenReturn(List.of());
-
-        mockMvc.perform(get("/airports/1"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("airport"))
-                .andExpect(model().attributeExists("airports"));
-    }*/
 }

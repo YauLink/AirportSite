@@ -106,7 +106,7 @@ class BookingServiceTest {
         verify(bookingRepository).deleteById("REF123");
     }
 
-    /*@Test
+    @Test
     void testAssignSeat() {
         TicketFlight tf1 = new TicketFlight();
         TicketFlight tf2 = new TicketFlight();
@@ -119,16 +119,17 @@ class BookingServiceTest {
         assertEquals("12A", tf1.getSeatNo());
         assertEquals("12A", tf2.getSeatNo());
         verify(ticketFlightRepository).saveAll(flights);
-    }*/
+    }
 
-    /*@Test
+    @Test
     void testFindByFlightId() {
         Booking booking = new Booking();
-        when(ticketFlightRepository.findBookingsByFlight("F123")).thenReturn(Arrays.asList(booking));
+        when(ticketFlightRepository.findBookingsByFlight(123))
+                .thenReturn(Arrays.asList(booking));
 
-        List<Booking> result = bookingService.findByFlightId("F123");
+        List<Booking> result = bookingService.findByFlightId(123);
 
         assertEquals(1, result.size());
-        verify(ticketFlightRepository).findBookingsByFlight("F123");
-    }*/
+        verify(ticketFlightRepository).findBookingsByFlight(123);
+    }
 }

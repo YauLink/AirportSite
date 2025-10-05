@@ -30,7 +30,7 @@ public class TicketFlight {
 
     private String seatNo;
 
-    protected TicketFlight() {}
+    public TicketFlight() {}
 
     public TicketFlight(Long ticketNo, Long flightId, String fareConditions, BigDecimal amount, String seatNo) {
         this.fareConditions = fareConditions;
