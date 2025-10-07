@@ -1,29 +1,27 @@
-version: '3.8'
+version: '3.9'
 
 services:
-  postgres:
+  airports_postgres:
     image: postgres:15
     container_name: airports_postgres
+    env_file: .env
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: demo
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mypassword
+    volumes:
+      - ./init-db:/docker-entrypoint-initdb.d
     ports:
       - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
-  airports-app:
+  airports_app:
     build: .
-    container_name: airports_app
     depends_on:
-      - postgres
-    ports:
-      - "8081:8081"
+      - airports_postgres
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/airports_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://airports_postgres:5432/demo
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: ${POSTGRES_PASSWORD}
-
-volumes:
-  postgres_data:
+    ports:
+      - "8081:8081"

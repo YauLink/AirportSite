@@ -12,15 +12,22 @@
                 <h1>Welcome to Airport System</h1>
             </header>
 
-            <button class="btn btn-add" th:onclick="'location.href=\'' + @{/airports} + '\'" >
-                View Airports
-            </button>
-            <button class="btn btn-edit" th:onclick="'location.href=\'' + @{/filters} + '\'" >
-                View Flights
-            </button>
-            <button class="btn btn-delete" th:onclick="'location.href=\'' + @{/admin} + '\'" >
-                Admin Login
-            </button>
+            <div class="button-group">
+                <button class="btn btn-add"
+                        th:onclick="|location.href='@{/airports}'|">
+                    View Airports
+                </button>
+
+                <button class="btn btn-edit"
+                        th:onclick="|location.href='@{/filters}'|">
+                    View Flights
+                </button>
+
+                <button class="btn btn-delete"
+                        th:onclick="|location.href='@{/admin}'|">
+                    Admin Login
+                </button>
+            </div>
 
             <footer>&copy; 2025 Airport System</footer>
         </div>
