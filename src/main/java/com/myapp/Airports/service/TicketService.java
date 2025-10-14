@@ -4,6 +4,9 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.storage.api.IBookingRepository;
 import com.myapp.Airports.storage.api.ITicketRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +24,10 @@ public class TicketService {
 
     public List<Ticket> findAll() {
         return ticketRepo.findAll();
+    }
+
+    public Page<Ticket> getAllTickets(int n, int page) {
+        return ticketRepo.findAll(PageRequest.of(page, n));
     }
 
     public Ticket findById(String ticketNo) {

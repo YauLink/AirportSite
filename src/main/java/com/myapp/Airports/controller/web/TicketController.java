@@ -6,6 +6,8 @@ import com.myapp.Airports.dto.TicketDTO;
 import com.myapp.Airports.mapper.TicketMapper;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.service.TicketService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
@@ -24,11 +26,19 @@ public class TicketController {
     }
 
     @GetMapping
-    public String showTicketList(Model model) {
-        model.addAttribute("tickets", service.findAll().stream()
-                .map(TicketMapper::toDto)
-                .collect(Collectors.toList()));
+    public String showTicketList(@RequestParam(defaultValue = "0") int page, Model model) {
+        int pageSize = 20, amount = 100;
+        Page<Ticket> ticketPage = service.getAllTickets(amount, pageSize);
+
+        model.addAttribute("tickets", ticketPage.getContent());
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", ticketPage.getTotalPages());
+
         return "tickets/list";
+//        model.addAttribute("tickets", service.findAll().stream()
+//                .map(TicketMapper::toDto)
+//                .collect(Collectors.toList()));
+//        return "tickets/list";
     }
 
     @GetMapping("/{ticketNo}/edit")
