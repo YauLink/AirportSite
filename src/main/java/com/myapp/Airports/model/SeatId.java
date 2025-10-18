@@ -18,8 +18,6 @@ public class SeatId implements Serializable {
         this.aircraftCode = aircraftCode;
     }
 
-    // Getters, setters, equals, and hashCode
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

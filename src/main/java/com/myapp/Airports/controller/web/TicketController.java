@@ -35,10 +35,6 @@ public class TicketController {
         model.addAttribute("totalPages", ticketPage.getTotalPages());
 
         return "tickets/list";
-//        model.addAttribute("tickets", service.findAll().stream()
-//                .map(TicketMapper::toDto)
-//                .collect(Collectors.toList()));
-//        return "tickets/list";
     }
 
     @GetMapping("/{ticketNo}/edit")
