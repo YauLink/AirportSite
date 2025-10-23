@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airportsite-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airportsite
+  template:
+    metadata:
+      labels:
+        app: airportsite
+    spec:
+      containers:
+        - name: airportsite-app
+          image: airportsite-airports_app:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:postgresql://host.docker.internal:5432/demo"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: "postgres"
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: ${POSTGRES_PASSWORD}
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "250m"
+            limits:
+              memory: "1Gi"
+              cpu: "500m"
