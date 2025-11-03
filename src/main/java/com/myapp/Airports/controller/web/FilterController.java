@@ -28,11 +28,9 @@ public class FilterController {
                                  @RequestParam(name = "airport_out", required = false) String airportOut,
                                  @RequestParam(name = "airport_in", required = false) String airportIn,
                                  Model model) {
-        // Populate airports for dropdowns
         List<Airport> airports = airportView.getAll();
         model.addAttribute("airports", airports);
 
-        // Show empty or filtered list based on optional params
         if ((airportOut != null && !airportOut.isBlank()) || (airportIn != null && !airportIn.isBlank())) {
             var filter = new IFlyingsView.FlyingFilter(
                     airportOut.isBlank() ? null : airportOut,
@@ -60,4 +58,31 @@ public class FilterController {
                                Model model) {
         return showFilterForm(currentPage, airportOut, airportIn, model);
     }
+
+    /*@GetMapping
+    public ResponseEntity<Map<String, Object>> filterFlights(
+            @RequestParam(name = "airport_out", required = false) String airportOut,
+            @RequestParam(name = "airport_in", required = false) String airportIn,
+            @RequestParam(name = "page", defaultValue = "1") int currentPage
+    ) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("airports", airportView.getAll());
+
+        if ((airportOut != null && !airportOut.isBlank()) || (airportIn != null && !airportIn.isBlank())) {
+            var filter = new IFlyingsView.FlyingFilter(
+                    airportOut.isBlank() ? null : airportOut,
+                    airportIn.isBlank() ? null : airportIn,
+                    currentPage
+            );
+
+            List<Flying> flying = flyingsView.getList(filter);
+            long total = flyingsView.count(filter);
+
+            response.put("flights", flying);
+            response.put("totalCount", total);
+            response.put("currentPage", currentPage);
+        }
+
+        return ResponseEntity.ok(response);
+    }*/
 }

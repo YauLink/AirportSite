@@ -1,11 +1,14 @@
 package com.myapp.Airports.controller.web;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
+import java.util.Map;
 
 
 @Controller
@@ -41,5 +44,40 @@ public class AdminController {
         model.addAttribute("theme", "dark");
         model.addAttribute("notificationsEnabled", true);
         return "admin/settings";
+    }
+
+    /* ---------------- REST API ENDPOINTS ---------------- */
+
+    @GetMapping(value = "/api/dashboard", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getDashboardData() {
+        Map<String, Object> data = Map.of(
+                "totalUsers", 3,
+                "totalFlights", 3,
+                "systemStatus", "OK"
+        );
+        return ResponseEntity.ok(data);
+    }
+
+    @GetMapping(value = "/api/users", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<String>> getUsers() {
+        return ResponseEntity.ok(List.of("Alice", "Bob", "Charlie"));
+    }
+
+    @GetMapping(value = "/api/flights", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<List<String>> getFlights() {
+        return ResponseEntity.ok(List.of("Flight-101", "Flight-202", "Flight-303"));
+    }
+
+    @GetMapping(value = "/api/settings", produces = "application/json")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> getSettings() {
+        Map<String, Object> settings = Map.of(
+                "theme", "dark",
+                "notificationsEnabled", true
+        );
+        return ResponseEntity.ok(settings);
     }
 }
