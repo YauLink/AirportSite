@@ -5,11 +5,14 @@ import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/filters")
@@ -59,7 +62,7 @@ public class FilterController {
         return showFilterForm(currentPage, airportOut, airportIn, model);
     }
 
-    /*@GetMapping
+    @GetMapping
     public ResponseEntity<Map<String, Object>> filterFlights(
             @RequestParam(name = "airport_out", required = false) String airportOut,
             @RequestParam(name = "airport_in", required = false) String airportIn,
@@ -84,5 +87,5 @@ public class FilterController {
         }
 
         return ResponseEntity.ok(response);
-    }*/
+    }
 }

@@ -127,4 +127,7 @@ public class Flying implements Serializable{
     public void setFlightNumber(String aa123) {
 
     }
+
+    public void setId(Integer id) {
+    }
 }

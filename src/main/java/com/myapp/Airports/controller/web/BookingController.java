@@ -36,10 +36,10 @@ public class BookingController {
         return "bookings/list";
     }
 
-    @GetMapping("/{id}")
+/*    @GetMapping("/{id}")
     public BookingDTO getOne(@PathVariable String id) {
         return BookingMapper.toDto(bookingService.findById(id));
-    }
+    }*/
 
     @PostMapping
     public BookingDTO create(@RequestBody BookingDTO dto) {
@@ -116,7 +116,7 @@ public class BookingController {
     @PutMapping("/api/{ref}")
     @ResponseBody
     public ResponseEntity<BookingDTO> updateBookingRest(@PathVariable String ref, @RequestBody BookingDTO dto) {
-        Booking updated = bookingService.updateBooking(ref, BookingMapper.toEntity(dto));
+        Booking updated = bookingService.updateBookingAndReturn(ref, BookingMapper.toEntity(dto));
         return ResponseEntity.ok(BookingMapper.toDto(updated));
     }
 

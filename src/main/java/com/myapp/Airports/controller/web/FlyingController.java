@@ -102,7 +102,7 @@ public class FlyingController {
     @PostMapping("/api")
     @ResponseBody
     public ResponseEntity<FlyingDTO> createFlightApi(@RequestBody @Valid FlyingDTO flyingDTO) {
-        Flying saved = flyingService.save(FlyingMapper.toEntity(flyingDTO));
+        Flying saved = flyingService.saveAndReturn(FlyingMapper.toEntity(flyingDTO));
         return ResponseEntity.ok(FlyingMapper.toDto(saved));
     }
 
@@ -115,8 +115,8 @@ public class FlyingController {
             return ResponseEntity.notFound().build();
         }
         Flying flight = FlyingMapper.toEntity(flyingDTO);
-        //flight.setId(id);
-        //Flying updated = flyingService.save(flight);
+        flight.setId(id);
+        Flying updated = flyingService.saveAndReturn(flight);
         return ResponseEntity.ok(FlyingMapper.toDto(updated));
     }
 

@@ -36,10 +36,19 @@ public class BookingService {
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
     public void updateBooking(String bookRef, Booking updatedBooking) {
+        performUpdate(bookRef, updatedBooking);
+    }
+
+    @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
+    public Booking updateBookingAndReturn(String bookRef, Booking updatedBooking) {
+        return performUpdate(bookRef, updatedBooking);
+    }
+
+    private Booking performUpdate(String bookRef, Booking updatedBooking) {
         Booking existing = findByBookRef(bookRef);
         existing.setBookDate(updatedBooking.getBookDate());
         existing.setTotalAmount(updatedBooking.getTotalAmount());
-        bookingRepository.save(existing);
+        return bookingRepository.save(existing);
     }
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
