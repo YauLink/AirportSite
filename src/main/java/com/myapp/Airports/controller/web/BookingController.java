@@ -33,11 +33,6 @@ public class BookingController {
         return "bookings/list";
     }
 
-    @GetMapping("/{id}")
-    public BookingDTO getOne(@PathVariable String id) {
-        return BookingMapper.toDto(bookingService.findById(id));
-    }
-
     @PostMapping
     public BookingDTO create(@RequestBody BookingDTO dto) {
         Booking booking = BookingMapper.toEntity(dto);
