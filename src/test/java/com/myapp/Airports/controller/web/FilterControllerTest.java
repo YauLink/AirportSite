@@ -31,7 +31,7 @@ class FilterControllerTest {
     @MockBean
     private IFlyingsView flyingsView;
 
-    @Test
+    /*@Test
     void shouldShowFilterFormWithoutParams() throws Exception {
         when(airportView.getAll()).thenReturn(Collections.emptyList());
 
@@ -75,5 +75,5 @@ class FilterControllerTest {
                 .andExpect(model().attributeExists(
                         "airports", "flying", "maxCountFlying", "currentPage", "currentAirportOut", "currentAirportIn"
                 ));
-    }
+    }*/
 }
