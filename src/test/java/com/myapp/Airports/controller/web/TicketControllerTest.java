@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -18,6 +20,7 @@ import java.util.Collections;
 
 import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -37,7 +40,10 @@ class TicketControllerTest {
 
     /*@Test
     void shouldShowTicketList() throws Exception {
-        when(service.findAll()).thenReturn(Collections.emptyList());
+        Page<Ticket> emptyPage = new PageImpl<>(Collections.emptyList());
+
+        when(service.getAllTickets(anyInt(), anyInt())).thenReturn(emptyPage);
+
 
         mockMvc.perform(get("/tickets"))
                 .andExpect(status().isOk())
