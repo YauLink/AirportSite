@@ -6,7 +6,6 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

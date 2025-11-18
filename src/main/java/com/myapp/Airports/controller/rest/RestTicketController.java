@@ -23,8 +23,7 @@ public class RestTicketController {
         this.service = service;
     }
 
-    @GetMapping("/api")
-    @ResponseBody
+    @GetMapping
     public ResponseEntity<List<TicketDTO>> getAllTickets() {
         List<TicketDTO> tickets = service.findAll()
                 .stream()
@@ -33,8 +32,7 @@ public class RestTicketController {
         return ResponseEntity.ok(tickets);
     }
 
-    @GetMapping("/api/{ticketNo}")
-    @ResponseBody
+    @GetMapping("/{ticketNo}")
     public ResponseEntity<TicketDTO> getTicket(@PathVariable String ticketNo) {
         Ticket ticket = service.findById(ticketNo);
         if (ticket == null) {
@@ -43,22 +41,23 @@ public class RestTicketController {
         return ResponseEntity.ok(TicketMapper.toDto(ticket));
     }
 
-    @PostMapping("/api")
-    @ResponseBody
+    @PostMapping
     public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO dto) throws JsonProcessingException {
         Ticket ticket = TicketMapper.toEntity(dto);
+
         if (dto.getContactData() != null) {
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> noteMap = Map.of("phone", dto.getContactData());
-            Map<String, Object> wrapper = Map.of("note", noteMap);
+            Map<String, Object> wrapper = Map.of(
+                    "note", Map.of("phone", dto.getContactData())
+            );
             ticket.setContactData(mapper.writeValueAsString(wrapper));
         }
+
         Ticket saved = service.save(ticket);
         return ResponseEntity.ok(TicketMapper.toDto(saved));
     }
 
-    @PutMapping("/api/{ticketNo}")
-    @ResponseBody
+    @PutMapping("/{ticketNo}")
     public ResponseEntity<TicketDTO> updateTicket(@PathVariable String ticketNo, @RequestBody TicketDTO dto) throws JsonProcessingException {
         Ticket ticket = service.findById(ticketNo);
         if (ticket == null) {
@@ -66,10 +65,12 @@ public class RestTicketController {
         }
 
         ticket.setPassengerName(dto.getPassengerName());
+
         if (dto.getContactData() != null) {
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> noteMap = Map.of("phone", dto.getContactData());
-            Map<String, Object> wrapper = Map.of("note", noteMap);
+            Map<String, Object> wrapper = Map.of(
+                    "note", Map.of("phone", dto.getContactData())
+            );
             ticket.setContactData(mapper.writeValueAsString(wrapper));
         }
 
@@ -77,8 +78,7 @@ public class RestTicketController {
         return ResponseEntity.ok(TicketMapper.toDto(updated));
     }
 
-    @DeleteMapping("/api/{ticketNo}")
-    @ResponseBody
+    @DeleteMapping("/{ticketNo}")
     public ResponseEntity<Void> deleteTicket(@PathVariable String ticketNo) {
         service.delete(ticketNo);
         return ResponseEntity.noContent().build();

@@ -27,6 +27,10 @@ public class Airport implements Serializable {
     @Column(name = "timezone")
     private String timezone;    //Часовой пояс аэропорта
 
+    public Airport(String aaa, String airportA) {
+
+    }
+
 
     public String getCode() {
         return code;
