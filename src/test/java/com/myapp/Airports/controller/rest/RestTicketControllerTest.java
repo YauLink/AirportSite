@@ -72,7 +72,7 @@ class RestTicketControllerTest {
     void testGetAllTickets() throws Exception {
         when(service.findAll()).thenReturn(List.of(ticket));
 
-        mockMvc.perform(get("/api/tickets/api"))
+        mockMvc.perform(get("/api/tickets"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].ticketNo").value("TCK123"))
                 .andExpect(jsonPath("$[0].passengerName").value("John Doe"));
@@ -82,7 +82,7 @@ class RestTicketControllerTest {
     void testGetTicket() throws Exception {
         when(service.findById("TCK123")).thenReturn(ticket);
 
-        mockMvc.perform(get("/api/tickets/api/TCK123"))
+        mockMvc.perform(get("/api/tickets/TCK123"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ticketNo").value("TCK123"))
                 .andExpect(jsonPath("$.bookRef").value("BR123"));
@@ -90,15 +90,14 @@ class RestTicketControllerTest {
 
     @Test
     void testGetTicket_NotFound() throws Exception {
-        when(service.findById("BAD")).thenThrow(new RuntimeException("Ticket not found"));
+        when(service.findById("BAD")).thenReturn(null);
 
-        mockMvc.perform(get("/api/tickets/api/BAD"))
+        mockMvc.perform(get("/api/tickets/BAD"))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void testCreateTicket() throws Exception {
-        // We expect that controller rewrites contactData -> {"note":{"phone":"value"}}
         Ticket saved = new Ticket();
         saved.setTicketNo("TCK123");
         saved.setBooking(booking);
@@ -109,7 +108,7 @@ class RestTicketControllerTest {
         when(service.save(any(Ticket.class))).thenReturn(saved);
 
         mockMvc.perform(
-                        post("/api/tickets/api")
+                        post("/api/tickets")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(mapper.writeValueAsString(dto))
                 )
@@ -140,7 +139,7 @@ class RestTicketControllerTest {
         when(service.save(any(Ticket.class))).thenReturn(updated);
 
         mockMvc.perform(
-                        put("/api/tickets/api/TCK123")
+                        put("/api/tickets/TCK123")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(mapper.writeValueAsString(updateDto))
                 )
@@ -151,10 +150,10 @@ class RestTicketControllerTest {
 
     @Test
     void testUpdateTicket_NotFound() throws Exception {
-        when(service.findById("NOPE")).thenThrow(new RuntimeException("Ticket not found"));
+        when(service.findById("NOPE")).thenReturn(null);
 
         mockMvc.perform(
-                        put("/api/tickets/api/NOPE")
+                        put("/api/tickets/NOPE")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(mapper.writeValueAsString(dto))
                 )
@@ -165,7 +164,7 @@ class RestTicketControllerTest {
     void testDeleteTicket() throws Exception {
         doNothing().when(service).delete("TCK123");
 
-        mockMvc.perform(delete("/api/tickets/api/TCK123"))
+        mockMvc.perform(delete("/api/tickets/TCK123"))
                 .andExpect(status().isNoContent());
     }
 }
