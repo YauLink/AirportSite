@@ -21,7 +21,7 @@ public class RestFlyingController {
         this.flyingService = flyingService;
     }
 
-    @GetMapping("/api")
+    @GetMapping
     @ResponseBody
     public ResponseEntity<List<FlyingDTO>> getAllFlights() {
         List<FlyingDTO> flights = flyingService.findAll()
@@ -31,7 +31,7 @@ public class RestFlyingController {
         return ResponseEntity.ok(flights);
     }
 
-    @GetMapping("/api/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<FlyingDTO> getFlightById(@PathVariable Integer id) {
         Optional<Flying> flightOpt = flyingService.findById(id);
@@ -40,14 +40,14 @@ public class RestFlyingController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/api")
+    @PostMapping
     @ResponseBody
     public ResponseEntity<FlyingDTO> createFlightApi(@RequestBody @Valid FlyingDTO flyingDTO) {
         Flying saved = flyingService.saveAndReturn(FlyingMapper.toEntity(flyingDTO));
         return ResponseEntity.ok(FlyingMapper.toDto(saved));
     }
 
-    @PutMapping("/api/{id}")
+    @PutMapping("/{id}")
     @ResponseBody
     public ResponseEntity<FlyingDTO> updateFlightApi(@PathVariable Integer id,
                                                      @RequestBody @Valid FlyingDTO flyingDTO) {
@@ -61,7 +61,7 @@ public class RestFlyingController {
         return ResponseEntity.ok(FlyingMapper.toDto(updated));
     }
 
-    @DeleteMapping("/api/{id}")
+    @DeleteMapping("/{id}")
     @ResponseBody
     public ResponseEntity<Void> deleteFlightApi(@PathVariable Integer id) {
         flyingService.deleteById(id);

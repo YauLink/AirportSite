@@ -35,10 +35,13 @@ public class RestFilterController {
         Map<String, Object> response = new HashMap<>();
         response.put("airports", airportView.getAll());
 
-        if ((airportOut != null && !airportOut.isBlank()) || (airportIn != null && !airportIn.isBlank())) {
+        boolean hasOut = airportOut != null && !airportOut.isBlank();
+        boolean hasIn  = airportIn  != null && !airportIn.isBlank();
+
+        if (hasOut || hasIn) {
             var filter = new IFlyingsView.FlyingFilter(
-                    airportOut.isBlank() ? null : airportOut,
-                    airportIn.isBlank() ? null : airportIn,
+                    hasOut ? airportOut : null,
+                    hasIn ? airportIn : null,
                     currentPage
             );
 

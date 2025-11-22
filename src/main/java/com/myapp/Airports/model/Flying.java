@@ -124,10 +124,7 @@ public class Flying implements Serializable{
         this.actualArrival = actualArrival;
     }
 
-    public void setFlightNumber(String aa123) {
-
-    }
-
     public void setId(Integer id) {
+        this.flightId = id;
     }
 }

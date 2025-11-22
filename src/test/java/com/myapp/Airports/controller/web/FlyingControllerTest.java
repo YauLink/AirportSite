@@ -78,7 +78,7 @@ class FlyingControllerTest {
         flight.setFlightId(1);
         flight.setDepartureAirport("JFK");
         flight.setArrivalAirport("LAX");
-        flight.setFlightNumber("AA123");
+        flight.setFlightNo("AA123");
         flight.setScheduledDeparture(LocalDateTime.of(2025, 9, 2, 10, 0));
         flight.setScheduledArrival(LocalDateTime.of(2025, 9, 2, 14, 0));
         when(flyingService.findById(1)).thenReturn(Optional.of(flight));

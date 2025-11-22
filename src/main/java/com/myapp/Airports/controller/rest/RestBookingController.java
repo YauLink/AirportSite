@@ -5,6 +5,7 @@ import com.myapp.Airports.mapper.BookingMapper;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,7 +42,7 @@ public class RestBookingController {
     }
 
     @PostMapping
-    public ResponseEntity<BookingDTO> createBooking(@RequestBody BookingDTO dto) {
+    public ResponseEntity<BookingDTO> createBooking(@RequestBody @Valid BookingDTO dto) {
         Booking saved = bookingService.save(BookingMapper.toEntity(dto));
         return ResponseEntity.ok(BookingMapper.toDto(saved));
     }

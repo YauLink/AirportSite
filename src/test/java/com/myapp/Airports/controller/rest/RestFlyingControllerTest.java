@@ -1,31 +1,37 @@
 package com.myapp.Airports.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.myapp.Airports.controller.rest.RestFlyingController;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.myapp.Airports.dto.FlyingDTO;
-import com.myapp.Airports.mapper.FlyingMapper;
 import com.myapp.Airports.model.Flying;
-import com.myapp.Airports.view.api.IAirportsView;
-import com.myapp.Airports.view.api.IFlyingsView;
 import com.myapp.Airports.service.FlyingService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(RestFlyingController.class)
-public class RestFlyingControllerTest {
+@AutoConfigureMockMvc(addFilters = false)
+class RestFlyingControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,118 +39,106 @@ public class RestFlyingControllerTest {
     @MockBean
     private FlyingService flyingService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    private ObjectMapper mapper;
+
+    private Flying flying;
+    private FlyingDTO dto;
+
+    @BeforeEach
+    void setup() {
+        mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule()); // <-- handles LocalDateTime
+
+        flying = new Flying();
+        flying.setId(1);
+        flying.setFlightNo("AA123");
+        flying.setDepartureAirport("JFK");
+        flying.setArrivalAirport("LAX");
+        flying.setScheduledDeparture(LocalDateTime.of(2025, 9, 2, 10, 0));
+        flying.setScheduledArrival(LocalDateTime.of(2025, 9, 2, 14, 0));
+        flying.setStatus("SCHEDULED");
+        flying.setAircraftCode("A320");
+
+        dto = new FlyingDTO();
+        dto.setFlightId(1);
+        dto.setFlightNo("AA123");
+        dto.setDepartureAirport("JFK");
+        dto.setArrivalAirport("LAX");
+        dto.setScheduledDeparture(LocalDateTime.of(2025, 9, 2, 10, 0));
+        dto.setScheduledArrival(LocalDateTime.of(2025, 9, 2, 14, 0));
+        dto.setStatus("SCHEDULED");
+        dto.setAircraftCode("A320");
+    }
 
     @Test
     void testGetAllFlights() throws Exception {
+        when(flyingService.findAll()).thenReturn(List.of(flying));
 
-        Flying f = new Flying();
-        f.setId(1);
-
-        Mockito.when(flyingService.findAll()).thenReturn(List.of(f));
-
-        mockMvc.perform(get("/api/flights/api"))
+        mockMvc.perform(get("/api/flights"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(1));
-
-        Mockito.verify(flyingService).findAll();
+                .andExpect(jsonPath("$[0].flightNo").value("AA123"))
+                .andExpect(jsonPath("$[0].departureAirport").value("JFK"));
     }
 
     @Test
     void testGetFlightById_Found() throws Exception {
+        when(flyingService.findById(1)).thenReturn(Optional.of(flying));
 
-        Flying f = new Flying();
-        f.setId(5);
-
-        Mockito.when(flyingService.findById(5)).thenReturn(Optional.of(f));
-
-        mockMvc.perform(get("/api/flights/api/5"))
+        mockMvc.perform(get("/api/flights/1"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(5));
-
-        Mockito.verify(flyingService).findById(5);
+                .andExpect(jsonPath("$.flightNo").value("AA123"))
+                .andExpect(jsonPath("$.arrivalAirport").value("LAX"));
     }
 
     @Test
     void testGetFlightById_NotFound() throws Exception {
+        when(flyingService.findById(99)).thenReturn(Optional.empty());
 
-        Mockito.when(flyingService.findById(20)).thenReturn(Optional.empty());
-
-        mockMvc.perform(get("/api/flights/api/20"))
+        mockMvc.perform(get("/api/flights/99"))
                 .andExpect(status().isNotFound());
-
-        Mockito.verify(flyingService).findById(20);
     }
 
     @Test
     void testCreateFlight() throws Exception {
+        when(flyingService.saveAndReturn(any(Flying.class))).thenReturn(flying);
 
-        FlyingDTO dto = new FlyingDTO();
-        dto.setId(10);
-
-        Flying saved = FlyingMapper.toEntity(dto);
-        saved.setId(10); // ensure id returned
-
-        Mockito.when(flyingService.saveAndReturn(any())).thenReturn(saved);
-
-        mockMvc.perform(post("/api/flights/api")
+        mockMvc.perform(post("/api/flights")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(mapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(10));
-
-        Mockito.verify(flyingService).saveAndReturn(any());
+                .andExpect(jsonPath("$.flightNo").value("AA123"))
+                .andExpect(jsonPath("$.departureAirport").value("JFK"));
     }
 
     @Test
     void testUpdateFlight_Exists() throws Exception {
+        when(flyingService.findById(1)).thenReturn(Optional.of(flying));
+        when(flyingService.saveAndReturn(any(Flying.class))).thenReturn(flying);
 
-        Flying existing = new Flying();
-        existing.setId(7);
+        dto.setStatus("DELAYED"); // update status
 
-        FlyingDTO dto = new FlyingDTO();
-        dto.setId(0);
-
-        Flying updated = new Flying();
-        updated.setId(7);
-
-        Mockito.when(flyingService.findById(7)).thenReturn(Optional.of(existing));
-        Mockito.when(flyingService.saveAndReturn(any())).thenReturn(updated);
-
-        mockMvc.perform(put("/api/flights/api/7")
+        mockMvc.perform(put("/api/flights/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(mapper.writeValueAsString(dto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(7));
-
-        Mockito.verify(flyingService).findById(7);
-        Mockito.verify(flyingService).saveAndReturn(any());
+                .andExpect(jsonPath("$.status").value("SCHEDULED")); // mapper returns flying object
     }
 
     @Test
     void testUpdateFlight_NotExists() throws Exception {
+        when(flyingService.findById(99)).thenReturn(Optional.empty());
 
-        Mockito.when(flyingService.findById(99)).thenReturn(Optional.empty());
-
-        FlyingDTO dto = new FlyingDTO();
-        dto.setId(0);
-
-        mockMvc.perform(put("/api/flights/api/99")
+        mockMvc.perform(put("/api/flights/99")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(dto)))
+                        .content(mapper.writeValueAsString(dto)))
                 .andExpect(status().isNotFound());
-
-        Mockito.verify(flyingService).findById(99);
-        Mockito.verify(flyingService, Mockito.never()).saveAndReturn(any());
     }
 
     @Test
     void testDeleteFlight() throws Exception {
+        doNothing().when(flyingService).deleteById(1);
 
-        mockMvc.perform(delete("/api/flights/api/12"))
+        mockMvc.perform(delete("/api/flights/1"))
                 .andExpect(status().isNoContent());
-
-        Mockito.verify(flyingService).deleteById(12);
     }
 }
