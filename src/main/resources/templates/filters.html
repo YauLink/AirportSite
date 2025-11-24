@@ -45,10 +45,10 @@
           </thead>
           <tbody>
           <tr th:each="flight : ${flying}">
-            <td th:text="${flight.airportOut?.name}"></td>
-            <td th:text="${flight.airportIn?.name}"></td>
-            <td th:text="${flight.date}"></td>
-            <td th:text="${flight.flightNumber}"></td>
+            <td th:text="${flight.departureAirport}"></td>
+            <td th:text="${flight.arrivalAirport}"></td>
+            <td th:text="${flight.scheduledDeparture}"></td>
+            <td th:text="${flight.flightNo}"></td>
           </tr>
           </tbody>
         </table>

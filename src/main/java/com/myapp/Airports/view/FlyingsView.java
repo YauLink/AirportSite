@@ -18,8 +18,8 @@ public class FlyingsView implements IFlyingsView {
     }
 
     @Override
-    public long count(FlyingFilter filter){
-        return this.repository.countByArrivalAirportOrDepartureAirport(
+    public long count(FlyingFilter filter) {
+        return repository.countByDepartureAirportAndArrivalAirport(
                 filter.getAirportOut(),
                 filter.getAirportIn()
         );
@@ -27,10 +27,10 @@ public class FlyingsView implements IFlyingsView {
 
     @Override
     public List<Flying> getList(FlyingFilter filter) {
-        return this.repository.findAllByArrivalAirportOrDepartureAirport(
+        return repository.findAllByDepartureAirportAndArrivalAirport(
                 filter.getAirportOut(),
                 filter.getAirportIn(),
-                PageRequest.of(filter.getPage(), 20)
+                PageRequest.of(filter.getPage() - 1, 20)
         );
     }
 
