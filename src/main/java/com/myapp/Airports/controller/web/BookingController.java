@@ -1,19 +1,17 @@
 package com.myapp.Airports.controller.web;
 
-
 import com.myapp.Airports.dto.BookingDTO;
 import com.myapp.Airports.mapper.BookingMapper;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Seat;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/bookings")

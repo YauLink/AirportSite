@@ -16,10 +16,10 @@ public class TicketMapper {
         return dto;
     }
 
-    public static Ticket toEntity(TicketDTO dto, Booking booking) {
+    public static Ticket toEntity(TicketDTO dto) {
         Ticket ticket = new Ticket();
         ticket.setTicketNo(dto.getTicketNo());
-        ticket.setBooking(booking);
+        //ticket.setBooking(booking);
         ticket.setPassengerId(dto.getPassengerId());
         ticket.setPassengerName(dto.getPassengerName());
         ticket.setContactData(dto.getContactData());

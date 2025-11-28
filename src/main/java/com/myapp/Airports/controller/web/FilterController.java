@@ -5,11 +5,14 @@ import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/filters")
@@ -28,11 +31,9 @@ public class FilterController {
                                  @RequestParam(name = "airport_out", required = false) String airportOut,
                                  @RequestParam(name = "airport_in", required = false) String airportIn,
                                  Model model) {
-        // Populate airports for dropdowns
         List<Airport> airports = airportView.getAll();
         model.addAttribute("airports", airports);
 
-        // Show empty or filtered list based on optional params
         if ((airportOut != null && !airportOut.isBlank()) || (airportIn != null && !airportIn.isBlank())) {
             var filter = new IFlyingsView.FlyingFilter(
                     airportOut.isBlank() ? null : airportOut,

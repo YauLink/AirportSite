@@ -6,6 +6,7 @@ import com.myapp.Airports.view.api.IFlyingsView.FlyingFilter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,28 +26,33 @@ class FlyingsViewTest {
 
     @Test
     void count_ShouldCallRepositoryWithCorrectParams() {
-        FlyingFilter filter = new FlyingFilter("JFK", "LAX", 0);
-        when(repository.countByArrivalAirportOrDepartureAirport("JFK", "LAX")).thenReturn(5L);
+        FlyingFilter filter = new FlyingFilter("JFK", "LAX", 1);
+
+        when(repository.countByDepartureAirportAndArrivalAirport("JFK", "LAX"))
+                .thenReturn(5L);
 
         long count = view.count(filter);
 
         assertEquals(5L, count);
-        verify(repository).countByArrivalAirportOrDepartureAirport("JFK", "LAX");
-    }
 
+        verify(repository).countByDepartureAirportAndArrivalAirport("JFK", "LAX");
+    }
     @Test
     void getList_ShouldCallRepositoryWithCorrectParams() {
-        FlyingFilter filter = new FlyingFilter("JFK", "LAX", 0);
+        FlyingFilter filter = new FlyingFilter("JFK", "LAX", 1);
         List<Flying> expectedList = List.of(new Flying(), new Flying());
 
-        when(repository.findAllByArrivalAirportOrDepartureAirport(
-                "JFK", "LAX", PageRequest.of(0, 20))
-        ).thenReturn(expectedList);
+        Pageable pageable = PageRequest.of(0, 20); // page = filter.page - 1
+
+        when(repository.findAllByDepartureAirportAndArrivalAirport(
+                "JFK", "LAX", pageable
+        )).thenReturn(expectedList);
 
         List<Flying> result = view.getList(filter);
 
         assertEquals(expectedList, result);
-        verify(repository).findAllByArrivalAirportOrDepartureAirport("JFK", "LAX", PageRequest.of(0, 20));
+
+        verify(repository).findAllByDepartureAirportAndArrivalAirport("JFK", "LAX", pageable);
     }
 
     @Test

@@ -134,4 +134,8 @@ public class FlyingDTO {
     public void setActualArrival(LocalDateTime actualArrival) {
         this.actualArrival = actualArrival;
     }
+
+    public void setId(int i) {
+        this.flightId = i;
+    }
 }

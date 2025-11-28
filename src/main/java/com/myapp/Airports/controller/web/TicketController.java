@@ -8,10 +8,12 @@ import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.service.TicketService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 

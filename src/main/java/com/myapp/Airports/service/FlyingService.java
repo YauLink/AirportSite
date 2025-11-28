@@ -23,6 +23,11 @@ public class FlyingService {
         flyingRepository.save(flying);
     }
 
+    @CacheEvict(value = {"flights"}, allEntries = true)
+    public Flying saveAndReturn(Flying flying) {
+        return flyingRepository.save(flying);
+    }
+
     @Cacheable(value = "flights")
     public List<Flying> findAll() {
         System.out.println("⏳ Fetching all flights from DB...");

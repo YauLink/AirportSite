@@ -5,11 +5,13 @@ import com.myapp.Airports.mapper.FlyingMapper;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.service.FlyingService;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -70,7 +72,6 @@ public class FlyingController {
         return "redirect:/flights";
     }
 
-    // Delete a flight
     @PostMapping("/delete/{id}")
     public String deleteFlight(@PathVariable("id") Integer id) {
         flyingService.deleteById(id);

@@ -7,7 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface IFlyingsRepository extends JpaRepository<Flying, Integer> {
-    long countByArrivalAirportOrDepartureAirport(String airportOut, String airportIn);
-    List<Flying> findAllByArrivalAirportOrDepartureAirport(String airportOut, String airportIn, Pageable pageable);
+    List<Flying> findAllByDepartureAirportAndArrivalAirport(
+            String departureAirport,
+            String arrivalAirport,
+            Pageable pageable);
+
+    long countByDepartureAirportAndArrivalAirport(
+            String departureAirport,
+            String arrivalAirport);
 
 }
