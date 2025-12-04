@@ -1,18 +1,14 @@
 package com.myapp.Airports.controller.web;
 
-import com.myapp.Airports.model.Airport;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @RequestMapping("/filters")
@@ -27,38 +23,52 @@ public class FilterController {
     }
 
     @GetMapping
-    public String showFilterForm(@RequestParam(name = "page", defaultValue = "1", required = false) int currentPage,
-                                 @RequestParam(name = "airport_out", required = false) String airportOut,
-                                 @RequestParam(name = "airport_in", required = false) String airportIn,
-                                 Model model) {
-        List<Airport> airports = airportView.getAll();
-        model.addAttribute("airports", airports);
+    public String showFilterForm(
+            @RequestParam(name = "page", defaultValue = "1") int currentPage,
+            @RequestParam(name = "airport_out", required = false) String airportOut,
+            @RequestParam(name = "airport_in", required = false) String airportIn,
+            Model model) {
 
-        if ((airportOut != null && !airportOut.isBlank()) || (airportIn != null && !airportIn.isBlank())) {
-            var filter = new IFlyingsView.FlyingFilter(
-                    airportOut.isBlank() ? null : airportOut,
-                    airportIn.isBlank() ? null : airportIn,
+        model.addAttribute("airports", airportView.getAll());
+
+        String normalizedOut = (airportOut == null || airportOut.isBlank()) ? null : airportOut;
+        String normalizedIn = (airportIn == null || airportIn.isBlank()) ? null : airportIn;
+
+        if (normalizedOut != null && normalizedIn != null) {
+
+            IFlyingsView.FlyingFilter filter = new IFlyingsView.FlyingFilter(
+                    normalizedOut,
+                    normalizedIn,
                     currentPage
             );
 
-            List<Flying> flying = flyingsView.getList(filter);
-            long maxCountFlying = flyingsView.count(filter);
+            List<Flying> flights = flyingsView.getList(filter);
+            long totalItems = flyingsView.count(filter);
+            long totalPages = (long) Math.ceil(totalItems / 20.0);
 
-            model.addAttribute("flying", flying);
-            model.addAttribute("maxCountFlying", maxCountFlying);
+            model.addAttribute("flying", flights);
+            model.addAttribute("maxCountFlying", totalPages);
             model.addAttribute("currentPage", currentPage);
-            model.addAttribute("currentAirportOut", airportOut);
-            model.addAttribute("currentAirportIn", airportIn);
+            model.addAttribute("currentAirportOut", normalizedOut);
+            model.addAttribute("currentAirportIn", normalizedIn);
+        } else {
+            model.addAttribute("flying", null);
+            model.addAttribute("maxCountFlying", 0);
+            model.addAttribute("currentPage", 1);
+            model.addAttribute("currentAirportOut", null);
+            model.addAttribute("currentAirportIn", null);
         }
 
         return "filters";
     }
 
     @PostMapping
-    public String handleFilter(@RequestParam("airport_out") String airportOut,
-                               @RequestParam("airport_in") String airportIn,
-                               @RequestParam(name = "page", defaultValue = "1", required = false) int currentPage,
-                               Model model) {
-        return showFilterForm(currentPage, airportOut, airportIn, model);
+    public String handleFilter(
+            @RequestParam("airport_out") String airportOut,
+            @RequestParam("airport_in") String airportIn) {
+
+        return "redirect:/filters?airport_out=" + airportOut +
+                "&airport_in=" + airportIn +
+                "&page=1";
     }
 }
