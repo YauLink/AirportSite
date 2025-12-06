@@ -1,36 +1,73 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Booking lists</title>
+    <title>Booking Lists</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    <style>
+        .pagination a.active {
+            font-weight: bold;
+            text-decoration: underline;
+        }
+    </style>
 </head>
-    <body>
-        <div class="container">
-            <h2>Booking lists</h2>
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Ref</th>
-                        <th>Flight</th>
-                        <th>Seat</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="b : ${bookings}">
-                        <td th:text="${b.bookRef}"></td>
-                        <td th:text="${b.bookDate}"></td>
-                        <td th:text="${b.totalAmount}"></td>
-                        <td>
-                            <a th:href="@{'/bookings/edit/' + ${b.bookRef}}" class="btn">Edit</a>
-                            <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}" class="btn">Cancel</a>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+<body>
+<div class="container">
+    <h2>Booking Lists</h2>
+
+    <div class="table-wrapper">
+        <table>
+            <thead>
+            <tr>
+                <th>Ref</th>
+                <th>Date</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="b : ${bookingsPage.content}">
+                <td th:text="${b.bookRef}">N/A</td>
+                <td th:text="${b.bookDate != null} ? ${#temporals.format(b.bookDate, 'yyyy-MM-dd HH:mm')} : 'N/A'">N/A</td>
+                <td th:text="${b.totalAmount != null} ? ${b.totalAmount} : '0.00'">0.00</td>
+                <td>
+                    <a th:href="@{'/bookings/edit/' + ${b.bookRef}}" class="btn">Edit</a>
+                    <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}" class="btn">Cancel</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" th:if="${bookingsPage.totalPages > 1}">
+        <div th:with="
+            cp=${bookingsPage.number},
+            tp=${bookingsPage.totalPages},
+            size=${bookingsPage.size},
+            start=${cp - 3 >= 0 ? cp - 3 : 0},
+            end=${cp + 3 < tp ? cp + 3 : tp - 1}">
+
+            <a th:if="${cp > 0}" th:href="@{'/bookings/list'(page=${cp - 1}, size=${size})}">Previous</a>
+
+            <a th:if="${start > 0}" th:href="@{'/bookings/list'(page=0, size=${size})}">1</a>
+            <span th:if="${start > 1}" class="ellipsis">...</span>
+
+            <span th:each="i : ${#numbers.sequence(start, end)}">
+                <a th:href="@{'/bookings/list'(page=${i}, size=${size})}"
+                   th:text="${i + 1}"
+                   th:classappend="${i == cp} ? 'active' : ''">
+                </a>
+            </span>
+
+            <span th:if="${end < tp - 2}" class="ellipsis">...</span>
+            <a th:if="${end < tp - 1}" th:href="@{'/bookings/list'(page=${tp - 1}, size=${size})}"
+               th:text="${tp}"></a>
+
+            <!-- Next -->
+            <a th:if="${cp < tp - 1}" th:href="@{'/bookings/list'(page=${cp + 1}, size=${size})}">Next</a>
         </div>
-    </body>
+    </div>
+</div>
+</body>
 </html>

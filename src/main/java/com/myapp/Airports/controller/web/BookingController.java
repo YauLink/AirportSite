@@ -6,6 +6,7 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Seat;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,8 +27,17 @@ public class BookingController {
     }
 
     @GetMapping("/list")
-    public String getAll(Model model) {
-        model.addAttribute("bookings", bookingService.findAll());
+    public String getAll(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "30") int size,
+            Model model) {
+
+        Page<Booking> bookingsPage = bookingService.findAll(page, size);
+
+        model.addAttribute("bookingsPage", bookingsPage);
+        model.addAttribute("currentPage", bookingsPage.getNumber());
+        model.addAttribute("totalPages", bookingsPage.getTotalPages());
+
         return "bookings/list";
     }
 

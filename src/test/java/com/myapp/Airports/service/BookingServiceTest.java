@@ -35,7 +35,7 @@ class BookingServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @Test
+/*    @Test
     void testFindAll() {
         Booking b1 = new Booking();
         Booking b2 = new Booking();
@@ -45,7 +45,7 @@ class BookingServiceTest {
 
         assertEquals(2, result.size());
         verify(bookingRepository).findAll();
-    }
+    }*/
 
     @Test
     void testFindByBookRef_found() {

@@ -6,6 +6,7 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,11 +25,13 @@ public class RestBookingController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BookingDTO>> getAllBookings() {
-        List<BookingDTO> bookings = bookingService.findAll()
-                .stream()
-                .map(BookingMapper::toDto)
-                .toList();
+    public ResponseEntity<Page<BookingDTO>> getAllBookings(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "30") int size) {
+
+        Page<BookingDTO> bookings = bookingService.findAll(page, size)
+                .map(BookingMapper::toDto);
+
         return ResponseEntity.ok(bookings);
     }
 

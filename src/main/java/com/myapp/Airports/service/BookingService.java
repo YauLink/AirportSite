@@ -6,6 +6,9 @@ import com.myapp.Airports.storage.api.IBookingRepository;
 import com.myapp.Airports.storage.api.ITicketFlightRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,9 +25,10 @@ public class BookingService {
     }
 
     @Cacheable(value = "bookings")
-    public List<Booking> findAll() {
-        System.out.println("⏳ Fetching all bookings from DB...");
-        return bookingRepository.findAll();
+    public Page<Booking> findAll(int page, int size) {
+        PageRequest req = PageRequest.of(page, size, Sort.by("bookDate").descending());
+        System.out.println("⏳ Fetching paginated bookings from DB...");
+        return bookingRepository.findAll(req);
     }
 
     @Cacheable(value = "booking", key = "#book_ref")

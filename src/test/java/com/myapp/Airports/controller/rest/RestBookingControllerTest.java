@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -73,12 +75,15 @@ class RestBookingControllerTest {
     @Test
     void testGetAllBookings() throws Exception {
         Booking b = bookingEntity();
-        when(bookingService.findAll()).thenReturn(List.of(b));
+        Page<Booking> page = new PageImpl<>(List.of(b));
+        when(bookingService.findAll(0, 10)).thenReturn(page);
 
-        mockMvc.perform(get("/api/bookings"))
+        mockMvc.perform(get("/api/bookings")
+                        .param("page", "0")
+                        .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].bookRef").value("ABC123"))
-                .andExpect(jsonPath("$[0].totalAmount").value(150.00));
+                .andExpect(jsonPath("$.content[0].bookRef").value("ABC123"))
+                .andExpect(jsonPath("$.content[0].totalAmount").value(150.00));
     }
 
     @Test
