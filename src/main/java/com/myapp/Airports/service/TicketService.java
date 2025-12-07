@@ -30,6 +30,7 @@ public class TicketService {
         return ticketRepo.findAll();
     }
 
+    @Cacheable(value = "tickets")
     public Page<Ticket> getAllTickets(int n, int page) {
         return ticketRepo.findAll(PageRequest.of(page, n));
     }

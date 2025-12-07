@@ -29,10 +29,11 @@ public class TicketController {
 
     @GetMapping
     public String showTicketList(@RequestParam(defaultValue = "0") int page, Model model) {
-        int pageSize = 20, amount = 100;
-        Page<Ticket> ticketPage = service.getAllTickets(amount, pageSize);
+        int pageSize = 20;
+        Page<Ticket> ticketPage = service.getAllTickets(pageSize, page);
 
         model.addAttribute("tickets", ticketPage.getContent());
+        model.addAttribute("ticketPage", ticketPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", ticketPage.getTotalPages());
 

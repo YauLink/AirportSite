@@ -37,20 +37,50 @@
           </tr>
           </tbody>
         </table>
-        <div class="pagination" style="margin-top: 15px; text-align: center;">
-          <a th:if="${currentPage > 0}"
-             th:href="@{/tickets(page=${currentPage - 1})}"
-             class="btn">Previous</a>
+      </div>
+      <div class="pagination"
+           th:if="${ticketPage.totalPages > 1}">
 
-          <span style="margin: 0 10px;">
-              Page [[${currentPage + 1}]] of [[${totalPages}]]
+        <div class="pagination-inner"
+             th:with="
+            cp=${ticketPage.number},
+            tp=${ticketPage.totalPages},
+            size=${ticketPage.size},
+            start=${cp - 3 >= 0 ? cp - 3 : 0},
+            end=${cp + 3 < tp ? cp + 3 : tp - 1}">
+
+          <a th:if="${cp > 0}"
+             th:href="@{'/tickets'(page=${cp - 1}, size=${size})}">
+            Previous
+          </a>
+
+          <a th:if="${start > 0}"
+             th:href="@{'/tickets'(page=0, size=${size})}">
+            1
+          </a>
+
+          <span th:if="${start > 1}" class="ellipsis">...</span>
+
+          <span th:each="i : ${#numbers.sequence(start, end)}">
+            <a th:href="@{'/tickets'(page=${i}, size=${size})}"
+               th:text="${i + 1}"
+               th:classappend="${i == cp} ? 'active' : ''">
+            </a>
           </span>
 
-          <a th:if="${currentPage + 1 < totalPages}"
-             th:href="@{/tickets(page=${currentPage + 1})}"
-             class="btn">Next</a>
+          <span th:if="${end < tp - 2}" class="ellipsis">...</span>
+
+          <a th:if="${end < tp - 1}"
+             th:href="@{'/tickets'(page=${tp - 1}, size=${size})}"
+             th:text="${tp}">
+          </a>
+
+          <a th:if="${cp < tp - 1}"
+             th:href="@{'/tickets'(page=${cp + 1}, size=${size})}">
+            Next
+          </a>
+
         </div>
-      </div>
     </div>
   </body>
 </html>
