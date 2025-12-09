@@ -31,7 +31,7 @@ public class BookingService {
         return bookingRepository.findAll(req);
     }
 
-    @Cacheable(value = "booking", key = "#book_ref")
+    @Cacheable(value = "booking", key = "#bookRef")
     public Booking findByBookRef(String bookRef) {
         System.out.println("⏳ Fetching booking " + bookRef + " from DB...");
         return bookingRepository.findById(bookRef)

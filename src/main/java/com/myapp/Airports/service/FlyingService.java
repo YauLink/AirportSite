@@ -34,7 +34,7 @@ public class FlyingService {
         return flyingRepository.findAll();
     }
 
-    @Cacheable(value = "flight", key = "#flight_id")
+    @Cacheable(value = "flight", key = "#id")
     public Optional<Flying> findById(Integer id) {
         System.out.println("⏳ Fetching flight " + id + " from DB...");
         return flyingRepository.findById(id);

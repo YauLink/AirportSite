@@ -27,11 +27,19 @@ public class FlyingsView implements IFlyingsView {
 
     @Override
     public List<Flying> getList(FlyingFilter filter) {
-        return repository.findAllByDepartureAirportAndArrivalAirport(
+        System.out.println("DEBUG: getList called -> departure=" + filter.getAirportOut() +
+                ", arrival=" + filter.getAirportIn());
+
+        List<Flying> flights = repository.findAllByDepartureAirportAndArrivalAirport(
                 filter.getAirportOut(),
                 filter.getAirportIn(),
                 PageRequest.of(filter.getPage() - 1, 20)
         );
+
+        System.out.println("DEBUG: flights returned = " + flights.size());
+        flights.forEach(f -> System.out.println(f.getFlightNo() + ": " + f.getDepartureAirport() + "->" + f.getArrivalAirport()));
+
+        return flights;
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.myapp.Airports.model;
 
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,14 @@ public class Booking {
 
     @OneToMany(mappedBy = "booking", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Ticket> tickets = new ArrayList<>();;
+
+    public Booking () {}
+
+    public Booking(String ref, LocalDateTime date, BigDecimal amount) {
+        this.bookRef = ref;
+        this.bookDate = date;
+        this.totalAmount = amount;
+    }
 
     public String getBookRef() {
         return bookRef;
