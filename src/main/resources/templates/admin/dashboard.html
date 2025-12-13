@@ -7,15 +7,30 @@
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
   <body>
-    <div class="container">
-      <h1>Admin Dashboard</h1>
-      <p>Welcome to admin dashboard</p>
+    <div class="actions">
+      <h2>Management</h2>
+      <a href="/admin/users" class="btn">Manage Users</a>
+      <a href="/admin/flights" class="btn">Manage Flights</a>
+    </div>
 
-      <div>
-        <a href="/admin/users" class="btn">Manage Users</a>
-        <a href="/admin/flights" class="btn">Manage Flights</a>
-        <a href="/admin/settings" class="btn">Settings</a>
-      </div>
+    <!-- Reports -->
+    <div class="actions">
+      <h2>Reports</h2>
+      <a href="/admin/reports/bookings" class="btn">Bookings Report</a>
+      <a href="/admin/reports/flights" class="btn">Flights Report</a>
+      <a href="/admin/reports/users" class="btn">Users Activity Report</a>
+    </div>
+
+    <!-- System monitoring -->
+    <div class="actions">
+      <h2>System</h2>
+      <a href="/admin/logs" class="btn">System Logs</a>
+    </div>
+
+    <!-- Settings -->
+    <div class="actions">
+      <h2>Settings</h2>
+      <a href="/admin/settings" class="btn">Application Settings</a>
     </div>
   </body>
 </html>

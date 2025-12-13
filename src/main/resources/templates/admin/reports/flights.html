@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Flights Report</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<div class="container">
+  <h1>Flights Report</h1>
+
+  <table>
+    <thead>
+    <tr>
+      <th>Flight Code</th>
+      <th>From</th>
+      <th>To</th>
+      <th>Total Bookings</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="flight : ${flights}">
+      <td th:text="${flight.code}"></td>
+      <td th:text="${flight.from}"></td>
+      <td th:text="${flight.to}"></td>
+      <td th:text="${flight.bookings}"></td>
+    </tr>
+    </tbody>
+  </table>
+
+  <a href="/admin" class="btn">Back</a>
+</div>
+</body>
+</html>

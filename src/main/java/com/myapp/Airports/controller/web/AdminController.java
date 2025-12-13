@@ -26,17 +26,34 @@ public class AdminController {
         return "admin/dashboard";
     }
 
-
-    @GetMapping(value = "/users", produces = {"text/html"})
-    protected String manageUsers(Model model) {
-        model.addAttribute("users", List.of("Alice", "Bob", "Charlie"));
+    @GetMapping(value = "/users", produces = "text/html")
+    public String manageUsers(Model model) {
         return "admin/users";
     }
 
-    @GetMapping(value = "/flights", produces = {"text/html"})
-    protected String manageFlights(Model model) {
-        model.addAttribute("flights", List.of("Flight-101", "Flight-202", "Flight-303"));
+    @GetMapping(value = "/flights", produces = "text/html")
+    public String manageFlights(Model model) {
         return "admin/flights";
+    }
+
+    @GetMapping(value = "/reports/bookings", produces = "text/html")
+    public String bookingsReport(Model model) {
+        return "admin/reports/bookings";
+    }
+
+    @GetMapping(value = "/reports/flights", produces = "text/html")
+    public String flightsReport(Model model) {
+        return "admin/reports/flights";
+    }
+
+    @GetMapping(value = "/reports/users", produces = "text/html")
+    public String usersReport(Model model) {
+        return "admin/reports/users";
+    }
+
+    @GetMapping(value = "/logs", produces = "text/html")
+    public String systemLogs(Model model) {
+        return "admin/logs";
     }
 
     @GetMapping(value = "/settings", produces = {"text/html"})
@@ -44,40 +61,5 @@ public class AdminController {
         model.addAttribute("theme", "dark");
         model.addAttribute("notificationsEnabled", true);
         return "admin/settings";
-    }
-
-    /* ---------------- REST API ENDPOINTS ---------------- */
-
-    @GetMapping(value = "/api/dashboard", produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> getDashboardData() {
-        Map<String, Object> data = Map.of(
-                "totalUsers", 3,
-                "totalFlights", 3,
-                "systemStatus", "OK"
-        );
-        return ResponseEntity.ok(data);
-    }
-
-    @GetMapping(value = "/api/users", produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<List<String>> getUsers() {
-        return ResponseEntity.ok(List.of("Alice", "Bob", "Charlie"));
-    }
-
-    @GetMapping(value = "/api/flights", produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<List<String>> getFlights() {
-        return ResponseEntity.ok(List.of("Flight-101", "Flight-202", "Flight-303"));
-    }
-
-    @GetMapping(value = "/api/settings", produces = "application/json")
-    @ResponseBody
-    public ResponseEntity<Map<String, Object>> getSettings() {
-        Map<String, Object> settings = Map.of(
-                "theme", "dark",
-                "notificationsEnabled", true
-        );
-        return ResponseEntity.ok(settings);
     }
 }
