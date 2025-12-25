@@ -31,4 +31,8 @@ public class SeatId implements Serializable {
     public int hashCode() {
         return Objects.hash(seatNo, aircraftCode);
     }
+
+    public String getSeatNo() {
+        return seatNo;
+    }
 }
