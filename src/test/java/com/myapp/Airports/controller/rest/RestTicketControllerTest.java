@@ -61,7 +61,7 @@ class RestTicketControllerTest {
 
         dto = new TicketDTO(
                 "TCK123",
-                "BR123",
+                booking,
                 "PID999",
                 "John Doe",
                 "12345"
@@ -85,7 +85,7 @@ class RestTicketControllerTest {
         mockMvc.perform(get("/api/tickets/TCK123"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.ticketNo").value("TCK123"))
-                .andExpect(jsonPath("$.bookRef").value("BR123"));
+                .andExpect(jsonPath("$.booking.bookRef").value(booking.getBookRef()));
     }
 
     @Test
@@ -130,7 +130,7 @@ class RestTicketControllerTest {
 
         TicketDTO updateDto = new TicketDTO(
                 "TCK123",
-                "BR123",
+                booking,
                 "PID999",
                 "John Doe UPDATED",
                 "55555"
