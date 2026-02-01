@@ -9,6 +9,10 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -35,17 +39,27 @@ class BookingServiceTest {
         MockitoAnnotations.openMocks(this);
     }
 
-/*    @Test
+    @Test
     void testFindAll() {
         Booking b1 = new Booking();
         Booking b2 = new Booking();
-        when(bookingRepository.findAll()).thenReturn(Arrays.asList(b1, b2));
 
-        List<Booking> result = bookingService.findAll();
+        int page = 0;
+        int size = 2;
 
-        assertEquals(2, result.size());
-        verify(bookingRepository).findAll();
-    }*/
+        PageRequest pageRequest =
+                PageRequest.of(page, size, Sort.by("bookDate").descending());
+
+        Page<Booking> bookingPage =
+                new PageImpl<>(Arrays.asList(b1, b2), pageRequest, 2);
+
+        when(bookingRepository.findAll(pageRequest)).thenReturn(bookingPage);
+
+        Page<Booking> result = bookingService.findAll(page, size);
+
+        assertEquals(2, result.getContent().size());
+        verify(bookingRepository).findAll(pageRequest);
+    }
 
     @Test
     void testFindByBookRef_found() {

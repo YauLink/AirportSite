@@ -31,7 +31,7 @@ class FilterControllerTest {
     @MockBean
     private IFlyingsView flyingsView;
 
-    /*@Test
+    @Test
     void shouldShowFilterFormWithoutParams() throws Exception {
         when(airportView.getAll()).thenReturn(Collections.emptyList());
 
@@ -70,10 +70,9 @@ class FilterControllerTest {
                         .param("airport_in", "LAX")
                         .param("page", "1")
                         .with(csrf()))
-                .andExpect(status().isOk())
-                .andExpect(view().name("filters"))
-                .andExpect(model().attributeExists(
-                        "airports", "flying", "maxCountFlying", "currentPage", "currentAirportOut", "currentAirportIn"
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl(
+                        "/filters?airport_out=JFK&airport_in=LAX&page=1"
                 ));
-    }*/
+    }
 }
