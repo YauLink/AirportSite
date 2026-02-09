@@ -17,4 +17,6 @@ public interface ITicketRepository extends JpaRepository<Ticket, String> {
 
     @Query(value = "SELECT * FROM tickets ORDER BY random()", nativeQuery = true)
     Page<Ticket> findAll(Pageable pageable);
+
+    List<Ticket> findAllByPassengerId(String passengerId);
 }

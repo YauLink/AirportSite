@@ -42,6 +42,12 @@ public class TicketService {
                 .orElseThrow(() -> new RuntimeException("Ticket not found"));
     }
 
+    @Cacheable(value = "tickets", key = "#passengerId")
+    public List<Ticket> findAllByUserId(String passengerId) {
+        System.out.println("⏳ Fetching tickets of User " + passengerId + " from DB...");
+        return ticketRepo.findAllByPassengerId(passengerId);
+    }
+
     @CacheEvict(value = {"tickets", "ticket"}, allEntries = true)
     public Ticket save(Ticket ticket) {
         return ticketRepo.save(ticket);

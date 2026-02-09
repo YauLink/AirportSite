@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>User Cabinet</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+  </head>
+  <body>
+
+    <h2>Welcome, <span th:text="${fullName}"></span></h2>
+
+    <a href="/logout">Logout</a>
+
+    <h3>My Tickets</h3>
+
+    <table border="1">
+      <tr>
+        <th>Ticket No</th>
+        <th>Booking Ref</th>
+        <th>Flight</th>
+        <th>Status</th>
+      </tr>
+
+      <tr th:each="ticket : ${tickets}">
+        <td th:text="${ticket.ticketNo}"></td>
+        <td th:text="${ticket.bookingRef}"></td>
+        <td th:text="${ticket.flightId}"></td>
+        <td th:text="${ticket.status}"></td>
+      </tr>
+    </table>
+
+  </body>
+</html>
