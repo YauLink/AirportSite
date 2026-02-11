@@ -9,6 +9,7 @@ import com.myapp.Airports.view.api.IFlyingsView;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 
 @Configuration
@@ -23,6 +24,11 @@ public class RootConfig {
     @Bean
     public IFlyingsView flyingsView(IFlyingsRepository repository){
         return new FlyingsView(repository);
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
 
