@@ -1,9 +1,12 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.controller.web.AdminController;
+import com.myapp.Airports.service.BookingService;
+import com.myapp.Airports.service.FlyingService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -17,6 +20,12 @@ class AdminControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private FlyingService flyingService;
+
+    @MockBean
+    private BookingService bookingService;
 
     @Test
     void shouldReturnAdminIndexView() throws Exception {
