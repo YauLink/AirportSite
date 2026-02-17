@@ -15,7 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * MVC controller responsible for admin cabinet.
+ * <p>
+ * Provides endpoints for creating and retrieving information about flights and logs.
+ * </p>
+ */
 @Controller
 @RequestMapping(value = "/admin")
 public class AdminController {

@@ -7,6 +7,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents a flight booking in the system.
+ * <p>
+ * Each booking links a user to a specific flight and stores
+ * booking metadata such as creation time and booking reference.
+ * </p>
+ */
 @Entity
 @Table(name = "bookings")
 public class Booking {

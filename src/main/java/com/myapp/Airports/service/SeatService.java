@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Handles seat operations for flights.
+ */
 @Service
 public class SeatService {
 

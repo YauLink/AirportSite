@@ -5,6 +5,12 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+/**
+ * Represents a flight in the system.
+ * <p>
+ * Each flight contains info about schedule, aircraft and flight data as id and number
+ * </p>
+ */
 @Entity(name = "Flying")
 @Table(name = "flights", schema = "bookings")
 public class Flying implements Serializable{

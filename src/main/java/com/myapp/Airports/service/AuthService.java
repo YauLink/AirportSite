@@ -6,6 +6,9 @@ import com.myapp.Airports.storage.api.IAuthService;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Handles credentials verification and login.
+ */
 @Service
 public class AuthService implements IAuthService {
 

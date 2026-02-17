@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * REST controller responsible for managing flights.
+ * <p>
+ * Provides endpoints for creating and retrieving flights information.
+ * </p>
+ */
 @RestController
 @RequestMapping("/api/flights")
 public class RestFlyingController {

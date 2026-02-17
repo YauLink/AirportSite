@@ -17,6 +17,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * MVC controller responsible for managing flight tickets.
+ * <p>
+ * Provides endpoints for creating and retrieving ticket information.
+ * </p>
+ */
 @Controller
 @RequestMapping("/tickets")
 public class TicketController {

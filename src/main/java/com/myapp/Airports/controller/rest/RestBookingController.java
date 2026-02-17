@@ -12,6 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * REST controller responsible for managing flight bookings.
+ * <p>
+ * Provides endpoints for creating and retrieving booking information.
+ * </p>
+ */
 @RestController
 @RequestMapping("/api/bookings")
 public class RestBookingController {

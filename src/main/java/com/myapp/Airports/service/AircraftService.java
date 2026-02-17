@@ -6,6 +6,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Handles aircraft operations for flights.
+ */
 @Service
 public class AircraftService {
 

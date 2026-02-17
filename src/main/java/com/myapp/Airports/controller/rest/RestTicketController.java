@@ -13,6 +13,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST controller responsible for managing flight tickets.
+ * <p>
+ * Provides endpoints for creating and retrieving ticket information.
+ * </p>
+ */
 @RestController
 @RequestMapping("/api/tickets")
 public class RestTicketController {

@@ -4,6 +4,13 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+/**
+ * Represents a flight ticket in the system.
+ * <p>
+ * Each ticket links a user to a specific ticket and stores
+ * ticket metadata such as passenger id and booking.
+ * </p>
+ */
 @Entity
 @Table(name = "tickets")
 public class Ticket {

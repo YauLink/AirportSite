@@ -14,6 +14,12 @@ import org.springframework.ui.Model;
 
 import java.util.List;
 
+/**
+ * MVC controller responsible for managing flight bookings.
+ * <p>
+ * Provides endpoints for creating and retrieving booking information.
+ * </p>
+ */
 @Controller
 @RequestMapping("/bookings")
 public class BookingController {

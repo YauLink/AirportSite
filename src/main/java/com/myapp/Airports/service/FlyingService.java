@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Handles flights operations for flights.
+ */
 @Service
 public class FlyingService {
 

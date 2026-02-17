@@ -14,6 +14,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * MVC controller responsible for managing flights.
+ * <p>
+ * Provides endpoints for creating and retrieving flights information.
+ * </p>
+ */
 @Controller
 @RequestMapping("/flights")
 public class FlyingController {
