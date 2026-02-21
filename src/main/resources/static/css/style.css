@@ -1,9 +1,22 @@
 /* --- Global --- */
+* {
+    box-sizing: border-box;
+    transition: background 0.2s ease,
+                color 0.2s ease,
+                border 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.1s ease;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
     background: #f8f9fa;
     margin: 0;
     padding: 0;
+    line-height: 1.6;
+    color: #2c3e50;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 /* --- Main container --- */
@@ -13,8 +26,25 @@ body {
     padding: 20px;
     background: #ffffff;
     border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
     text-align: center;
+}
+
+/* --- Headings --- */
+h1, h2, h3 {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* --- Links --- */
+a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
 }
 
 /* --- Tables --- */
@@ -25,8 +55,12 @@ body {
 
 table {
     width: auto;
+    min-width: 600px;
     border-collapse: collapse;
     margin: 20px 0;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
 }
 
 th, td {
@@ -35,12 +69,18 @@ th, td {
     text-align: center;
 }
 
-tr:hover {
-    background: #f9f9f9;
-}
-
 th {
     background: #f1f1f1;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+tr:nth-child(even) {
+    background-color: #f8f9fb;
+}
+
+tr:hover {
+    background: #eef4ff;
 }
 
 /* --- Forms --- */
@@ -71,6 +111,13 @@ input, select {
     border-radius: 6px;
 }
 
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+}
+
 /* --- Buttons --- */
 button,
 .btn {
@@ -80,10 +127,12 @@ button,
     border: none;
     border-radius: 8px;
     font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
     cursor: pointer;
     background: #007bff;
     color: white;
-    transition: 0.2s;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
 button:hover,
@@ -92,7 +141,20 @@ button:hover,
     background: #0056b3;
 }
 
-/* --- Error messages --- */
+button:active,
+.btn:active {
+    transform: scale(0.97);
+}
+
+/* --- Messages --- */
+.message {
+    padding: 12px;
+    margin: 15px 0;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: center;
+}
+
 .error {
     color: red;
     font-size: 13px;
@@ -108,6 +170,25 @@ button:hover,
 /* --- Footer --- */
 footer {
     margin-top: 30px;
+    padding: 20px 0;
     font-size: 14px;
     color: #666;
+    border-top: 1px solid #eee;
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+    .container {
+        margin: 20px;
+        padding: 15px;
+    }
+
+    table {
+        min-width: 100%;
+        font-size: 14px;
+    }
+
+    form {
+        width: 100%;
+    }
 }
