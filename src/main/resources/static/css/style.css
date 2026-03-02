@@ -29,6 +29,29 @@
 .text-center { text-align: center; }
 .text-left { text-align: left; }
 
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 10px;
+    font-size: 12px;
+    border-radius: 20px;
+    background: #eef4ff;
+    color: var(--primary);
+    font-weight: 500;
+}
+
 body {
     font-family: "Segoe UI", Roboto, Arial, sans-serif;
     background: #f8f9fa;
