@@ -8,57 +8,13 @@
                 transform 0.1s ease;
 }
 
-:root {
-    --primary: #007bff;
-    --primary-dark: #0056b3;
-    --background: #f8f9fa;
-    --surface: #ffffff;
-    --text-main: #2c3e50;
-    --text-muted: #6c757d;
-    --border-light: #e0e0e0;
-    --success-bg: #d4edda;
-    --success-text: #155724;
-}
-
-.mt-1 { margin-top: 10px; }
-.mt-2 { margin-top: 20px; }
-.mb-1 { margin-bottom: 10px; }
-.mb-2 { margin-bottom: 20px; }
-.p-1 { padding: 10px; }
-.p-2 { padding: 20px; }
-.text-center { text-align: center; }
-.text-left { text-align: left; }
-
-::-webkit-scrollbar {
-    width: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
-}
-
-.badge {
-    display: inline-block;
-    padding: 4px 10px;
-    font-size: 12px;
-    border-radius: 20px;
-    background: #eef4ff;
-    color: var(--primary);
-    font-weight: 500;
-}
-
 body {
     font-family: "Segoe UI", Roboto, Arial, sans-serif;
     background: #f8f9fa;
     margin: 0;
     padding: 0;
     line-height: 1.6;
-    color: var(--primary);
+    color: #2c3e50;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -82,7 +38,7 @@ h1, h2, h3 {
 
 /* --- Links --- */
 a {
-    color: var(--primary);
+    color: #007bff;
     text-decoration: none;
     font-weight: 500;
 }
@@ -120,7 +76,7 @@ th {
 }
 
 tr:nth-child(even) {
-    background-color: var(--primary);
+    background-color: #f8f9fb;
 }
 
 tr:hover {
@@ -158,7 +114,7 @@ input, select {
 input:focus,
 select:focus {
     outline: none;
-    border-color: var(--primary);
+    border-color: #007bff;
     box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
 }
 
@@ -175,7 +131,7 @@ button,
     letter-spacing: 0.3px;
     cursor: pointer;
     background: #007bff;
-    color: var(--primary);
+    color: white;
     box-shadow: 0 4px 10px rgba(0, 123, 255, 0.2);
 }
 
@@ -200,15 +156,15 @@ button:active,
 }
 
 .error {
-    color: var(--primary);
+    color: red;
     font-size: 13px;
     margin-top: 4px;
     text-align: center;
 }
 
 .invalid-input {
-    border-color: var(--primary); !important;
-    background-color: var(--primary); !important;
+    border-color: red !important;
+    background-color: #ffe6e6 !important;
 }
 
 /* --- Footer --- */
@@ -216,7 +172,7 @@ footer {
     margin-top: 30px;
     padding: 20px 0;
     font-size: 14px;
-    color: var(--primary);
+    color: #666;
     border-top: 1px solid #eee;
 }
 
