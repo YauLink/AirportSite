@@ -48,14 +48,16 @@ public class BookingController {
     }
 
     @PostMapping
-    public BookingDTO create(@RequestBody BookingDTO dto) {
+    public String create(@ModelAttribute BookingDTO dto) {
         Booking booking = BookingMapper.toEntity(dto);
-        return BookingMapper.toDto(bookingService.save(booking));
+        bookingService.save(booking);
+        return "redirect:/bookings/list";
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) {
+    public String delete(@PathVariable String id) {
         bookingService.delete(id);
+        return "redirect:/bookings/list";
     }
 
     @GetMapping("/edit/{ref}")
