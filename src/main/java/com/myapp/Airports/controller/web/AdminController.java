@@ -1,22 +1,19 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.dto.AuthResponseDTO;
+import com.myapp.Airports.dto.FlyingDTO;
 import com.myapp.Airports.model.Booking;
+import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.data.domain.Page;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 /**
  * MVC controller responsible for admin cabinet.
@@ -118,5 +115,57 @@ public class AdminController {
         model.addAttribute("theme", "dark");
         model.addAttribute("notificationsEnabled", true);
         return "admin/settings";
+    }
+
+    @PostMapping(value = "/flights/create")
+    public String createFlight(@ModelAttribute FlyingDTO dto) {
+
+        Flying flight = new Flying();
+
+        flight.setFlightId(dto.getFlightId());
+        flight.setFlightNo(dto.getFlightNo());
+        flight.setScheduledDeparture(dto.getScheduledDeparture());
+        flight.setScheduledArrival(dto.getScheduledArrival());
+        flight.setDepartureAirport(dto.getDepartureAirport());
+        flight.setArrivalAirport(dto.getArrivalAirport());
+        flight.setStatus(dto.getStatus());
+        flight.setAircraftCode(dto.getAircraftCode());
+
+        flyingService.save(flight);
+
+        return "redirect:/admin/flights";
+    }
+
+    @GetMapping(value = "/flights/edit/{id}", produces = "text/html")
+    public String showEditFlightForm(@PathVariable Integer id, Model model) {
+
+        Optional<Flying> flight = flyingService.findById(id);
+
+        FlyingDTO dto = new FlyingDTO();
+        dto.setFlightId(flight.get().getFlightId());
+        dto.setFlightNo(flight.get().getFlightNo());
+        dto.setScheduledDeparture(flight.get().getScheduledDeparture());
+        dto.setScheduledArrival(flight.get().getScheduledArrival());
+        dto.setDepartureAirport(flight.get().getDepartureAirport());
+        dto.setArrivalAirport(flight.get().getArrivalAirport());
+        dto.setStatus(flight.get().getStatus());
+        dto.setAircraftCode(flight.get().getAircraftCode());
+
+        model.addAttribute("flight", dto);
+
+        return "admin/edit-flight";
+    }
+
+    @PostMapping(value = "/flights/edit/{id}")
+    public String updateFlight(@PathVariable Integer id,
+                               @ModelAttribute FlyingDTO dto) {
+        flyingService.update(id, dto);
+        return "redirect:/admin/flights";
+    }
+
+    @PostMapping(value = "/flights/delete/{id}")
+    public String deleteFlight(@PathVariable Integer id) {
+        flyingService.deleteById(id);
+        return "redirect:/admin/flights";
     }
 }

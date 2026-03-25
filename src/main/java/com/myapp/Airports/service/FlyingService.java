@@ -1,7 +1,9 @@
 package com.myapp.Airports.service;
 
+import com.myapp.Airports.dto.FlyingDTO;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.storage.api.IFlyingsRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -46,6 +48,22 @@ public class FlyingService {
     @CacheEvict(value = {"flights", "flight"}, allEntries = true)
     public void deleteById(Integer id) {
         flyingRepository.deleteById(id);
+    }
+
+    public void update (Integer id, FlyingDTO dto) {
+
+        Flying flight = flyingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Flight not found"));
+
+        flight.setFlightNo(dto.getFlightNo());
+        flight.setScheduledDeparture(dto.getScheduledDeparture());
+        flight.setScheduledArrival(dto.getScheduledArrival());
+        flight.setDepartureAirport(dto.getDepartureAirport());
+        flight.setArrivalAirport(dto.getArrivalAirport());
+        flight.setStatus(dto.getStatus());
+        flight.setAircraftCode(dto.getAircraftCode());
+
+        flyingRepository.save(flight);
     }
 }
 
