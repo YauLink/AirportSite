@@ -1,32 +1,55 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <title>Manage Users</title>
+  <title>Manage Flights</title>
   <meta charset="UTF-8"/>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-  <body>
-    <div class="container">
-      <h1>Manage Users</h1>
+<body>
+<div class="container">
+  <h1>Manage Flights</h1>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-          <tr>
-            <th>#</th>
-            <th>Username</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="user, iterStat : ${users}">
-            <td th:text="${iterStat.count}"></td>
-            <td th:text="${user}"></td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
 
-      <a href="/admin/dashboard" class="btn">Back to Dashboard</a>
-    </div>
-  </body>
+  <a th:href="@{/admin/flights/create}" class="btn">Create Flight</a>
+
+  <div class="table-wrapper">
+    <table>
+      <thead>
+      <tr>
+        <th>#</th>
+        <th>Flight No</th>
+        <th>From</th>
+        <th>To</th>
+        <th>Status</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+
+
+      <tr th:each="flight, iterStat : ${flights}">
+        <td th:text="${iterStat.count}"></td>
+        <td th:text="${flight.flightNo}"></td>
+        <td th:text="${flight.departureAirport}"></td>
+        <td th:text="${flight.arrivalAirport}"></td>
+        <td th:text="${flight.status}"></td>
+
+        <td>
+          <a th:href="@{/admin/flights/edit/{id}(id=${flight.flightId})}" class="btn">Edit</a>
+
+          <form th:action="@{/admin/flights/delete/{id}(id=${flight.flightId})}"
+                method="post"
+                style="display:inline;">
+            <button type="submit" class="btn">Delete</button>
+          </form>
+        </td>
+      </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <a href="/admin/dashboard" class="btn">Back to Dashboard</a>
+</div>
+</body>
 </html>
