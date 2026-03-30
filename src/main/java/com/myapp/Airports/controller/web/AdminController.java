@@ -117,12 +117,17 @@ public class AdminController {
         return "admin/settings";
     }
 
-    @PostMapping(value = "/flights/create")
+    @GetMapping("/flights/create")
+    public String showCreateFlightForm(Model model) {
+        model.addAttribute("flight", new FlyingDTO());
+        return "admin/create-flight";
+    }
+
+    @PostMapping("/flights/create")
     public String createFlight(@ModelAttribute FlyingDTO dto) {
 
         Flying flight = new Flying();
 
-        flight.setFlightId(dto.getFlightId());
         flight.setFlightNo(dto.getFlightNo());
         flight.setScheduledDeparture(dto.getScheduledDeparture());
         flight.setScheduledArrival(dto.getScheduledArrival());
@@ -139,17 +144,18 @@ public class AdminController {
     @GetMapping(value = "/flights/edit/{id}", produces = "text/html")
     public String showEditFlightForm(@PathVariable Integer id, Model model) {
 
-        Optional<Flying> flight = flyingService.findById(id);
+        Flying flight = flyingService.findById(id)
+                .orElseThrow(() -> new RuntimeException("Flight not found"));
 
         FlyingDTO dto = new FlyingDTO();
-        dto.setFlightId(flight.get().getFlightId());
-        dto.setFlightNo(flight.get().getFlightNo());
-        dto.setScheduledDeparture(flight.get().getScheduledDeparture());
-        dto.setScheduledArrival(flight.get().getScheduledArrival());
-        dto.setDepartureAirport(flight.get().getDepartureAirport());
-        dto.setArrivalAirport(flight.get().getArrivalAirport());
-        dto.setStatus(flight.get().getStatus());
-        dto.setAircraftCode(flight.get().getAircraftCode());
+        dto.setFlightId(flight.getFlightId());
+        dto.setFlightNo(flight.getFlightNo());
+        dto.setScheduledDeparture(flight.getScheduledDeparture());
+        dto.setScheduledArrival(flight.getScheduledArrival());
+        dto.setDepartureAirport(flight.getDepartureAirport());
+        dto.setArrivalAirport(flight.getArrivalAirport());
+        dto.setStatus(flight.getStatus());
+        dto.setAircraftCode(flight.getAircraftCode());
 
         model.addAttribute("flight", dto);
 
