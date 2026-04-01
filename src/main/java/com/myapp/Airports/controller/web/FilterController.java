@@ -4,6 +4,7 @@ import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +28,14 @@ public class FilterController {
             @RequestParam(name = "page", defaultValue = "1") int currentPage,
             @RequestParam(name = "airport_out", required = false) String airportOut,
             @RequestParam(name = "airport_in", required = false) String airportIn,
+            HttpServletRequest request,
             Model model) {
 
+        // Add airports
         model.addAttribute("airports", airportView.getAll());
+
+        // Add logged-in user from session
+        model.addAttribute("loggedInUser", request.getSession().getAttribute("USER_ID"));
 
         String normalizedOut = (airportOut == null || airportOut.isBlank()) ? null : airportOut;
         String normalizedIn = (airportIn == null || airportIn.isBlank()) ? null : airportIn;

@@ -61,4 +61,13 @@ public class TicketFlight {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
+
+    public void setId(TicketFlightId id) {
+    }
+
+    public void setTicket(Ticket ticket) {
+    }
+
+    public void setFlight(Flying flight) {
+    }
 }

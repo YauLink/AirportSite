@@ -49,7 +49,16 @@
             <td th:text="${flight.arrivalAirport}"></td>
             <td th:text="${flight.scheduledDeparture}"></td>
             <td th:text="${flight.flightNo}"></td>
+            <td th:if="${loggedInUser != null}">
+              <form th:action="@{/user/book/{id}(id=${flight.flightId})}" method="post">
+                <button type="submit" class="btn btn-add">Book</button>
+              </form>
+            </td>
+            <td th:if="${loggedInUser == null}">
+              <span>Please log in to book</span>
+            </td>
           </tr>
+
           </tbody>
         </table>
       </div>

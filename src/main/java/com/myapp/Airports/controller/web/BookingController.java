@@ -88,7 +88,7 @@ public class BookingController {
 
     @PostMapping("/assign/{ref}")
     public String assignSeat(@PathVariable String ref, @RequestParam("seatNo") String seatNo) {
-        bookingService.assignSeat(ref, seatNo); // or use service to update TicketFlight
+        bookingService.assignSeat(ref, seatNo);
         return "redirect:/bookings/list";
     }
 }
