@@ -13,26 +13,60 @@
         th:object="${flight}"
         method="post">
 
-    <label>Flight No:</label>
-    <input type="text" th:field="*{flightNo}" required/><br/>
+    <table>
+      <thead>
+      <tr>
+        <th>Field</th>
+        <th>Current Value</th>
+        <th>New Value</th>
+      </tr>
+      </thead>
+      <tbody>
 
-    <label>Departure Time:</label>
-    <input type="datetime-local" th:field="*{scheduledDeparture}" required/><br/>
+      <tr>
+        <td>Flight No</td>
+        <td th:text="${flight.flightNo}"></td>
+        <td><input type="text" th:field="*{flightNo}" required/></td>
+      </tr>
 
-    <label>Arrival Time:</label>
-    <input type="datetime-local" th:field="*{scheduledArrival}" required/><br/>
+      <tr>
+        <td>Departure Time</td>
+        <td th:text="${flight.scheduledDeparture}"></td>
+        <td><input type="datetime-local" th:field="*{scheduledDeparture}" required/></td>
+      </tr>
 
-    <label>From:</label>
-    <input type="text" th:field="*{departureAirport}" required/><br/>
+      <tr>
+        <td>Arrival Time</td>
+        <td th:text="${flight.scheduledArrival}"></td>
+        <td><input type="datetime-local" th:field="*{scheduledArrival}" required/></td>
+      </tr>
 
-    <label>To:</label>
-    <input type="text" th:field="*{arrivalAirport}" required/><br/>
+      <tr>
+        <td>From</td>
+        <td th:text="${flight.departureAirport}"></td>
+        <td><input type="text" th:field="*{departureAirport}" required/></td>
+      </tr>
 
-    <label>Status:</label>
-    <input type="text" th:field="*{status}" required/><br/>
+      <tr>
+        <td>To</td>
+        <td th:text="${flight.arrivalAirport}"></td>
+        <td><input type="text" th:field="*{arrivalAirport}" required/></td>
+      </tr>
 
-    <label>Aircraft Code:</label>
-    <input type="text" th:field="*{aircraftCode}" required/><br/>
+      <tr>
+        <td>Status</td>
+        <td th:text="${flight.status}"></td>
+        <td><input type="text" th:field="*{status}" required/></td>
+      </tr>
+
+      <tr>
+        <td>Aircraft Code</td>
+        <td th:text="${flight.aircraftCode}"></td>
+        <td><input type="text" th:field="*{aircraftCode}" required/></td>
+      </tr>
+
+      </tbody>
+    </table>
 
     <button type="submit" class="btn">Update</button>
   </form>
