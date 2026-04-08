@@ -7,38 +7,71 @@
 </head>
 <body>
 <div class="container">
-  <h1>Manage Flights</h1>
 
-  <a th:href="@{/admin/flights/create}" class="btn">Create Flight</a>
+  <!-- Header -->
+  <header class="header">
+    <h1>✈ Manage Flights</h1>
+    <div class="actions">
+      <a th:href="@{/admin/flights/create}" class="btn btn-add">+ Create Flight</a>
+      <a href="/admin/dashboard" class="btn btn-secondary">Dashboard</a>
+    </div>
+  </header>
 
+  <!-- Flights Table -->
   <div class="table-wrapper">
-    <table>
+    <table class="styled-table">
       <thead>
       <tr>
         <th>#</th>
         <th>Flight No</th>
-        <th>From</th>
-        <th>To</th>
+        <th>Route</th>
         <th>Status</th>
         <th>Actions</th>
       </tr>
       </thead>
-      <tbody>
 
+      <tbody>
       <tr th:each="flight, iterStat : ${flights}">
         <td th:text="${iterStat.count}"></td>
-        <td th:text="${flight.flightNo}"></td>
-        <td th:text="${flight.departureAirport}"></td>
-        <td th:text="${flight.arrivalAirport}"></td>
-        <td th:text="${flight.status}"></td>
+
         <td>
-          <a th:href="@{/admin/flights/edit/{id}(id=${flight.flightId})}" class="btn">Edit</a>
+          <strong th:text="${flight.flightNo}"></strong>
+        </td>
+
+        <td>
+          <span th:text="${flight.departureAirport}"></span>
+          →
+          <span th:text="${flight.arrivalAirport}"></span>
+        </td>
+
+        <td>
+          <span class="status"
+                th:text="${flight.status}"
+                th:classappend="' status-' + ${flight.status.toLowerCase()}">
+          </span>
+        </td>
+
+        <td class="actions-cell">
+
+          <a th:href="@{/admin/flights/edit/{id}(id=${flight.flightId})}"
+             class="btn btn-edit">
+            Edit
+          </a>
 
           <form th:action="@{/admin/flights/delete/{id}(id=${flight.flightId})}"
                 method="post"
                 style="display:inline;">
-            <button type="submit" class="btn">Delete</button>
+            <button type="submit" class="btn btn-delete">
+              Delete
+            </button>
           </form>
+
+        </td>
+      </tr>
+
+      <tr th:if="${#lists.isEmpty(flights)}">
+        <td colspan="5" style="text-align:center;">
+          No flights available
         </td>
       </tr>
 
@@ -46,7 +79,6 @@
     </table>
   </div>
 
-  <a href="/admin/dashboard" class="btn">Back to Dashboard</a>
 </div>
 </body>
 </html>
