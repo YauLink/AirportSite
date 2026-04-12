@@ -1,35 +1,52 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Server main page</title>
+    <title>Airport System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-    <body>
-        <div class="container">
-            <header>
-                <h1>Welcome to Airport System</h1>
-            </header>
+<body>
 
-            <div class="button-group">
-                <button class="btn btn-add"
-                        th:onclick="|location.href='@{/airports}'|">
-                    View Airports
-                </button>
+<div class="container">
 
-                <button class="btn btn-edit"
-                        th:onclick="|location.href='@{/filters}'|">
-                    View Flights
-                </button>
+    <header class="header">
+        <h1>✈ Airport System</h1>
+        <p>Your portal for flights, bookings, and management</p>
+    </header>
 
-                <button class="btn btn-delete"
-                        th:onclick="|location.href='@{/admin}'|">
-                    Admin Login
-                </button>
-            </div>
+    <section class="card">
+        <h2>Passenger Services</h2>
 
-            <footer>&copy; 2025 Airport System</footer>
+        <div class="button-group">
+            <a th:href="@{/filters}" class="btn btn-add">
+                🔍 Search Flights
+            </a>
+
+            <a th:href="@{/user/login}" class="btn btn-edit">
+                👤 Login / Cabinet
+            </a>
+
+            <a th:href="@{/airports}" class="btn btn-secondary">
+                🌍 View Airports
+            </a>
         </div>
-    </body>
+    </section>
+
+    <section class="card">
+        <h2>Administration</h2>
+
+        <div class="button-group">
+            <a th:href="@{/admin}" class="btn btn-delete">
+                🔐 Admin Panel
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025-2026 Airport System</p>
+    </footer>
+
+</div>
+</body>
 </html>
