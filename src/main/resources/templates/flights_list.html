@@ -2,49 +2,74 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Flight List</title>
+    <meta charset="UTF-8"/>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-    <body>
-        <div class="container">
-            <header><h1>All Flights</h1></header>
+<body>
 
-            <div class="table-wrapper">
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Flight No</th>
-                        <th>Departure</th>
-                        <th>Arrival</th>
-                        <th>Scheduled Departure</th>
-                        <th>Scheduled Arrival</th>
-                        <th>Status</th>
-                        <th>Aircraft</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="flight : ${flights}">
-                        <td th:text="${flight.flightNo}"></td>
-                        <td th:text="${flight.departureAirport}"></td>
-                        <td th:text="${flight.arrivalAirport}"></td>
-                        <td th:text="${flight.scheduledDeparture}"></td>
-                        <td th:text="${flight.scheduledArrival}"></td>
-                        <td th:text="${flight.status}"></td>
-                        <td th:text="${flight.aircraftCode}"></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
+<div class="container">
 
-            <button class="btn btn-add"
-                    th:onclick="|location.href='@{/flights/new}'|">
-                Add Flight
-            </button>
-            <button class="btn btn-edit"
-                    th:onclick="|location.href='@{/}'|">
-                Back to Main Page
-            </button>
-
-            <footer>&copy; 2025 Airport System</footer>
+    <header class="header">
+        <h1>✈ All Flights</h1>
+        <div class="actions">
+            <a th:href="@{/flights/new}" class="btn btn-add">+ Add Flight</a>
+            <a th:href="@{/}" class="btn btn-secondary">Home</a>
         </div>
-    </body>
+    </header>
+
+    <div class="table-wrapper">
+        <table class="styled-table">
+            <thead>
+            <tr>
+                <th>Flight No</th>
+                <th>Route</th>
+                <th>Departure</th>
+                <th>Arrival</th>
+                <th>Status</th>
+                <th>Aircraft</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each="flight : ${flights}">
+                <td>
+                    <strong th:text="${flight.flightNo}"></strong>
+                </td>
+
+                <td>
+                    <span th:text="${flight.departureAirport}"></span>
+                    →
+                    <span th:text="${flight.arrivalAirport}"></span>
+                </td>
+
+                <td th:text="${flight.scheduledDeparture}"></td>
+                <td th:text="${flight.scheduledArrival}"></td>
+
+                <td>
+                    <span class="status"
+                          th:text="${flight.status}"
+                          th:classappend="' status-' + ${flight.status.toLowerCase()}">
+                    </span>
+                </td>
+
+                <td th:text="${flight.aircraftCode}"></td>
+            </tr>
+
+            <tr th:if="${#lists.isEmpty(flights)}">
+                <td colspan="6" style="text-align:center;">
+                    No flights available
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <footer>
+        <p>&copy; 2025-2026 Airport System</p>
+    </footer>
+
+</div>
+
+</body>
 </html>
