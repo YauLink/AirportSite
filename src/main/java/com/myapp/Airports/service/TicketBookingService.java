@@ -55,8 +55,10 @@ public class TicketBookingService {
 
             ticketService.save(ticket);
 
-            Flying flight = flyingService.findById(flightIds.get(i))
-                    .orElseThrow(() -> new RuntimeException("Flight not found: " + flightIds.get(i)));
+            Integer flightId = flightIds.get(i);
+
+            Flying flight = flyingService.findById(flightIds.get(flightId))
+                    .orElseThrow(() -> new RuntimeException("Flight not found: " + flightIds.get(flightId)));
 
             TicketFlight tf = new TicketFlight();
             TicketFlightId id = new TicketFlightId();
