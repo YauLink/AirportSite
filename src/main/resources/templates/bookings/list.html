@@ -25,19 +25,35 @@
                 <th>Actions</th>
             </tr>
             </thead>
+
             <tbody>
             <tr th:each="b : ${bookingsPage.content}">
                 <td th:text="${b.bookRef}">N/A</td>
-                <td th:text="${b.bookDate != null} ? ${#temporals.format(b.bookDate, 'yyyy-MM-dd HH:mm')} : 'N/A'">N/A</td>
+
+                <td th:text="${b.bookDate != null} ? ${#temporals.format(b.bookDate, 'yyyy-MM-dd HH:mm')} : 'N/A'">
+                    N/A
+                </td>
+
                 <td th:text="${b.totalAmount != null} ? ${b.totalAmount} : '0.00'">0.00</td>
+
+                <td>
+                    <span th:text="${b.totalAmount != null} ? 'ACTIVE' : 'N/A'"></span>
+                </td>
+
                 <td>
                     <a th:href="@{'/bookings/edit/' + ${b.bookRef}}" class="btn">Edit</a>
+
+                    <a th:href="@{'/bookings/select-seat/' + ${b.bookRef}}" class="btn">
+                        Select Seat
+                    </a>
+
                     <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}" class="btn">Cancel</a>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
+
     <div class="pagination" th:if="${bookingsPage.totalPages > 1}">
         <div th:with="
             cp=${bookingsPage.number},
@@ -59,11 +75,16 @@
             </span>
 
             <span th:if="${end < tp - 2}" class="ellipsis">...</span>
-            <a th:if="${end < tp - 1}" th:href="@{'/bookings/list'(page=${tp - 1}, size=${size})}"
-               th:text="${tp}"></a>
 
-            <!-- Next -->
-            <a th:if="${cp < tp - 1}" th:href="@{'/bookings/list'(page=${cp + 1}, size=${size})}">Next</a>
+            <a th:if="${end < tp - 1}"
+               th:href="@{'/bookings/list'(page=${tp - 1}, size=${size})}"
+               th:text="${tp}">
+            </a>
+
+            <a th:if="${cp < tp - 1}"
+               th:href="@{'/bookings/list'(page=${cp + 1}, size=${size})}">
+                Next
+            </a>
         </div>
     </div>
 </div>

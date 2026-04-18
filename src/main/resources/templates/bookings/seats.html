@@ -4,21 +4,35 @@
     <title>Select Seat</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-    <body>
-        <div class="container">
-            <h2>Select a Seat</h2>
-            <form th:action="@{/bookings/assign}" method="post">
-                <input type="hidden" name="ref" th:value="${bookingRef}" />
+<body>
+<div class="container">
 
-                <div class="form-group">
-                    <label>Select Seat:</label>
-                    <select name="seatNo">
-                        <option th:each="seat : ${seats}" th:value="${seat.seatNo}" th:text="${seat.seatNo}"></option>
-                    </select>
-                </div>
+    <h2>Select a Seat</h2>
 
-                <button type="submit" class="btn">Confirm</button>
-            </form>
+    <form th:action="@{/bookings/assign}" method="post">
+
+        <input type="hidden" name="bookingRef" th:value="${bookingRef}" />
+        <input type="hidden" name="flightId" th:value="${flightId}" />
+
+        <div class="form-group">
+            <label>Select Seat:</label>
+            <select name="seatNo">
+
+                <option th:each="seat : ${seats}"
+                        th:value="${seat.seatNo}"
+                        th:text="${seat.seatNo}">
+                </option>
+
+            </select>
         </div>
-    </body>
+
+        <button type="submit" class="btn">Confirm</button>
+    </form>
+
+    <div th:if="${error}" style="color:red; margin-top:10px;">
+        <p th:text="${error}"></p>
+    </div>
+
+</div>
+</body>
 </html>
