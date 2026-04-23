@@ -39,12 +39,25 @@ public class BoardingPass {
         this.seatNo = seatNo;
     }
 
-    public void setFLightId (Integer id) {
-        this.id.setFlightId(id);
+    public void setFLightId(Integer flightId) {
+        if (this.id == null) {
+            this.id = new BoardingPassId();
+        }
+        this.id.setFlightId(flightId);
     }
 
-    public void setTicketNo (String number) {
-        this.id.setTicketNo(number);
+    public void setTicketNo(String ticketNo) {
+        if (this.id == null) {
+            this.id = new BoardingPassId();
+        }
+        this.id.setTicketNo(ticketNo);
     }
 
+    public Integer getFlightId() {
+        return this.id != null ? this.id.getFlightId() : null;
+    }
+
+    public String getTicketNo() {
+        return this.id != null ? this.id.getTicketNo() : null;
+    }
 }
