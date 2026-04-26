@@ -39,6 +39,16 @@ public class FlyingService {
         return flyingRepository.findAll();
     }
 
+    @Cacheable(value = "flights", key = "#ids.toString()")
+    public List<Flying> findAllByIds(List<Integer> ids) {
+        List<Flying> flights = flyingRepository.findAllById(ids);
+
+        if (flights.size() != ids.size()) {
+            throw new RuntimeException("Some flights not found");
+        }
+        return flights;
+    }
+
     @Cacheable(value = "flight", key = "#id")
     public Optional<Flying> findById(Integer id) {
         System.out.println("⏳ Fetching flight " + id + " from DB...");

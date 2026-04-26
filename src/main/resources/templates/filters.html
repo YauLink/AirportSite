@@ -43,23 +43,34 @@
             <th>Flight Number</th>
           </tr>
           </thead>
-          <tbody>
-          <tr th:each="flight : ${flying}">
-            <td th:text="${flight.departureAirport}"></td>
-            <td th:text="${flight.arrivalAirport}"></td>
-            <td th:text="${flight.scheduledDeparture}"></td>
-            <td th:text="${flight.flightNo}"></td>
-            <td th:if="${loggedInUser != null}">
-              <form th:action="@{/user/book/{id}(id=${flight.flightId})}" method="post">
-                <button type="submit" class="btn btn-add">Book</button>
-              </form>
-            </td>
-            <td th:if="${loggedInUser == null}">
-              <span>Please log in to book</span>
-            </td>
-          </tr>
+          <form th:action="@{/user/book}" method="post">
 
-          </tbody>
+            <tbody>
+            <tr th:each="flight : ${flying}">
+
+              <td>
+                <input type="checkbox"
+                       name="flightIds"
+                       th:value="${flight.flightId}" />
+              </td>
+
+              <td th:text="${flight.departureAirport}"></td>
+              <td th:text="${flight.arrivalAirport}"></td>
+              <td th:text="${flight.scheduledDeparture}"></td>
+              <td th:text="${flight.flightNo}"></td>
+
+              <td th:if="${loggedInUser == null}">
+                <span>Please log in to book</span>
+              </td>
+            </tr>
+            </tbody>
+
+            <button type="submit" class="btn btn-add"
+                    th:if="${loggedInUser != null}">
+              Book Selected
+            </button>
+
+          </form>
         </table>
       </div>
 
