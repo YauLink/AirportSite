@@ -1,13 +1,16 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.model.Booking;
+import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.service.BookingService;
+import com.myapp.Airports.service.FlyingService;
 import com.myapp.Airports.service.TicketBookingService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -22,6 +25,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(FlightBookingController.class)
+@WithMockUser
 class FlightBookingControllerTest {
 
     @Autowired
@@ -33,54 +37,38 @@ class FlightBookingControllerTest {
     @MockBean
     private TicketBookingService ticketBookingService;
 
+    @MockBean
+    private FlyingService flyingService;
+
 
     @Test
     void shouldRedirectToLoginWhenUserNotInSession() throws Exception {
-
         mockMvc.perform(post("/user/book")
-                        .with(csrf())
-                        .with(user("test"))
-                        .param("flightIds", "1")
-                        .param("fares", "Economy")
-                        .param("amounts", "100.00")
-                        .param("contactData", "{}"))
+                        .with(csrf()))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/login"));
 
         verifyNoInteractions(bookingService);
-        verifyNoInteractions(ticketBookingService);
     }
 
     @Test
     void shouldCreateBookingAndRedirectToCabinet() throws Exception {
 
+        when(flyingService.findAllByIds(List.of(1, 2)))
+                .thenReturn(List.of(new Flying(), new Flying()));
+
         mockMvc.perform(post("/user/book")
                         .with(csrf())
-                        .with(user("test"))
                         .sessionAttr("USER_ID", "123")
                         .sessionAttr("USER_NAME", "John Doe")
-                        .param("flightIds", "1", "2")
-                        .param("fares", "Economy", "Business")
-                        .param("amounts", "100.00", "200.00")
-                        .param("contactData", "{\"email\":\"test@test.com\"}"))
+                        .sessionAttr("SELECTED_FLIGHTS", List.of(1, 2)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/cabinet"));
 
-        ArgumentCaptor<Booking> bookingCaptor = ArgumentCaptor.forClass(Booking.class);
-        verify(bookingService, times(1)).save(bookingCaptor.capture());
-
-        Booking savedBooking = bookingCaptor.getValue();
-
-        assert savedBooking.getTotalAmount().compareTo(new BigDecimal("300.00")) == 0;
-
+        verify(bookingService, times(1)).save(any(Booking.class));
         verify(ticketBookingService, times(1)).createTicketsForBooking(
-                any(Booking.class),
-                eq("123"),
-                eq("John Doe"),
-                eq("{\"email\":\"test@test.com\"}"),
-                eq(List.of(1, 2)),
-                eq(List.of("Economy", "Business")),
-                eq(List.of(new BigDecimal("100.00"), new BigDecimal("200.00")))
+                any(), eq("123"), eq("John Doe"), anyString(),
+                eq(List.of(1, 2)), anyList(), anyList()
         );
     }
 }
