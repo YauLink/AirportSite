@@ -25,7 +25,7 @@ public class AuthController {
 
     @GetMapping("/login")
     public String loginPage() {
-        return "login";
+        return "user/login";
     }
 
     @PostMapping("/login")
@@ -34,39 +34,40 @@ public class AuthController {
                         HttpSession session,
                         Model model) {
         try {
-            //Call the Authentification Service which calls the User Management REST API
             AuthResponseDTO auth = authService.login(username, password);
 
             session.setAttribute("USER_ID", auth.getUserId());
             session.setAttribute("USER_NAME", auth.getFullName());
 
-            return "redirect:/cabinet";
+            return "redirect:/user/cabinet";
 
         } catch (Exception e) {
             model.addAttribute("error", "Invalid username or password");
-            return "login";
+            return "user/login";
         }
     }
 
     @GetMapping("/cabinet")
     public String cabinet(HttpSession session, Model model) {
-        String passengerId = (String) session.getAttribute("USER_ID");
+        Object userIdObj = session.getAttribute("USER_ID");
 
-        if (passengerId == null) {
-            return "redirect:/login";
+        if (userIdObj == null) {
+            return "redirect:/user/login";
         }
+
+        String passengerId = String.valueOf(userIdObj);
 
         List<Ticket> tickets = ticketService.findAllByUserId(passengerId);
 
         model.addAttribute("fullName", session.getAttribute("USER_NAME"));
         model.addAttribute("tickets", tickets);
 
-        return "cabinet";
+        return "user/cabinet";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.invalidate();
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 }
