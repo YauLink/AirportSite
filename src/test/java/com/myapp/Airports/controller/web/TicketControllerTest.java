@@ -29,7 +29,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 
 @WebMvcTest(TicketController.class)
-@WithMockUser   // ensures security allows POST/DELETE
+@WithMockUser
 class TicketControllerTest {
 
     @Autowired

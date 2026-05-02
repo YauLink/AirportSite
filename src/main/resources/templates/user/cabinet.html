@@ -20,11 +20,12 @@
         <th>Status</th>
       </tr>
 
-      <tr th:each="ticket : ${tickets}">
-        <td th:text="${ticket.ticketNo}"></td>
-        <td th:text="${ticket.bookingRef}"></td>
-        <td th:text="${ticket.flightId}"></td>
-        <td th:text="${ticket.status}"></td>
+      <tr th:each="tf : ${ticketFlights}">
+        <td th:text="${tf.ticket.ticketNo}"></td>
+        <td th:text="${tf.ticket.booking.bookRef}"></td>
+        <td th:text="${tf.id.flightId}"></td>
+        <td th:text="${tf.fareConditions}"></td>
+        <td th:text="${tf.amount}"></td>
       </tr>
     </table>
 
