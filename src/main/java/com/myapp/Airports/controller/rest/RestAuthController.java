@@ -7,6 +7,7 @@ import com.myapp.Airports.service.TicketService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.myapp.Airports.dto.CabinetResponseDTO;
 
 import java.util.List;
 
@@ -54,7 +55,7 @@ public class RestAuthController {
         List<Ticket> tickets = ticketService.findAllByUserId(passengerId);
 
         return ResponseEntity.ok()
-                .body(new CabinetResponse(
+                .body(new CabinetResponseDTO(
                         (String) session.getAttribute("USER_NAME"),
                         tickets
                 ));
@@ -64,24 +65,5 @@ public class RestAuthController {
     public ResponseEntity<?> logout(HttpSession session) {
         session.invalidate();
         return ResponseEntity.ok("Logged out");
-    }
-
-    // DTO for response
-    public static class CabinetResponse {
-        private String fullName;
-        private List<Ticket> tickets;
-
-        public CabinetResponse(String fullName, List<Ticket> tickets) {
-            this.fullName = fullName;
-            this.tickets = tickets;
-        }
-
-        public String getFullName() {
-            return fullName;
-        }
-
-        public List<Ticket> getTickets() {
-            return tickets;
-        }
     }
 }
