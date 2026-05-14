@@ -3,8 +3,10 @@ package com.myapp.Airports.service;
 import com.myapp.Airports.model.BoardingPass;
 import com.myapp.Airports.storage.api.IBoardingPassRepository;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@Service
 public class BoardingPassService {
 
     private final IBoardingPassRepository repository;
