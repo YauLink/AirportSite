@@ -2,6 +2,13 @@ package com.myapp.Airports.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents a seat inside an aircraft.
+ * <p>
+ * Each seat belongs to a specific aircraft and stores
+ * fare conditions associated with that seat.
+ * </p>
+ */
 @Entity
 public class Seat {
 

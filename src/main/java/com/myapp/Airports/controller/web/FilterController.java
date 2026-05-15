@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * MVC controller responsible for flight filtering and search.
+ * <p>
+ * Provides endpoints for searching flights by departure
+ * and arrival airports with pagination support.
+ * </p>
+ */
 @Controller
 @RequestMapping("/filters")
 public class FilterController {

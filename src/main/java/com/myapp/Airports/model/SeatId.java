@@ -4,6 +4,13 @@ import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Represents a composite identifier for a seat.
+ * <p>
+ * Combines seat number and aircraft code to uniquely
+ * identify a seat within a specific aircraft.
+ * </p>
+ */
 @Embeddable
 public class SeatId implements Serializable {
 

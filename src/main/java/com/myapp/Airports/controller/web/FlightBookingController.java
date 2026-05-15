@@ -14,6 +14,13 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * MVC controller responsible for flight booking operations.
+ * <p>
+ * Provides endpoints for confirming selected flights
+ * and creating bookings for authenticated users.
+ * </p>
+ */
 @Controller
 @RequestMapping("/user")
 public class FlightBookingController {

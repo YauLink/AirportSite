@@ -5,6 +5,13 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents an aircraft in the system.
+ * <p>
+ * Stores aircraft metadata such as model, flight range,
+ * and associated seats available on the aircraft.
+ * </p>
+ */
 @Entity
 @Table(name = "aircrafts_data", schema = "bookings")
 public class Aircraft {

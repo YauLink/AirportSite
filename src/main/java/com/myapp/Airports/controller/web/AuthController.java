@@ -11,6 +11,13 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ * MVC controller responsible for user authentication and cabinet management.
+ * <p>
+ * Provides endpoints for login, logout, and displaying
+ * user ticket information inside the personal cabinet.
+ * </p>
+ */
 @Controller
 @RequestMapping("/user")
 public class AuthController {

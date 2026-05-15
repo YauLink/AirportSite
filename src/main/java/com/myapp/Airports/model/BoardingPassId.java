@@ -5,6 +5,13 @@ import jakarta.persistence.Embeddable;
 
 import java.io.Serializable;
 
+/**
+ * Represents a composite identifier for a boarding pass.
+ * <p>
+ * Combines ticket number and flight id to uniquely
+ * identify a boarding pass for a specific flight.
+ * </p>
+ */
 @Embeddable
 public class BoardingPassId implements Serializable {
 

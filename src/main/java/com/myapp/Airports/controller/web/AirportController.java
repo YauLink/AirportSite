@@ -9,6 +9,13 @@ import org.springframework.web.bind.annotation.*;
 import com.myapp.Airports.view.*;
 import java.util.List;
 
+/**
+ * MVC controller responsible for displaying airport information.
+ * <p>
+ * Provides endpoints for viewing available airports
+ * in the system.
+ * </p>
+ */
 @Controller
 @RequestMapping("/airports")
 public class AirportController {

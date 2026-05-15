@@ -7,25 +7,29 @@ import org.hibernate.annotations.GenerationTime;
 
 import java.io.Serializable;
 
+/**
+ * Represents an airport in the system.
+ * <p>
+ * Stores airport information including airport code,
+ * airport name, city, and timezone.
+ * </p>
+ */
 @Entity(name = "Airport")
 @Table(name = "airports", schema = "bookings")
 public class Airport implements Serializable {
 
     @Id
     @Column(name = "airport_code")
-    private String code; //Код аэропорта
-
+    private String code;
 
     @Column(name = "airport_name")
-    private String name; //Название аэропорта
-
+    private String name;
 
     @Column(name = "city")
-    private String city;        // Город
-
+    private String city;
 
     @Column(name = "timezone")
-    private String timezone;    //Часовой пояс аэропорта
+    private String timezone;
 
     public Airport() {
     }

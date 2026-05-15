@@ -2,6 +2,13 @@ package com.myapp.Airports.model;
 
 import jakarta.persistence.*;
 
+/**
+ * Represents a boarding pass issued for a flight.
+ * <p>
+ * Stores boarding information such as boarding number,
+ * assigned seat, and links to a ticket and flight.
+ * </p>
+ */
 @Entity
 @Table(name = "boarding_passes", schema = "bookings")
 public class BoardingPass {
