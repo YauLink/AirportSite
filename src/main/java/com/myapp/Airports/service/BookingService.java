@@ -22,66 +22,148 @@ public class BookingService {
     private final IBookingRepository bookingRepository;
     private final ITicketFlightRepository ticketFlightRepository;
 
-    public BookingService(IBookingRepository bookingRepository, ITicketFlightRepository ticketFlightRepository) {
+    public BookingService(IBookingRepository bookingRepository,
+                          ITicketFlightRepository ticketFlightRepository) {
         this.bookingRepository = bookingRepository;
         this.ticketFlightRepository = ticketFlightRepository;
     }
 
     @Cacheable(value = "bookings")
     public Page<Booking> findAll(int page, int size) {
-        PageRequest req = PageRequest.of(page, size, Sort.by("bookDate").descending());
-        System.out.println("⏳ Fetching paginated bookings from DB...");
-        return bookingRepository.findAll(req);
+
+        try {
+            PageRequest req = PageRequest.of(
+                    page,
+                    size,
+                    Sort.by("bookDate").descending()
+            );
+
+            System.out.println("⏳ Fetching paginated bookings from DB...");
+
+            return bookingRepository.findAll(req);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch bookings", e);
+        }
     }
 
     @Cacheable(value = "booking", key = "#bookRef")
     public Booking findByBookRef(String bookRef) {
-        System.out.println("⏳ Fetching booking " + bookRef + " from DB...");
-        return bookingRepository.findById(bookRef)
-                .orElseThrow(() -> new RuntimeException("Booking not found with ref: " + bookRef));
+
+        try {
+            System.out.println("⏳ Fetching booking " + bookRef + " from DB...");
+
+            return bookingRepository.findById(bookRef)
+                    .orElseThrow(() ->
+                            new RuntimeException(
+                                    "Booking not found with ref: " + bookRef
+                            ));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch booking: " + bookRef, e);
+        }
     }
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
     public void updateBooking(String bookRef, Booking updatedBooking) {
-        performUpdate(bookRef, updatedBooking);
+
+        try {
+            performUpdate(bookRef, updatedBooking);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to update booking: " + bookRef, e);
+        }
     }
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
-    public Booking updateBookingAndReturn(String bookRef, Booking updatedBooking) {
-        return performUpdate(bookRef, updatedBooking);
+    public Booking updateBookingAndReturn(String bookRef,
+                                          Booking updatedBooking) {
+
+        try {
+            return performUpdate(bookRef, updatedBooking);
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Failed to update and return booking: " + bookRef,
+                    e
+            );
+        }
     }
 
-    private Booking performUpdate(String bookRef, Booking updatedBooking) {
+    private Booking performUpdate(String bookRef,
+                                  Booking updatedBooking) {
+
         Booking existing = findByBookRef(bookRef);
+
         existing.setBookDate(updatedBooking.getBookDate());
         existing.setTotalAmount(updatedBooking.getTotalAmount());
+
         return bookingRepository.save(existing);
     }
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
     public void cancelBooking(String bookRef) {
-        bookingRepository.deleteById(bookRef);
+
+        try {
+            bookingRepository.deleteById(bookRef);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to cancel booking: " + bookRef, e);
+        }
     }
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
     public Booking save(Booking booking) {
-        return bookingRepository.save(booking);
+
+        try {
+            return bookingRepository.save(booking);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save booking", e);
+        }
     }
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
     public void delete(String bookRef) {
-        bookingRepository.deleteById(bookRef);
+
+        try {
+            bookingRepository.deleteById(bookRef);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete booking: " + bookRef, e);
+        }
     }
 
     public void assignSeat(String bookRef, String seatNo) {
-        List<TicketFlight> ticketFlights = ticketFlightRepository.findByBookingRef(bookRef);
-        for (TicketFlight tf : ticketFlights) {
-            tf.setSeatNo(seatNo);
+
+        try {
+            List<TicketFlight> ticketFlights =
+                    ticketFlightRepository.findByBookingRef(bookRef);
+
+            for (TicketFlight tf : ticketFlights) {
+                tf.setSeatNo(seatNo);
+            }
+
+            ticketFlightRepository.saveAll(ticketFlights);
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Failed to assign seat for booking: " + bookRef,
+                    e
+            );
         }
-        ticketFlightRepository.saveAll(ticketFlights);
     }
 
     public List<Booking> findByFlightId(Integer flightId) {
-        return ticketFlightRepository.findBookingsByFlight(flightId);
+
+        try {
+            return ticketFlightRepository.findBookingsByFlight(flightId);
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Failed to fetch bookings for flight: " + flightId,
+                    e
+            );
+        }
     }
 }

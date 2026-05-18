@@ -22,49 +22,100 @@ public class TicketService {
     private final ITicketRepository ticketRepo;
     private final IBookingRepository bookingRepo;
 
-    public TicketService(ITicketRepository ticketRepo, IBookingRepository bookingRepo) {
+    public TicketService(ITicketRepository ticketRepo,
+                         IBookingRepository bookingRepo) {
         this.ticketRepo = ticketRepo;
         this.bookingRepo = bookingRepo;
     }
 
     @Cacheable(value = "tickets")
     public List<Ticket> findAll() {
-        System.out.println("⏳ Fetching all tickets from DB...");
-        return ticketRepo.findAll();
+
+        try {
+            System.out.println("⏳ Fetching all tickets from DB...");
+            return ticketRepo.findAll();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch tickets", e);
+        }
     }
 
     @Cacheable(value = "tickets")
     public Page<Ticket> getAllTickets(int n, int page) {
-        return ticketRepo.findAll(PageRequest.of(page, n));
+
+        try {
+            return ticketRepo.findAll(PageRequest.of(page, n));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch paginated tickets", e);
+        }
     }
 
     @Cacheable(value = "ticket", key = "#ticketNo")
     public Ticket findById(String ticketNo) {
-        System.out.println("⏳ Fetching ticket " + ticketNo + " from DB...");
-        return ticketRepo.findById(ticketNo)
-                .orElseThrow(() -> new RuntimeException("Ticket not found"));
+
+        try {
+            System.out.println("⏳ Fetching ticket " + ticketNo + " from DB...");
+
+            return ticketRepo.findById(ticketNo)
+                    .orElseThrow(() ->
+                            new RuntimeException("Ticket not found"));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch ticket: " + ticketNo, e);
+        }
     }
 
     @Cacheable(value = "tickets", key = "#passengerId")
     public List<Ticket> findAllByUserId(String passengerId) {
-        System.out.println("⏳ Fetching tickets of User " + passengerId + " from DB...");
-        return ticketRepo.findAllByPassengerId(passengerId);
+
+        try {
+            System.out.println("⏳ Fetching tickets of User " + passengerId + " from DB...");
+
+            return ticketRepo.findAllByPassengerId(passengerId);
+
+        } catch (Exception e) {
+            throw new RuntimeException(
+                    "Failed to fetch tickets for passenger: " + passengerId,
+                    e
+            );
+        }
     }
 
     @CacheEvict(value = {"tickets", "ticket"}, allEntries = true)
     public Ticket save(Ticket ticket) {
-        return ticketRepo.save(ticket);
+
+        try {
+            return ticketRepo.save(ticket);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to save ticket", e);
+        }
     }
 
     @CacheEvict(value = {"tickets", "ticket"}, allEntries = true)
     public void delete(String ticketNo) {
-        ticketRepo.deleteById(ticketNo);
+
+        try {
+            ticketRepo.deleteById(ticketNo);
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to delete ticket: " + ticketNo, e);
+        }
     }
 
     @Cacheable(value = "booking", key = "#bookRef")
     public Booking getBooking(String bookRef) {
-        System.out.println("⏳ Fetching booking " + bookRef + " from DB...");
-        return bookingRepo.findById(bookRef)
-                .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+        try {
+            System.out.println("⏳ Fetching booking " + bookRef + " from DB...");
+
+            return bookingRepo.findById(bookRef)
+                    .orElseThrow(() ->
+                            new RuntimeException("Booking not found"));
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to fetch booking: " + bookRef, e);
+        }
     }
 }
