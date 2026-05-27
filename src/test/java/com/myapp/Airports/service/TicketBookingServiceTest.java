@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -79,7 +80,7 @@ class TicketBookingServiceTest {
         List<String> fares = List.of("Economy");
         List<BigDecimal> amounts = List.of(new BigDecimal("100.00"));
 
-        RuntimeException ex = org.junit.jupiter.api.Assertions.assertThrows(
+        RuntimeException ex = assertThrows(
                 RuntimeException.class,
                 () -> ticketBookingService.createTicketsForBooking(
                         booking,
@@ -92,7 +93,7 @@ class TicketBookingServiceTest {
                 )
         );
 
-        assert ex.getMessage().contains("Flight not found");
+        assert ex.getCause().getMessage().contains("Flight not found");
 
         verify(ticketService, never()).save(any());
         verify(boardingPassRepository, never()).save(any());
