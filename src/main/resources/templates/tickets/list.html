@@ -5,82 +5,110 @@
   <title>Tickets</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-  <body>
-    <div class="container">
-      <h1>Tickets</h1>
+<body>
 
-      <div class="table-wrapper">
-        <table>
-          <thead>
-          <tr>
-            <th>Ticket No</th>
-            <th>Book Ref</th>
-            <th>Passenger ID</th>
-            <th>Passenger Name</th>
-            <th>Contact Data</th>
-            <th>Actions</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr th:each="ticket : ${tickets}">
-            <td th:text="${ticket.ticketNo}"></td>
-            <td th:text="${ticket.passengerId}"></td>
-            <td th:text="${ticket.passengerName}"></td>
-            <td th:text="${ticket.contactData}"></td>
-            <td>
-              <a th:href="@{/tickets/{ticketNo}/edit(ticketNo=${ticket.ticketNo})}" class="btn">Edit</a>
-              <form th:action="@{/tickets/{ticketNo}/delete(ticketNo=${ticket.ticketNo})}" method="post" style="display:inline">
-                <button type="submit" class="btn" style="background:#dc3545;"
-                        onclick="return confirm('Delete this ticket?')">Delete</button>
-              </form>
-            </td>
-          </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="pagination"
-           th:if="${ticketPage.totalPages > 1}">
+<div class="container">
 
-        <div class="pagination-inner"
-             th:with="
-            cp=${ticketPage.number},
-            tp=${ticketPage.totalPages},
-            size=${ticketPage.size},
-            start=${cp - 3 >= 0 ? cp - 3 : 0},
-            end=${cp + 3 < tp ? cp + 3 : tp - 1}">
+  <header class="header">
+    <h1>🎫 Tickets</h1>
+  </header>
 
-          <a th:if="${cp > 0}"
-             th:href="@{'/tickets'(page=${cp - 1}, size=${size})}">
-            Previous
+  <div class="table-wrapper">
+
+    <table>
+      <thead>
+      <tr>
+        <th>Ticket No</th>
+        <th>Passenger Name</th>
+        <th>Contact Data</th>
+        <th class="actions-column">Actions</th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr th:if="${#lists.isEmpty(tickets)}">
+        <td colspan="5" class="empty-message">
+          No tickets found.
+        </td>
+      </tr>
+
+      <tr th:each="ticket : ${tickets}">
+        <td th:text="${ticket.ticketNo}"></td>
+        <td th:text="${ticket.passengerName}"></td>
+        <td th:text="${ticket.contactData}"></td>
+        <td class="actions">
+          <a th:href="@{/tickets/{ticketNo}/edit(ticketNo=${ticket.ticketNo})}"
+             class="btn">
+            Edit
           </a>
 
-          <a th:if="${start > 0}"
-             th:href="@{'/tickets'(page=0, size=${size})}">
-            1
-          </a>
+          <form th:action="@{/tickets/{ticketNo}/delete(ticketNo=${ticket.ticketNo})}"
+                method="post"
+                style="display:inline">
 
-          <span th:if="${start > 1}" class="ellipsis">...</span>
+            <button type="submit"
+                    class="btn btn-danger"
+                    onclick="return confirm('Delete this ticket?')">
+              Delete
+            </button>
 
-          <span th:each="i : ${#numbers.sequence(start, end)}">
-            <a th:href="@{'/tickets'(page=${i}, size=${size})}"
-               th:text="${i + 1}"
-               th:classappend="${i == cp} ? 'active' : ''">
-            </a>
-          </span>
+          </form>
+        </td>
+      </tr>
 
-          <span th:if="${end < tp - 2}" class="ellipsis">...</span>
+      </tbody>
+    </table>
 
-          <a th:if="${end < tp - 1}"
-             th:href="@{'/tickets'(page=${tp - 1}, size=${size})}"
-             th:text="${tp}">
-          </a>
+  </div>
 
-          <a th:if="${cp < tp - 1}"
-             th:href="@{'/tickets'(page=${cp + 1}, size=${size})}">
-            Next
-          </a>
+  <div class="pagination"
+       th:if="${ticketPage.totalPages > 1}">
 
-        </div>
+    <div class="pagination-inner"
+         th:with="
+                cp=${ticketPage.number},
+                tp=${ticketPage.totalPages},
+                size=${ticketPage.size},
+                start=${cp - 3 >= 0 ? cp - 3 : 0},
+                end=${cp + 3 < tp ? cp + 3 : tp - 1}">
+
+      <a th:if="${cp > 0}"
+         th:href="@{'/tickets'(page=${cp - 1}, size=${size})}">
+        Previous
+      </a>
+
+      <a th:if="${start > 0}"
+         th:href="@{'/tickets'(page=0, size=${size})}">
+        1
+      </a>
+
+      <span th:if="${start > 1}" class="ellipsis">...</span>
+
+      <span th:each="i : ${#numbers.sequence(start, end)}">
+                <a th:href="@{'/tickets'(page=${i}, size=${size})}"
+                   th:text="${i + 1}"
+                   th:classappend="${i == cp} ? 'active' : ''">
+                </a>
+            </span>
+
+      <span th:if="${end < tp - 2}" class="ellipsis">...</span>
+
+      <a th:if="${end < tp - 1}"
+         th:href="@{'/tickets'(page=${tp - 1}, size=${size})}"
+         th:text="${tp}">
+      </a>
+
+      <a th:if="${cp < tp - 1}"
+         th:href="@{'/tickets'(page=${cp + 1}, size=${size})}">
+        Next
+      </a>
+
     </div>
-  </body>
+
+  </div>
+
+</div>
+
+</body>
 </html>

@@ -5,35 +5,72 @@
   <title>Edit Ticket</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-  <body>
-    <div class="container">
-      <h1>Edit Ticket</h1>
+<body>
 
-      <form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/update'}"
-            th:object="${ticket}" method="post">
-        <div class="form-group">
-          <label>Passenger ID:</label>
-          <input type="text" th:field="*{passengerId}" />
+<div class="container">
+
+  <header class="header">
+    <h1>🎫 Edit Ticket</h1>
+  </header>
+
+  <div class="form-wrapper">
+
+    <form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/update'}"
+          th:object="${ticket}"
+          method="post">
+
+      <div class="form-group">
+        <label for="passengerName">Passenger Name</label>
+        <input id="passengerName"
+               type="text"
+               th:field="*{passengerName}">
+      </div>
+
+      <div class="form-group">
+        <label for="contactData">Contact Data</label>
+        <input id="contactData"
+               type="text"
+               th:field="*{contactData}">
+      </div>
+
+      <div class="button-row">
+
+        <div class="button-left">
+          <a th:href="@{/tickets}" class="btn">
+            ← Back
+          </a>
         </div>
 
-        <div class="form-group">
-          <label>Passenger Name:</label>
-          <input type="text" th:field="*{passengerName}" />
+        <div class="button-center">
+          <button type="submit" class="btn">
+            Update Ticket
+          </button>
         </div>
 
-        <div class="form-group">
-          <label>Contact Data:</label>
-          <input type="text" th:field="*{contactData}" />
-        </div>
+      </div>
 
-        <button type="submit" class="btn">Update Ticket</button>
-      </form>
+    </form>
 
-      <form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/delete'}" method="post">
-        <button type="submit" class="btn" style="background:#dc3545;">Delete Ticket</button>
-      </form>
+    <div class="button-row delete-row">
+      <div></div>
 
-      <a th:href="@{/tickets}" class="btn">Back to Ticket List</a>
+      <div class="button-right">
+        <form th:action="@{'/tickets/' + ${ticket.ticketNo} + '/delete'}"
+              method="post">
+
+          <button type="submit"
+                  class="btn btn-danger"
+                  onclick="return confirm('Delete this ticket?')">
+            Delete Ticket
+          </button>
+
+        </form>
+      </div>
     </div>
-  </body>
+
+  </div>
+
+</div>
+
+</body>
 </html>
