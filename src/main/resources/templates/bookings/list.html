@@ -12,7 +12,9 @@
 </head>
 <body>
 <div class="container">
-    <h2>Booking Lists</h2>
+    <header class="header">
+        <h1>📖 Booking List</h1>
+    </header>
 
     <div class="table-wrapper">
         <table>
@@ -40,14 +42,23 @@
                     <span th:text="${b.totalAmount != null} ? 'ACTIVE' : 'N/A'"></span>
                 </td>
 
-                <td>
-                    <a th:href="@{'/bookings/edit/' + ${b.bookRef}}" class="btn">Edit</a>
+                <td class="actions">
 
-                    <a th:href="@{'/bookings/select-seat/' + ${b.bookRef}}" class="btn">
-                        Select Seat
+                    <a th:href="@{'/bookings/edit/' + ${b.bookRef}}"
+                       class="btn">
+                        Edit
                     </a>
 
-                    <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}" class="btn">Cancel</a>
+                    <a th:href="@{'/bookings/select-seat/' + ${b.bookRef}}"
+                       class="btn">
+                        Seat
+                    </a>
+
+                    <a th:href="@{'/bookings/cancel/' + ${b.bookRef}}"
+                       class="btn btn-danger">
+                        Cancel
+                    </a>
+
                 </td>
             </tr>
             </tbody>

@@ -1,38 +1,71 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
     <title>Select Seat</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
 <div class="container">
 
-    <h2>Select a Seat</h2>
+    <header class="header">
+        <h1>💺 Select Seat</h1>
+    </header>
 
-    <form th:action="@{/bookings/assign}" method="post">
+    <div class="form-wrapper">
 
-        <input type="hidden" name="bookingRef" th:value="${bookingRef}" />
-        <input type="hidden" name="flightId" th:value="${flightId}" />
+        <form th:action="@{/bookings/assign}" method="post">
 
-        <div class="form-group">
-            <label>Select Seat:</label>
-            <select name="seatNo">
+            <input type="hidden"
+                   name="bookingRef"
+                   th:value="${bookingRef}">
 
-                <option th:each="seat : ${seats}"
-                        th:value="${seat.seatNo}"
-                        th:text="${seat.seatNo}">
-                </option>
+            <input type="hidden"
+                   name="flightId"
+                   th:value="${flightId}">
 
-            </select>
+            <div class="form-group">
+                <label>Available Seats</label>
+
+                <select name="seatNo">
+
+                    <option th:each="seat : ${seats}"
+                            th:value="${seat.seatNo}"
+                            th:text="${seat.seatNo}">
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="button-row">
+
+                <div class="button-left">
+                    <a th:href="@{/bookings/list}"
+                       class="btn">
+                        ← Back
+                    </a>
+                </div>
+
+                <div class="button-center">
+                    <button type="submit"
+                            class="btn">
+                        Confirm Seat
+                    </button>
+                </div>
+
+                <div></div>
+
+            </div>
+
+        </form>
+
+        <div class="error"
+             th:if="${error}"
+             th:text="${error}">
         </div>
-
-        <button type="submit" class="btn">Confirm</button>
-    </form>
-
-    <div th:if="${error}" style="color:red; margin-top:10px;">
-        <p th:text="${error}"></p>
     </div>
-
 </div>
 </body>
 </html>
