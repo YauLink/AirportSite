@@ -1,77 +1,69 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>Manage Flights</title>
-  <meta charset="UTF-8"/>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
 <div class="container">
 
-  <!-- Header -->
   <header class="header">
     <h1>✈ Manage Flights</h1>
     <div class="actions">
-      <a th:href="@{/admin/flights/create}" class="btn btn-add">+ Create Flight</a>
-      <a href="/admin/dashboard" class="btn btn-secondary">Dashboard</a>
+      <a th:href="@{/admin/flights/create}" class="btn">+ Create Flight</a>
+      <a th:href="@{/admin/dashboard}" class="btn">Dashboard</a>
     </div>
   </header>
 
-  <!-- Flights Table -->
   <div class="table-wrapper">
-    <table class="styled-table">
+    <table>
       <thead>
       <tr>
         <th>#</th>
         <th>Flight No</th>
-        <th>Route</th>
+        <th>Departure</th>
+        <th>Arrival</th>
         <th>Status</th>
-        <th>Actions</th>
+        <th class="actions-column">Actions</th>
       </tr>
       </thead>
 
       <tbody>
+
+      <tr th:if="${#lists.isEmpty(flights)}">
+        <td colspan="6" class="empty-message">
+          No flights available.
+        </td>
+      </tr>
+
       <tr th:each="flight, iterStat : ${flights}">
         <td th:text="${iterStat.count}"></td>
+        <td th:text="${flight.flightNo}"></td>
+        <td th:text="${flight.departureAirport}"></td>
+        <td th:text="${flight.arrivalAirport}"></td>
+        <td th:text="${flight.status}"></td>
 
-        <td>
-          <strong th:text="${flight.flightNo}"></strong>
-        </td>
-
-        <td>
-          <span th:text="${flight.departureAirport}"></span>
-          →
-          <span th:text="${flight.arrivalAirport}"></span>
-        </td>
-
-        <td>
-          <span class="status"
-                th:text="${flight.status}"
-                th:classappend="' status-' + ${flight.status.toLowerCase()}">
-          </span>
-        </td>
-
-        <td class="actions-cell">
+        <td class="actions">
 
           <a th:href="@{/admin/flights/edit/{id}(id=${flight.flightId})}"
-             class="btn btn-edit">
+             class="btn">
             Edit
           </a>
 
           <form th:action="@{/admin/flights/delete/{id}(id=${flight.flightId})}"
                 method="post"
-                style="display:inline;">
-            <button type="submit" class="btn btn-delete">
+                style="display:inline; margin:0; padding:0; background:none; box-shadow:none;">
+
+            <button type="submit"
+                    class="btn btn-danger"
+                    onclick="return confirm('Delete this flight?')">
               Delete
             </button>
+
           </form>
 
-        </td>
-      </tr>
-
-      <tr th:if="${#lists.isEmpty(flights)}">
-        <td colspan="5" style="text-align:center;">
-          No flights available
         </td>
       </tr>
 
@@ -80,5 +72,6 @@
   </div>
 
 </div>
+
 </body>
 </html>

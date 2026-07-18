@@ -1,36 +1,75 @@
 <!DOCTYPE html>
-<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-  <body>
-    <div class="actions">
-      <h2>Management</h2>
-      <a href="/admin/users" class="btn">Manage Users</a>
-      <a href="/admin/flights" class="btn">Manage Flights</a>
-    </div>
+<body>
 
-    <!-- Reports -->
-    <div class="actions">
-      <h2>Reports</h2>
-      <a href="/admin/reports/bookings" class="btn">Bookings Report</a>
-      <a href="/admin/reports/flights" class="btn">Flights Report</a>
-      <a href="/admin/reports/users" class="btn">Users Activity Report</a>
-    </div>
+<div class="container">
+  <header class="header">
+    <h1>🛠 Admin Dashboard</h1>
+  </header>
 
-    <!-- System monitoring -->
-    <div class="actions">
-      <h2>System</h2>
-      <a href="/admin/logs" class="btn">System Logs</a>
+  <div class="dashboard-section">
+    <h2>Management</h2>
+    <div class="button-row">
+      <div class="button-left">
+        <a th:href="@{/admin/users}" class="btn">Manage Users</a>
+      </div>
+      <div class="button-center">
+        <a th:href="@{/admin/flights}" class="btn">Manage Flights</a>
+      </div>
+      <div></div>
     </div>
+  </div>
 
-    <!-- Settings -->
-    <div class="actions">
-      <h2>Settings</h2>
-      <a href="/admin/settings" class="btn">Application Settings</a>
+  <hr>
+
+  <div class="dashboard-section">
+    <h2>Reports</h2>
+    <div class="button-row">
+      <div class="button-left">
+        <a th:href="@{/admin/reports/bookings}" class="btn">Bookings Report</a>
+      </div>
+      <div class="button-center">
+        <a th:href="@{/admin/reports/flights}" class="btn">Flights Report</a>
+      </div>
+      <div class="button-right">
+        <a th:href="@{/admin/reports/users}" class="btn">Users Activity</a>
+      </div>
     </div>
-  </body>
+  </div>
+
+  <hr>
+
+  <div class="dashboard-section">
+    <h2>System</h2>
+    <div class="button-row">
+      <div class="button-left">
+        <a th:href="@{/admin/logs}" class="btn">System Logs</a>
+      </div>
+      <div class="button-center">
+        <a th:href="@{/admin/settings}" class="btn">Application Settings</a>
+      </div>
+      <div></div>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="button-row">
+    <div class="button-left">
+      <a th:href="@{/admin}" class="btn">← Home</a>
+    </div>
+    <div></div>
+    <div class="button-right">
+      <a th:href="@{/}" class="btn">Exit Admin</a>
+    </div>
+  </div>
+</div>
+
+</body>
 </html>

@@ -1,77 +1,72 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>Edit Flight</title>
-  <meta charset="UTF-8"/>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
 <div class="container">
-  <h1>Edit Flight</h1>
+  <header class="header">
+    <h1>✈ Edit Flight</h1>
+  </header>
 
-  <form th:action="@{/admin/flights/edit/{id}(id=${flight.flightId})}"
-        th:object="${flight}"
-        method="post">
+  <div class="form-wrapper">
+    <form th:action="@{/admin/flights/edit/{id}(id=${flight.flightId})}"
+          th:object="${flight}"
+          method="post">
 
-    <table>
-      <thead>
-      <tr>
-        <th>Field</th>
-        <th>Current Value</th>
-        <th>New Value</th>
-      </tr>
-      </thead>
-      <tbody>
+      <div class="form-group">
+        <label>Flight Number</label>
+        <input type="text" th:field="*{flightNo}" required>
+      </div>
 
-      <tr>
-        <td>Flight No</td>
-        <td th:text="${flight.flightNo}"></td>
-        <td><input type="text" th:field="*{flightNo}" required/></td>
-      </tr>
+      <div class="form-group">
+        <label>Departure Time</label>
+        <input type="datetime-local" th:field="*{scheduledDeparture}" required>
+      </div>
 
-      <tr>
-        <td>Departure Time</td>
-        <td th:text="${flight.scheduledDeparture}"></td>
-        <td><input type="datetime-local" th:field="*{scheduledDeparture}" required/></td>
-      </tr>
+      <div class="form-group">
+        <label>Arrival Time</label>
+        <input type="datetime-local" th:field="*{scheduledArrival}" required>
+      </div>
 
-      <tr>
-        <td>Arrival Time</td>
-        <td th:text="${flight.scheduledArrival}"></td>
-        <td><input type="datetime-local" th:field="*{scheduledArrival}" required/></td>
-      </tr>
+      <div class="form-group">
+        <label>Departure Airport</label>
+        <input type="text" th:field="*{departureAirport}" required>
+      </div>
 
-      <tr>
-        <td>From</td>
-        <td th:text="${flight.departureAirport}"></td>
-        <td><input type="text" th:field="*{departureAirport}" required/></td>
-      </tr>
+      <div class="form-group">
+        <label>Arrival Airport</label>
+        <input type="text" th:field="*{arrivalAirport}" required>
+      </div>
 
-      <tr>
-        <td>To</td>
-        <td th:text="${flight.arrivalAirport}"></td>
-        <td><input type="text" th:field="*{arrivalAirport}" required/></td>
-      </tr>
+      <div class="form-group">
+        <label>Status</label>
+        <input type="text" th:field="*{status}" required>
+      </div>
 
-      <tr>
-        <td>Status</td>
-        <td th:text="${flight.status}"></td>
-        <td><input type="text" th:field="*{status}" required/></td>
-      </tr>
+      <div class="form-group">
+        <label>Aircraft Code</label>
+        <input type="text" th:field="*{aircraftCode}" required>
+      </div>
 
-      <tr>
-        <td>Aircraft Code</td>
-        <td th:text="${flight.aircraftCode}"></td>
-        <td><input type="text" th:field="*{aircraftCode}" required/></td>
-      </tr>
+      <div class="button-row">
+        <div class="button-left">
+          <a th:href="@{/admin/flights}" class="btn">← Back</a>
+        </div>
 
-      </tbody>
-    </table>
+        <div class="button-center">
+          <button type="submit" class="btn">Update Flight</button>
+        </div>
 
-    <button type="submit" class="btn">Update</button>
-  </form>
+        <div></div>
+      </div>
 
-  <a href="/admin/flights" class="btn">Back</a>
+    </form>
+  </div>
 </div>
+
 </body>
 </html>

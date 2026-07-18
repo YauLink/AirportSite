@@ -2,13 +2,37 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Index</title>
+    <title>Admin Home</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-    <body>
-        <div class="container">
-            <h1>Welcome to the Admin Index Page</h1>
-            <a href="/admin/dashboard" class="btn">Go to Dashboard</a>
+<body>
+
+<div class="container">
+
+    <header class="header">
+        <h1>🛠 Administration</h1>
+    </header>
+
+    <p style="text-align:center; margin-bottom:30px;">
+        Welcome to the administration panel.
+        From here you can manage flights, users, reports, logs and application settings.
+    </p>
+
+    <div class="button-row">
+
+        <div></div>
+
+        <div class="button-center">
+            <a th:href="@{/admin/dashboard}" class="btn">
+                Go to Dashboard
+            </a>
         </div>
-    </body>
+
+        <div></div>
+
+    </div>
+
+</div>
+
+</body>
 </html>

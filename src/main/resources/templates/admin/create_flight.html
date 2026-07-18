@@ -1,41 +1,70 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>Create Flight</title>
-  <meta charset="UTF-8"/>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
 <div class="container">
-  <h1>Create Flight</h1>
+  <header class="header">
+    <h1>✈ Create Flight</h1>
+  </header>
 
-  <form th:action="@{/admin/flights/create}" th:object="${flight}" method="post">
+  <div class="form-wrapper">
+    <form th:action="@{/admin/flights/create}" th:object="${flight}" method="post">
 
-    <label>Flight No:</label>
-    <input type="text" th:field="*{flightNo}" required/><br/>
+      <div class="form-group">
+        <label>Flight Number</label>
+        <input type="text" th:field="*{flightNo}" required>
+      </div>
 
-    <label>Departure Time:</label>
-    <input type="datetime-local" th:field="*{scheduledDeparture}" required/><br/>
+      <div class="form-group">
+        <label>Departure Time</label>
+        <input type="datetime-local" th:field="*{scheduledDeparture}" required>
+      </div>
 
-    <label>Arrival Time:</label>
-    <input type="datetime-local" th:field="*{scheduledArrival}" required/><br/>
+      <div class="form-group">
+        <label>Arrival Time</label>
+        <input type="datetime-local" th:field="*{scheduledArrival}" required>
+      </div>
 
-    <label>From:</label>
-    <input type="text" th:field="*{departureAirport}" required/><br/>
+      <div class="form-group">
+        <label>Departure Airport</label>
+        <input type="text" th:field="*{departureAirport}" required>
+      </div>
 
-    <label>To:</label>
-    <input type="text" th:field="*{arrivalAirport}" required/><br/>
+      <div class="form-group">
+        <label>Arrival Airport</label>
+        <input type="text" th:field="*{arrivalAirport}" required>
+      </div>
 
-    <label>Status:</label>
-    <input type="text" th:field="*{status}" required/><br/>
+      <div class="form-group">
+        <label>Status</label>
+        <input type="text" th:field="*{status}" required>
+      </div>
 
-    <label>Aircraft Code:</label>
-    <input type="text" th:field="*{aircraftCode}" required/><br/>
+      <div class="form-group">
+        <label>Aircraft Code</label>
+        <input type="text" th:field="*{aircraftCode}" required>
+      </div>
 
-    <button type="submit" class="btn">Save</button>
-  </form>
+      <div class="button-row">
+        <div class="button-left">
+          <a th:href="@{/admin/flights}" class="btn">← Back</a>
+        </div>
 
-  <a href="/admin/flights" class="btn">Back</a>
+        <div class="button-center">
+          <button type="submit" class="btn">Create Flight</button>
+        </div>
+
+        <div></div>
+      </div>
+
+    </form>
+  </div>
 </div>
+
 </body>
 </html>
