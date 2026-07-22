@@ -1,23 +1,46 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <title>User Cabinet</title>
-    <link rel="stylesheet" th:href="@{/css/style.css}">
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8">
+  <title>User Cabinet</title>
+  <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
 
-    <h2>Welcome, <span th:text="${fullName}"></span></h2>
+<div class="container">
 
-    <a href="/user/logout">Logout</a>
+  <header class="header">
+    <h1>👤 User Cabinet</h1>
+    <div class="actions">
+      <a th:href="@{/user/logout}" class="btn btn-danger">Logout</a>
+    </div>
+  </header>
 
-    <h3>My Tickets</h3>
+  <h2>
+    Welcome,
+    <span th:text="${fullName}">User</span>
+  </h2>
 
-    <table border="1">
+  <div class="table-wrapper">
+
+    <table>
+
+      <thead>
       <tr>
         <th>Ticket No</th>
         <th>Booking Ref</th>
-        <th>Flight</th>
-        <th>Status</th>
+        <th>Flight ID</th>
+        <th>Fare</th>
+        <th>Amount</th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr th:if="${#lists.isEmpty(ticketFlights)}">
+        <td colspan="5" class="empty-message">
+          You don't have any tickets.
+        </td>
       </tr>
 
       <tr th:each="tf : ${ticketFlights}">
@@ -27,7 +50,10 @@
         <td th:text="${tf.fareConditions}"></td>
         <td th:text="${tf.amount}"></td>
       </tr>
-    </table>
 
-  </body>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
 </html>

@@ -1,32 +1,45 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="ru">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
   <title>Confirm Booking</title>
   <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
+
 <div class="container">
-  <header>
-    <h1>Confirm Your Booking</h1>
+
+  <header class="header">
+    <h1>✅ Confirm Booking</h1>
   </header>
 
-  <p>Passenger: <strong th:text="${passengerName}"></strong></p>
+  <h3>
+    Passenger:
+    <span th:text="${passengerName}"></span>
+  </h3>
 
   <div class="table-wrapper">
-    <table border="1">
+    <table>
       <thead>
       <tr>
         <th>Flight No</th>
-        <th>From</th>
-        <th>To</th>
-        <th>Scheduled Departure</th>
-        <th>Scheduled Arrival</th>
+        <th>Departure</th>
+        <th>Arrival</th>
+        <th>Departure Time</th>
+        <th>Arrival Time</th>
         <th>Status</th>
         <th>Aircraft</th>
       </tr>
       </thead>
+
       <tbody>
+
+      <tr th:if="${#lists.isEmpty(flights)}">
+        <td colspan="7" class="empty-message">
+          No flights selected.
+        </td>
+      </tr>
+
       <tr th:each="flight : ${flights}">
         <td th:text="${flight.flightNo}"></td>
         <td th:text="${flight.departureAirport}"></td>
@@ -36,23 +49,39 @@
         <td th:text="${flight.status}"></td>
         <td th:text="${flight.aircraftCode}"></td>
       </tr>
+
       </tbody>
     </table>
   </div>
 
-  <form method="post" th:action="@{/user/book}">
-    <div th:each="flight : ${flights}">
-      <input type="hidden" name="flightIds" th:value="${flight.flightId}"/>
-    </div>
+  <div class="form-wrapper">
 
-    <button type="submit" class="btn btn-add">Confirm Booking</button>
-  </form>
+    <form th:action="@{/user/book}" method="post">
 
-  <button class="btn btn-edit" th:onclick="|location.href='@{/filters}'|">
-    Back to Flight Search
-  </button>
+      <div th:each="flight : ${flights}">
+        <input type="hidden"
+               name="flightIds"
+               th:value="${flight.flightId}">
+      </div>
 
-  <footer>&copy; 2025 Airport System</footer>
+      <div class="button-row">
+
+        <div class="button-left">
+          <a th:href="@{/filters}" class="btn">
+            ← Back
+          </a>
+        </div>
+
+        <div class="button-center">
+          <button type="submit" class="btn">
+            Confirm Booking
+          </button>
+        </div>
+
+        <div></div>
+      </div>
+    </form>
+  </div>
 </div>
 </body>
 </html>
