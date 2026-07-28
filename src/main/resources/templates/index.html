@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Airport System</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
@@ -12,79 +13,82 @@
 
     <header class="header">
         <h1>✈ Airport System</h1>
-        <p>Your portal for flights, bookings, and management</p>
+        <p class="subtitle">
+            Search flights, manage bookings, and explore airports worldwide.
+        </p>
     </header>
 
     <section class="card">
         <h2>Passenger Services</h2>
-
         <div class="button-group">
-            <a th:href="@{/filters}" class="btn btn-add">
+            <a th:href="@{/filters}" class="btn">
                 🔍 Search Flights
             </a>
-
-            <a th:href="@{/user/login}" class="btn btn-edit">
-                👤 Login / Cabinet
-            </a>
-
             <a th:href="@{/airports}" class="btn btn-secondary">
                 🌍 View Airports
+            </a>
+            <a th:href="@{/user/login}" class="btn btn-secondary">
+                👤 Login / Cabinet
             </a>
         </div>
     </section>
 
     <section class="card">
-        <h2>🚀 Quick Actions</h2>
-
+        <h2>Quick Actions</h2>
         <div class="button-group">
-            <a th:href="@{/filters}" class="btn btn-add">
+            <a th:href="@{/filters}" class="btn">
                 ✈ Book a Flight
             </a>
-
-            <a th:href="@{/user/login}" class="btn btn-edit">
-                🎫 View My Tickets
+            <a th:href="@{/user/login}" class="btn btn-secondary">
+                🎫 My Tickets
             </a>
-
             <a th:href="@{/airports}" class="btn btn-secondary">
-                🌍 Airport Directory
+                🗺 Airport Directory
             </a>
-
-            <a th:href="@{/admin}" class="btn btn-delete">
-                ⚙ System Administration
+            <a th:href="@{/admin}" class="btn btn-danger">
+                ⚙ Administration
             </a>
         </div>
+    </section>
 
-        <hr style="margin:30px 0;">
-
-        <h3>🧳 Before You Fly</h3>
-
-        <div style="display:flex; justify-content:space-around; flex-wrap:wrap; gap:20px; margin-top:20px;">
-
-            <div style="width:220px;">
-                <h4>🕒 Arrive Early</h4>
-                <p>International flights: arrive at least 3 hours before departure.</p>
+    <section class="card">
+        <h2>Before You Fly</h2>
+        <div class="info-grid">
+            <div class="info-card">
+                <h3>🕒 Arrive Early</h3>
+                <p>
+                    Domestic flights: arrive at least 2 hours before departure.
+                    International flights: arrive at least 3 hours before departure.
+                </p>
             </div>
-
-            <div style="width:220px;">
-                <h4>🛂 Documents</h4>
-                <p>Have your passport or ID and boarding pass ready before security.</p>
+            <div class="info-card">
+                <h3>🛂 Travel Documents</h3>
+                <p>
+                    Keep your passport or ID, boarding pass, and travel documents
+                    ready before entering the security checkpoint.
+                </p>
             </div>
-
-            <div style="width:220px;">
-                <h4>🛄 Baggage</h4>
-                <p>Check baggage limits before your trip to avoid additional fees.</p>
+            <div class="info-card">
+                <h3>🛄 Baggage</h3>
+                <p>
+                    Verify baggage allowance before departure to avoid excess
+                    baggage fees at the airport.
+                </p>
             </div>
-
-            <div style="width:220px;">
-                <h4>📱 Online Check-In</h4>
-                <p>Save time at the airport by checking in online when available.</p>
+            <div class="info-card">
+                <h3>📱 Online Check-In</h3>
+                <p>
+                    Check in online when available to save time and select your
+                    preferred seat before arriving.
+                </p>
             </div>
-
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2025-2026 Airport System</p>
+
+        <p>&copy; 2025–2026 Airport System</p>
+
     </footer>
 
 </div>
