@@ -1,6 +1,7 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.dto.AuthResponseDTO;
+import com.myapp.Airports.exceptions.UserNotFoundException;
 import com.myapp.Airports.model.*;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.TicketService;
@@ -48,8 +49,8 @@ public class AuthController {
 
             return "redirect:/user/cabinet";
 
-        } catch (Exception e) {
-            model.addAttribute("error", "Invalid username or password");
+        } catch (UserNotFoundException ex) {
+            model.addAttribute("error", ex.getMessage());
             return "user/login";
         }
     }

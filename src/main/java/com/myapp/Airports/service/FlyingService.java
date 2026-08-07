@@ -1,6 +1,7 @@
 package com.myapp.Airports.service;
 
 import com.myapp.Airports.dto.FlyingDTO;
+import com.myapp.Airports.exceptions.FlightNotFoundException;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.storage.api.IFlyingsRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -77,13 +78,8 @@ public class FlyingService {
     @Cacheable(value = "flight", key = "#id")
     public Optional<Flying> findById(Integer id) {
 
-        try {
-            System.out.println("⏳ Fetching flight " + id + " from DB...");
-            return flyingRepository.findById(id);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch flight: " + id, e);
-        }
+        return Optional.ofNullable(flyingRepository.findById(id)
+                .orElseThrow(() -> new FlightNotFoundException(id.longValue())));
     }
 
     @CacheEvict(value = {"flights", "flight"}, allEntries = true)

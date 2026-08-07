@@ -56,14 +56,13 @@ public class FlyingController {
 
     @GetMapping("/edit/{id}")
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
-        Optional<Flying> flightOpt = flyingService.findById(id);
-        if (flightOpt.isPresent()) {
-            FlyingDTO dto = FlyingMapper.toDto(flightOpt.get());
-            model.addAttribute("flyingDTO", dto);
-            return "flight_form";
-        } else {
-            return "redirect:/flights";
-        }
+        Flying flight = flyingService.findById(id);
+
+        FlyingDTO dto = FlyingMapper.toDto(flight);
+
+        model.addAttribute("flyingDTO", dto);
+
+        return "flight_form";
     }
 
     @PostMapping("/edit")

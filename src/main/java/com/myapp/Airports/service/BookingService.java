@@ -1,5 +1,6 @@
 package com.myapp.Airports.service;
 
+import com.myapp.Airports.exceptions.BookingNotFoundException;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.TicketFlight;
 import com.myapp.Airports.storage.api.IBookingRepository;
@@ -31,20 +32,13 @@ public class BookingService {
     @Cacheable(value = "bookings")
     public Page<Booking> findAll(int page, int size) {
 
-        try {
-            PageRequest req = PageRequest.of(
-                    page,
-                    size,
-                    Sort.by("bookDate").descending()
-            );
+        PageRequest req = PageRequest.of(
+                page,
+                size,
+                Sort.by("bookDate").descending()
+        );
 
-            System.out.println("⏳ Fetching paginated bookings from DB...");
-
-            return bookingRepository.findAll(req);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch bookings", e);
-        }
+        return bookingRepository.findAll(req);
     }
 
     @Cacheable(value = "booking", key = "#bookRef")
@@ -55,12 +49,10 @@ public class BookingService {
 
             return bookingRepository.findById(bookRef)
                     .orElseThrow(() ->
-                            new RuntimeException(
-                                    "Booking not found with ref: " + bookRef
-                            ));
+                            new BookingNotFoundException(bookRef));
 
         } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch booking: " + bookRef, e);
+            throw new BookingNotFoundException(bookRef);
         }
     }
 
@@ -105,7 +97,9 @@ public class BookingService {
     public void cancelBooking(String bookRef) {
 
         try {
-            bookingRepository.deleteById(bookRef);
+            Booking booking = findByBookRef(bookRef);
+
+            bookingRepository.delete(booking);
 
         } catch (Exception e) {
             throw new RuntimeException("Failed to cancel booking: " + bookRef, e);
@@ -115,12 +109,7 @@ public class BookingService {
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
     public Booking save(Booking booking) {
 
-        try {
-            return bookingRepository.save(booking);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to save booking", e);
-        }
+        return bookingRepository.save(booking);
     }
 
     @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
@@ -140,6 +129,10 @@ public class BookingService {
             List<TicketFlight> ticketFlights =
                     ticketFlightRepository.findByBookingRef(bookRef);
 
+            if (ticketFlights.isEmpty()) {
+                throw new BookingNotFoundException(bookRef);
+            }
+
             for (TicketFlight tf : ticketFlights) {
                 tf.setSeatNo(seatNo);
             }
@@ -156,14 +149,6 @@ public class BookingService {
 
     public List<Booking> findByFlightId(Integer flightId) {
 
-        try {
-            return ticketFlightRepository.findBookingsByFlight(flightId);
-
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Failed to fetch bookings for flight: " + flightId,
-                    e
-            );
-        }
+        return ticketFlightRepository.findBookingsByFlight(flightId);
     }
 }
