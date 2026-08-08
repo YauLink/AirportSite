@@ -33,63 +33,55 @@ public class TicketBookingService {
                                         List<String> fares,
                                         List<BigDecimal> amounts) {
 
-        try {
+        for (int i = 0; i < flightIds.size(); i++) {
 
-            for (int i = 0; i < flightIds.size(); i++) {
+            Integer flightId = flightIds.get(i);
 
-                Integer flightId = flightIds.get(i);
+            Flying flight = flyingService.findById(flightId)
+                    .orElseThrow(() ->
+                            new RuntimeException(
+                                    "Flight not found: " + flightId
+                            ));
 
-                Flying flight = flyingService.findById(flightId)
-                        .orElseThrow(() ->
-                                new RuntimeException(
-                                        "Flight not found: " + flightId
-                                ));
+            Ticket ticket = new Ticket();
 
-                Ticket ticket = new Ticket();
+            ticket.setTicketNo(generateTicketNo());
+            ticket.setBooking(booking);
+            ticket.setPassengerId(passengerId);
+            ticket.setPassengerName(passengerName);
+            ticket.setContactData(contactData);
 
-                ticket.setTicketNo(generateTicketNo());
-                ticket.setBooking(booking);
-                ticket.setPassengerId(passengerId);
-                ticket.setPassengerName(passengerName);
-                ticket.setContactData(contactData);
+            ticketService.save(ticket);
 
-                ticketService.save(ticket);
+            TicketFlight tf = new TicketFlight();
 
-                TicketFlight tf = new TicketFlight();
+            TicketFlightId tfId = new TicketFlightId();
+            tfId.setTicketNo(ticket.getTicketNo());
+            tfId.setFlightId(flight.getFlightId());
 
-                TicketFlightId tfId = new TicketFlightId();
-                tfId.setTicketNo(ticket.getTicketNo());
-                tfId.setFlightId(flight.getFlightId());
+            tf.setId(tfId);
+            tf.setTicket(ticket);
+            tf.setFlight(flight);
+            tf.setFareConditions(fares.get(i));
+            tf.setAmount(amounts.get(i));
 
-                tf.setId(tfId);
-                tf.setTicket(ticket);
-                tf.setFlight(flight);
-                tf.setFareConditions(fares.get(i));
-                tf.setAmount(amounts.get(i));
+            BoardingPass bp = new BoardingPass();
 
-                BoardingPass bp = new BoardingPass();
+            BoardingPassId bpId = new BoardingPassId();
+            bpId.setTicketNo(ticket.getTicketNo());
+            bpId.setFlightId(flight.getFlightId());
 
-                BoardingPassId bpId = new BoardingPassId();
-                bpId.setTicketNo(ticket.getTicketNo());
-                bpId.setFlightId(flight.getFlightId());
+            bp.setId(bpId);
+            bp.setTicketNo(ticket.getTicketNo());
+            bp.setFLightId(flight.getFlightId());
 
-                bp.setId(bpId);
-                bp.setTicketNo(ticket.getTicketNo());
-                bp.setFLightId(flight.getFlightId());
+            bp.setSeatNo("AUTO-" + (i + 1));
+            bp.setBoardingNo(i + 1);
 
-                bp.setSeatNo("AUTO-" + (i + 1));
-                bp.setBoardingNo(i + 1);
-
-                boardingPassRepository.save(bp);
-            }
-
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Failed to create tickets for booking: " + booking.getBookRef(),
-                    e
-            );
+            boardingPassRepository.save(bp);
         }
     }
+
 
     private String generateTicketNo() {
         return "T" + System.currentTimeMillis();
