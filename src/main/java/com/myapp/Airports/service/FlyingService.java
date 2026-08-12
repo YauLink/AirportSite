@@ -26,93 +26,70 @@ public class FlyingService {
 
     @CacheEvict(value = {"flights"}, allEntries = true)
     public void save(Flying flying) {
-
-        try {
-            flyingRepository.save(flying);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to save flight", e);
-        }
+        flyingRepository.save(flying);
     }
 
     @CacheEvict(value = {"flights"}, allEntries = true)
     public Flying saveAndReturn(Flying flying) {
-
-        try {
-            return flyingRepository.save(flying);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to save and return flight", e);
-        }
+        return flyingRepository.save(flying);
     }
 
     @Cacheable(value = "flights")
     public List<Flying> findAll() {
-
-        try {
-            System.out.println("⏳ Fetching all flights from DB...");
-            return flyingRepository.findAll();
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch flights", e);
-        }
+        return flyingRepository.findAll();
     }
 
     @Cacheable(value = "flights", key = "#ids.toString()")
     public List<Flying> findAllByIds(List<Integer> ids) {
 
-        try {
-            List<Flying> flights = flyingRepository.findAllById(ids);
+        List<Flying> flights = flyingRepository.findAllById(ids);
 
-            if (flights.size() != ids.size()) {
-                throw new RuntimeException("Some flights not found");
-            }
-
-            return flights;
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to fetch flights by ids", e);
+        if (flights.size() != ids.size()) {
+            throw new FlightNotFoundException(
+                    "One or more flights were not found."
+            );
         }
+
+        return flights;
     }
 
     @Cacheable(value = "flight", key = "#id")
-    public Optional<Flying> findById(Integer id) {
+    public Flying findById(Integer id) {
 
-        return Optional.ofNullable(flyingRepository.findById(id)
-                .orElseThrow(() -> new FlightNotFoundException(id.longValue())));
+        return flyingRepository.findById(id)
+                .orElseThrow(() ->
+                        new FlightNotFoundException(id.longValue())
+                );
     }
 
-    @CacheEvict(value = {"flights", "flight"}, allEntries = true)
+    @CacheEvict(
+            value = {"flights", "flight"},
+            allEntries = true
+    )
     public void deleteById(Integer id) {
 
-        try {
-            flyingRepository.deleteById(id);
+        Flying flight = findById(id);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to delete flight: " + id, e);
-        }
+        flyingRepository.delete(flight);
     }
 
+    @CacheEvict(
+            value = {"flights", "flight"},
+            allEntries = true
+    )
     public void update(Integer id, FlyingDTO dto) {
 
-        try {
-            Flying flight = flyingRepository.findById(id)
-                    .orElseThrow(() ->
-                            new RuntimeException("Flight not found"));
+        Flying flight = findById(id);
 
-            flight.setFlightNo(dto.getFlightNo());
-            flight.setScheduledDeparture(dto.getScheduledDeparture());
-            flight.setScheduledArrival(dto.getScheduledArrival());
-            flight.setDepartureAirport(dto.getDepartureAirport());
-            flight.setArrivalAirport(dto.getArrivalAirport());
-            flight.setStatus(dto.getStatus());
-            flight.setAircraftCode(dto.getAircraftCode());
+        flight.setFlightNo(dto.getFlightNo());
+        flight.setScheduledDeparture(dto.getScheduledDeparture());
+        flight.setScheduledArrival(dto.getScheduledArrival());
+        flight.setDepartureAirport(dto.getDepartureAirport());
+        flight.setArrivalAirport(dto.getArrivalAirport());
+        flight.setStatus(dto.getStatus());
+        flight.setAircraftCode(dto.getAircraftCode());
 
-            flyingRepository.save(flight);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update flight: " + id, e);
-        }
+        flyingRepository.save(flight);
     }
 }
 

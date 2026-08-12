@@ -1,5 +1,6 @@
 package com.myapp.Airports.service;
 
+import com.myapp.Airports.exceptions.SeatUnavailableException;
 import com.myapp.Airports.model.BoardingPass;
 import com.myapp.Airports.storage.api.IBoardingPassRepository;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -20,8 +21,11 @@ public class BoardingPassService {
 
         try {
             return repository.save(bp);
+
         } catch (DataIntegrityViolationException e) {
-            throw new RuntimeException("Seat already taken for this flight");
+            throw new SeatUnavailableException(
+                    "Seat already taken for this flight"
+            );
         }
     }
 }

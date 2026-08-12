@@ -23,8 +23,10 @@ public class BookingService {
     private final IBookingRepository bookingRepository;
     private final ITicketFlightRepository ticketFlightRepository;
 
-    public BookingService(IBookingRepository bookingRepository,
-                          ITicketFlightRepository ticketFlightRepository) {
+    public BookingService(
+            IBookingRepository bookingRepository,
+            ITicketFlightRepository ticketFlightRepository) {
+
         this.bookingRepository = bookingRepository;
         this.ticketFlightRepository = ticketFlightRepository;
     }
@@ -44,46 +46,37 @@ public class BookingService {
     @Cacheable(value = "booking", key = "#bookRef")
     public Booking findByBookRef(String bookRef) {
 
-        try {
-            System.out.println("⏳ Fetching booking " + bookRef + " from DB...");
-
-            return bookingRepository.findById(bookRef)
-                    .orElseThrow(() ->
-                            new BookingNotFoundException(bookRef));
-
-        } catch (Exception e) {
-            throw new BookingNotFoundException(bookRef);
-        }
+        return bookingRepository.findById(bookRef)
+                .orElseThrow(() ->
+                        new BookingNotFoundException(bookRef)
+                );
     }
 
-    @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
-    public void updateBooking(String bookRef, Booking updatedBooking) {
+    @CacheEvict(
+            value = {"bookings", "booking"},
+            allEntries = true
+    )
+    public void updateBooking(
+            String bookRef,
+            Booking updatedBooking) {
 
-        try {
-            performUpdate(bookRef, updatedBooking);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to update booking: " + bookRef, e);
-        }
+        performUpdate(bookRef, updatedBooking);
     }
 
-    @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
-    public Booking updateBookingAndReturn(String bookRef,
-                                          Booking updatedBooking) {
+    @CacheEvict(
+            value = {"bookings", "booking"},
+            allEntries = true
+    )
+    public Booking updateBookingAndReturn(
+            String bookRef,
+            Booking updatedBooking) {
 
-        try {
-            return performUpdate(bookRef, updatedBooking);
-
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Failed to update and return booking: " + bookRef,
-                    e
-            );
-        }
+        return performUpdate(bookRef, updatedBooking);
     }
 
-    private Booking performUpdate(String bookRef,
-                                  Booking updatedBooking) {
+    private Booking performUpdate(
+            String bookRef,
+            Booking updatedBooking) {
 
         Booking existing = findByBookRef(bookRef);
 
@@ -93,58 +86,57 @@ public class BookingService {
         return bookingRepository.save(existing);
     }
 
-    @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
+    @CacheEvict(
+            value = {"bookings", "booking"},
+            allEntries = true
+    )
     public void cancelBooking(String bookRef) {
 
-        try {
-            Booking booking = findByBookRef(bookRef);
+        Booking booking = findByBookRef(bookRef);
 
-            bookingRepository.delete(booking);
-
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to cancel booking: " + bookRef, e);
-        }
+        bookingRepository.delete(booking);
     }
 
-    @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
+    @CacheEvict(
+            value = {"bookings", "booking"},
+            allEntries = true
+    )
     public Booking save(Booking booking) {
 
         return bookingRepository.save(booking);
     }
 
-    @CacheEvict(value = {"bookings", "booking"}, allEntries = true)
+    @CacheEvict(
+            value = {"bookings", "booking"},
+            allEntries = true
+    )
     public void delete(String bookRef) {
 
-        try {
-            bookingRepository.deleteById(bookRef);
+        Booking booking = findByBookRef(bookRef);
 
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to delete booking: " + bookRef, e);
-        }
+        bookingRepository.delete(booking);
     }
 
-    public void assignSeat(String bookRef, String seatNo) {
+    @CacheEvict(
+            value = {"bookings", "booking"},
+            allEntries = true
+    )
+    public void assignSeat(
+            String bookRef,
+            String seatNo) {
 
-        try {
-            List<TicketFlight> ticketFlights =
-                    ticketFlightRepository.findByBookingRef(bookRef);
+        List<TicketFlight> ticketFlights =
+                ticketFlightRepository.findByBookingRef(bookRef);
 
-            if (ticketFlights.isEmpty()) {
-                throw new BookingNotFoundException(bookRef);
-            }
-
-            for (TicketFlight tf : ticketFlights) {
-                tf.setSeatNo(seatNo);
-            }
-
-            ticketFlightRepository.saveAll(ticketFlights);
-
-        } catch (Exception e) {
-            throw new RuntimeException(
-                    "Failed to assign seat for booking: " + bookRef,
-                    e
-            );
+        if (ticketFlights.isEmpty()) {
+            throw new BookingNotFoundException(bookRef);
         }
+
+        for (TicketFlight ticketFlight : ticketFlights) {
+            ticketFlight.setSeatNo(seatNo);
+        }
+
+        ticketFlightRepository.saveAll(ticketFlights);
     }
 
     public List<Booking> findByFlightId(Integer flightId) {

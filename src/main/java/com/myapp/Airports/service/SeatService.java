@@ -1,5 +1,6 @@
 package com.myapp.Airports.service;
 
+import com.myapp.Airports.exceptions.SeatUnavailableException;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Seat;
 import com.myapp.Airports.model.SeatId;
@@ -28,7 +29,11 @@ public class SeatService {
     }
 
     public Seat getById(SeatId id) {
-        return seatRepository.findById(id).orElseThrow();
+
+        return seatRepository.findById(id)
+                .orElseThrow(() ->
+                        new SeatUnavailableException("Seat was not found: " + id)
+                );
     }
 
     public Seat save(Seat seat) {
@@ -36,10 +41,13 @@ public class SeatService {
     }
 
     public void delete(SeatId id) {
-        seatRepository.deleteById(id);
+
+        Seat seat = getById(id);
+
+        seatRepository.delete(seat);
     }
 
-    public List<Seat> findAvailableForFlight(Integer flightId){
+    public List<Seat> findAvailableForFlight(Integer flightId) {
         return seatRepository.findAvailableSeatsByFlightId(flightId);
     }
 }
