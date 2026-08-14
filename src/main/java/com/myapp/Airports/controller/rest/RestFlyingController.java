@@ -40,7 +40,7 @@ public class RestFlyingController {
     @GetMapping("/{id}")
     @ResponseBody
     public ResponseEntity<FlyingDTO> getFlightById(@PathVariable Integer id) {
-        Optional<Flying> flightOpt = flyingService.findById(id);
+        Optional<Flying> flightOpt = Optional.ofNullable(flyingService.findById(id));
         return flightOpt
                 .map(flight -> ResponseEntity.ok(FlyingMapper.toDto(flight)))
                 .orElse(ResponseEntity.notFound().build());
@@ -57,7 +57,7 @@ public class RestFlyingController {
     @ResponseBody
     public ResponseEntity<FlyingDTO> updateFlightApi(@PathVariable Integer id,
                                                      @RequestBody @Valid FlyingDTO flyingDTO) {
-        Optional<Flying> existing = flyingService.findById(id);
+        Optional<Flying> existing = Optional.ofNullable(flyingService.findById(id));
         if (existing.isEmpty()) {
             return ResponseEntity.notFound().build();
         }

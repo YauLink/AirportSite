@@ -20,7 +20,6 @@ import java.util.Map;
 public class RestAdminController {
 
     @GetMapping("/api/dashboard")
-    @ResponseBody
     public ResponseEntity<Map<String, Object>> getDashboardData() {
         Map<String, Object> data = Map.of(
                 "totalUsers", 3,
@@ -31,19 +30,18 @@ public class RestAdminController {
     }
 
     @GetMapping("/api/users")
-    @ResponseBody
     public ResponseEntity<List<String>> getUsers() {
+
         return ResponseEntity.ok(List.of("Alice", "Bob", "Charlie"));
     }
 
     @GetMapping(value = "/api/flights", produces = "application/json")
-    @ResponseBody
     public ResponseEntity<List<String>> getFlights() {
+
         return ResponseEntity.ok(List.of("Flight-101", "Flight-202", "Flight-303"));
     }
 
     @GetMapping("/api/settings")
-    @ResponseBody
     public ResponseEntity<Map<String, Object>> getSettings() {
         Map<String, Object> settings = Map.of(
                 "theme", "dark",

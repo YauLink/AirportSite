@@ -1,5 +1,7 @@
 package com.myapp.Airports.controller.rest;
 
+import com.myapp.Airports.exceptions.InvalidBookingStateException;
+import com.myapp.Airports.exceptions.UserNotAuthenticatedException;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.service.BookingService;
@@ -30,9 +32,11 @@ public class RestFlightBookingController {
     private final TicketBookingService ticketBookingService;
     private final FlyingService flyingService;
 
-    public RestFlightBookingController(BookingService bookingService,
-                                       TicketBookingService ticketBookingService,
-                                       FlyingService flyingService) {
+    public RestFlightBookingController(
+            BookingService bookingService,
+            TicketBookingService ticketBookingService,
+            FlyingService flyingService) {
+
         this.bookingService = bookingService;
         this.ticketBookingService = ticketBookingService;
         this.flyingService = flyingService;
@@ -42,25 +46,27 @@ public class RestFlightBookingController {
      * STEP 1: confirm selected flights.
      */
     @PostMapping("/confirm")
-    public ResponseEntity<?> confirmBooking(@RequestBody List<Integer> flightIds,
-                                            HttpSession session) {
+    public ResponseEntity<?> confirmBooking(
+            @RequestBody List<Integer> flightIds,
+            HttpSession session) {
 
         String passengerId = (String) session.getAttribute("USER_ID");
         String passengerName = (String) session.getAttribute("USER_NAME");
 
         if (passengerId == null || passengerName == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "User not authenticated"));
+            throw new UserNotAuthenticatedException("User not authenticated");
         }
 
         List<Flying> flights = flyingService.findAllByIds(flightIds);
 
         session.setAttribute("SELECTED_FLIGHTS", flightIds);
 
-        return ResponseEntity.ok(Map.of(
-                "passengerName", passengerName,
-                "flights", flights
-        ));
+        return ResponseEntity.ok(
+                Map.of(
+                        "passengerName", passengerName,
+                        "flights", flights
+                )
+        );
     }
 
     /**
@@ -73,23 +79,27 @@ public class RestFlightBookingController {
         String passengerName = (String) session.getAttribute("USER_NAME");
 
         if (passengerId == null || passengerName == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "User not authenticated"));
+            throw new UserNotAuthenticatedException("User not authenticated");
         }
 
+        @SuppressWarnings("unchecked")
         List<Integer> flightIds =
-                (List<Integer>) session.getAttribute("SELECTED_FLIGHTS");
+                (List<Integer>) session.getAttribute(
+                        "SELECTED_FLIGHTS"
+                );
 
         if (flightIds == null || flightIds.isEmpty()) {
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", "No flights selected"));
+            throw new InvalidBookingStateException("No flights selected");
         }
 
         List<Flying> flights = flyingService.findAllByIds(flightIds);
 
         BigDecimal total = flights.stream()
                 .map(f -> BigDecimal.valueOf(100))
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
+                .reduce(
+                        BigDecimal.ZERO,
+                        BigDecimal::add
+                );
 
         Booking booking = new Booking();
         booking.setBookRef("BKG-" + System.currentTimeMillis());
@@ -110,10 +120,13 @@ public class RestFlightBookingController {
 
         session.removeAttribute("SELECTED_FLIGHTS");
 
-        return ResponseEntity.ok(Map.of(
-                "message", "Booking created successfully",
-                "bookingRef", booking.getBookRef(),
-                "total", total
-        ));
+        return ResponseEntity.ok(
+                Map.of(
+                        "message",
+                        "Booking created successfully",
+                        "bookingRef",
+                        booking.getBookRef(),
+                        "total", total)
+        );
     }
 }
