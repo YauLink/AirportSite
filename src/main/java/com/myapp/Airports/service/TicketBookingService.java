@@ -37,11 +37,7 @@ public class TicketBookingService {
 
             Integer flightId = flightIds.get(i);
 
-            Flying flight = flyingService.findById(flightId)
-                    .orElseThrow(() ->
-                            new RuntimeException(
-                                    "Flight not found: " + flightId
-                            ));
+            Flying flight = flyingService.findById(flightId);
 
             Ticket ticket = new Ticket();
 

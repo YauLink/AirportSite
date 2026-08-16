@@ -37,8 +37,7 @@ public class BookingService {
         PageRequest req = PageRequest.of(
                 page,
                 size,
-                Sort.by("bookDate").descending()
-        );
+                Sort.by("bookDate").descending());
 
         return bookingRepository.findAll(req);
     }
@@ -47,9 +46,7 @@ public class BookingService {
     public Booking findByBookRef(String bookRef) {
 
         return bookingRepository.findById(bookRef)
-                .orElseThrow(() ->
-                        new BookingNotFoundException(bookRef)
-                );
+                .orElseThrow(() -> new BookingNotFoundException(bookRef));
     }
 
     @CacheEvict(
@@ -125,8 +122,7 @@ public class BookingService {
             String bookRef,
             String seatNo) {
 
-        List<TicketFlight> ticketFlights =
-                ticketFlightRepository.findByBookingRef(bookRef);
+        List<TicketFlight> ticketFlights = ticketFlightRepository.findByBookingRef(bookRef);
 
         if (ticketFlights.isEmpty()) {
             throw new BookingNotFoundException(bookRef);

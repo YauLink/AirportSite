@@ -31,9 +31,7 @@ public class SeatService {
     public Seat getById(SeatId id) {
 
         return seatRepository.findById(id)
-                .orElseThrow(() ->
-                        new SeatUnavailableException("Seat was not found: " + id)
-                );
+                .orElseThrow(() -> new SeatUnavailableException("Seat was not found: " + id));
     }
 
     public Seat save(Seat seat) {

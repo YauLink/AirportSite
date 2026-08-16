@@ -48,9 +48,7 @@ public class TicketService {
     public Ticket findById(String ticketNo) {
 
         return ticketRepo.findById(ticketNo)
-                .orElseThrow(() ->
-                        new TicketNotFoundException(ticketNo)
-                );
+                .orElseThrow(() -> new TicketNotFoundException(ticketNo));
     }
 
     @Cacheable(value = "tickets", key = "#passengerId")
@@ -81,8 +79,6 @@ public class TicketService {
     public Booking getBooking(String bookRef) {
 
         return bookingRepo.findById(bookRef)
-                .orElseThrow(() ->
-                        new BookingNotFoundException(bookRef)
-                );
+                .orElseThrow(() -> new BookingNotFoundException(bookRef));
     }
 }

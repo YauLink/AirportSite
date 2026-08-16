@@ -23,9 +23,7 @@ public class BoardingPassService {
             return repository.save(bp);
 
         } catch (DataIntegrityViolationException e) {
-            throw new SeatUnavailableException(
-                    "Seat already taken for this flight"
-            );
+            throw new SeatUnavailableException("Seat already taken for this flight");
         }
     }
 }
