@@ -60,13 +60,13 @@ class FlyingServiceCacheTest {
     void findById_ShouldUseCache() {
         when(flyingRepository.findById(1)).thenReturn(Optional.of(flight1));
 
-        Optional<Flying> first = flyingService.findById(1);
-        assertTrue(first.isPresent());
-        assertEquals(flight1.getFlightNo(), first.get().getFlightNo());
+        Flying first = flyingService.findById(1);
+        assertNotNull(first);
+        assertEquals(flight1.getFlightNo(), first.getFlightNo());
 
-        Optional<Flying> cached = flyingService.findById(1);
+        Flying cached = flyingService.findById(1);
         verify(flyingRepository, times(1)).findById(1);
-        assertTrue(cached.isPresent());
+        assertNotNull(cached);
     }
 
     @Test
@@ -95,7 +95,7 @@ class FlyingServiceCacheTest {
 
     @Test
     void deleteById_ShouldEvictCache() {
-        doNothing().when(flyingRepository).deleteById(1);
+        when(flyingRepository.findById(1)).thenReturn(Optional.of(flight1));
 
         flyingService.findAll();
         assertNotNull(cacheManager.getCache("flights").get(SimpleKey.EMPTY));

@@ -47,10 +47,10 @@ class FlyingServiceTest {
     void findById_ShouldReturnFlight() {
         when(flyingRepository.findById(1)).thenReturn(Optional.of(flight1));
 
-        Optional<Flying> flight = flyingService.findById(1);
+        Flying flight = flyingService.findById(1);
 
-        assertTrue(flight.isPresent());
-        assertEquals("FL123", flight.get().getFlightNo());
+        assertNotNull(flight);
+        assertEquals("FL123", flight.getFlightNo());
         verify(flyingRepository, times(1)).findById(1);
     }
 
@@ -67,10 +67,10 @@ class FlyingServiceTest {
 
     @Test
     void deleteById_ShouldCallRepository() {
-        doNothing().when(flyingRepository).deleteById(1);
+        when(flyingRepository.findById(1)).thenReturn(Optional.of(flight1));
 
         flyingService.deleteById(1);
 
-        verify(flyingRepository, times(1)).deleteById(1);
+        verify(flyingRepository, times(1)).delete(flight1);
     }
 }

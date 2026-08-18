@@ -81,7 +81,7 @@ class FlyingControllerTest {
         flight.setFlightNo("AA123");
         flight.setScheduledDeparture(LocalDateTime.of(2025, 9, 2, 10, 0));
         flight.setScheduledArrival(LocalDateTime.of(2025, 9, 2, 14, 0));
-        when(flyingService.findById(1)).thenReturn(Optional.of(flight));
+        when(flyingService.findById(1)).thenReturn(flight);
 
         mockMvc.perform(get("/flights/edit/1"))
                 .andExpect(status().isOk())
@@ -91,7 +91,7 @@ class FlyingControllerTest {
 
     @Test
     void testShowEditFormNotFound() throws Exception {
-        when(flyingService.findById(1)).thenReturn(Optional.empty());
+        when(flyingService.findById(1)).thenReturn(null);
 
         mockMvc.perform(get("/flights/edit/1"))
                 .andExpect(status().is3xxRedirection())

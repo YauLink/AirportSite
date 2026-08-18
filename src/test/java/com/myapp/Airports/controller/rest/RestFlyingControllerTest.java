@@ -82,7 +82,7 @@ class RestFlyingControllerTest {
 
     @Test
     void testGetFlightById_Found() throws Exception {
-        when(flyingService.findById(1)).thenReturn(Optional.of(flying));
+        when(flyingService.findById(1)).thenReturn(flying);
 
         mockMvc.perform(get("/api/flights/1"))
                 .andExpect(status().isOk())
@@ -92,7 +92,7 @@ class RestFlyingControllerTest {
 
     @Test
     void testGetFlightById_NotFound() throws Exception {
-        when(flyingService.findById(99)).thenReturn(Optional.empty());
+        when(flyingService.findById(99)).thenReturn(null);
 
         mockMvc.perform(get("/api/flights/99"))
                 .andExpect(status().isNotFound());
@@ -112,7 +112,7 @@ class RestFlyingControllerTest {
 
     @Test
     void testUpdateFlight_Exists() throws Exception {
-        when(flyingService.findById(1)).thenReturn(Optional.of(flying));
+        when(flyingService.findById(1)).thenReturn(flying);
         when(flyingService.saveAndReturn(any(Flying.class))).thenReturn(flying);
 
         dto.setStatus("DELAYED"); // update status
@@ -126,7 +126,7 @@ class RestFlyingControllerTest {
 
     @Test
     void testUpdateFlight_NotExists() throws Exception {
-        when(flyingService.findById(99)).thenReturn(Optional.empty());
+        when(flyingService.findById(99)).thenReturn(null);
 
         mockMvc.perform(put("/api/flights/99")
                         .contentType(MediaType.APPLICATION_JSON)

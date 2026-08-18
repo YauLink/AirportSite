@@ -65,8 +65,7 @@ class FlightBookingControllerTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/cabinet"));
 
-        verify(bookingService, times(1)).save(any(Booking.class));
-        verify(ticketBookingService, times(1)).createTicketsForBooking(
+        verify(ticketBookingService, times(1)).createBookingWithTickets(
                 any(), eq("123"), eq("John Doe"), anyString(),
                 eq(List.of(1, 2)), anyList(), anyList()
         );

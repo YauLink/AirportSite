@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * REST controller responsible for flight booking operations.
@@ -102,20 +103,25 @@ public class RestFlightBookingController {
                 );
 
         Booking booking = new Booking();
-        booking.setBookRef("BKG-" + System.currentTimeMillis());
+        booking.setBookRef(UUID.randomUUID().toString().substring(0, 6).toUpperCase());
         booking.setBookDate(LocalDateTime.now());
         booking.setTotalAmount(total);
 
-        bookingService.save(booking);
+        List<BigDecimal> amounts = flights.stream()
+                .map(flight -> BigDecimal.valueOf(100))
+                .toList();
+        List<String> fares = flights.stream()
+                .map(flight -> "Economy")
+                .toList();
 
-        ticketBookingService.createTicketsForBooking(
+        ticketBookingService.createBookingWithTickets(
                 booking,
                 passengerId,
                 passengerName,
                 "{}",
                 flightIds,
-                List.of("Economy"),
-                List.of(total)
+                fares,
+                amounts
         );
 
         session.removeAttribute("SELECTED_FLIGHTS");

@@ -98,10 +98,8 @@ class RestFlightBookingControllerTest {
                 .andExpect(jsonPath("$.bookingRef").exists())
                 .andExpect(jsonPath("$.total").value(100));
 
-        verify(bookingService).save(any(Booking.class));
-
         verify(ticketBookingService)
-                .createTicketsForBooking(
+                .createBookingWithTickets(
                         any(Booking.class),
                         eq("P001"),
                         eq("John Smith"),
