@@ -1,11 +1,11 @@
 package com.myapp.Airports.service;
 
 import com.myapp.Airports.model.*;
-import com.myapp.Airports.storage.api.IBoardingPassRepository;
+import com.myapp.Airports.storage.api.ITicketFlightRepository;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,7 +14,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
-@ExtendWith(SpringExtension.class)
+@ExtendWith(MockitoExtension.class)
 class TicketBookingServiceTest {
 
     @Mock
@@ -27,7 +27,7 @@ class TicketBookingServiceTest {
     private FlyingService flyingService;
 
     @Mock
-    private IBoardingPassRepository boardingPassRepository;
+    private ITicketFlightRepository ticketFlightRepository;
 
     @InjectMocks
     private TicketBookingService ticketBookingService;
@@ -44,8 +44,8 @@ class TicketBookingServiceTest {
         Flying flight2 = new Flying();
         flight2.setFlightId(2);
 
-        when(flyingService.findById(1)).thenReturn(Optional.of(flight1));
-        when(flyingService.findById(2)).thenReturn(Optional.of(flight2));
+        when(flyingService.findById(1)).thenReturn(flight1);
+        when(flyingService.findById(2)).thenReturn(flight2);
 
         List<Integer> flightIds = List.of(1, 2);
         List<String> fares = List.of("Economy", "Business");
@@ -66,22 +66,20 @@ class TicketBookingServiceTest {
 
         verify(ticketService, times(2)).save(any(Ticket.class));
 
-        verify(boardingPassRepository, times(2)).save(any(BoardingPass.class));
+        verify(ticketFlightRepository, times(2)).save(any(TicketFlight.class));
     }
 
     @Test
-    void shouldThrowExceptionWhenFlightNotFound() {
+    void shouldRejectMismatchedFlightData() {
 
         Booking booking = new Booking();
 
-        when(flyingService.findById(1)).thenReturn(Optional.empty());
-
-        List<Integer> flightIds = List.of(1);
+        List<Integer> flightIds = List.of(1, 2);
         List<String> fares = List.of("Economy");
         List<BigDecimal> amounts = List.of(new BigDecimal("100.00"));
 
-        RuntimeException ex = assertThrows(
-                RuntimeException.class,
+        assertThrows(
+                IllegalArgumentException.class,
                 () -> ticketBookingService.createTicketsForBooking(
                         booking,
                         "P1",
@@ -93,10 +91,8 @@ class TicketBookingServiceTest {
                 )
         );
 
-        assert ex.getCause().getMessage().contains("Flight not found");
-
         verify(ticketService, never()).save(any());
-        verify(boardingPassRepository, never()).save(any());
+        verifyNoInteractions(ticketFlightRepository);
     }
 
     @Test
@@ -107,13 +103,13 @@ class TicketBookingServiceTest {
         Flying flight = new Flying();
         flight.setFlightId(1);
 
-        when(flyingService.findById(1)).thenReturn(Optional.of(flight));
+        when(flyingService.findById(1)).thenReturn(flight);
 
         List<Integer> flightIds = List.of(1);
         List<String> fares = List.of("Economy");
         List<BigDecimal> amounts = List.of(new BigDecimal("100.00"));
 
-        ArgumentCaptor<BoardingPass> captor = ArgumentCaptor.forClass(BoardingPass.class);
+        ArgumentCaptor<TicketFlight> captor = ArgumentCaptor.forClass(TicketFlight.class);
 
         ticketBookingService.createTicketsForBooking(
                 booking,
@@ -125,12 +121,11 @@ class TicketBookingServiceTest {
                 amounts
         );
 
-        verify(boardingPassRepository).save(captor.capture());
+        verify(ticketFlightRepository).save(captor.capture());
 
-        BoardingPass bp = captor.getValue();
+        TicketFlight ticketFlight = captor.getValue();
 
-        assert bp.getSeatNo().equals("AUTO-1");
-        assert bp.getBoardingNo() == 1;
-        assert bp.getFlightId() == 1;
+        assert ticketFlight.getFareConditions().equals("Economy");
+        assert ticketFlight.getAmount().equals(new BigDecimal("100.00"));
     }
 }

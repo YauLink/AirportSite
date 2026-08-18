@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "ticket_flights")
+@Table(name = "ticket_flights", schema = "bookings")
 public class TicketFlight {
 
     @EmbeddedId
@@ -63,11 +63,14 @@ public class TicketFlight {
     }
 
     public void setId(TicketFlightId id) {
+        this.id = id;
     }
 
     public void setTicket(Ticket ticket) {
+        this.ticket = ticket;
     }
 
     public void setFlight(Flying flight) {
+        this.flight = flight;
     }
 }

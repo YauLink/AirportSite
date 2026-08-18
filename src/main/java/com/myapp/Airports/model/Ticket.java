@@ -12,11 +12,11 @@ import org.hibernate.type.SqlTypes;
  * </p>
  */
 @Entity
-@Table(name = "tickets")
+@Table(name = "tickets", schema = "bookings")
 public class Ticket {
 
     @Id
-    @Column(name = "ticket_no", nullable = false)
+    @Column(name = "ticket_no", nullable = false, length = 13)
     private String ticketNo;
 
     @ManyToOne(optional = false)
