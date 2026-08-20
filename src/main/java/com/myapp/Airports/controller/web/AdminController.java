@@ -144,8 +144,7 @@ public class AdminController {
     @GetMapping(value = "/flights/edit/{id}", produces = "text/html")
     public String showEditFlightForm(@PathVariable Integer id, Model model) {
 
-        Flying flight = flyingService.findById(id)
-                .orElseThrow(() -> new RuntimeException("Flight not found"));
+        Flying flight = flyingService.findById(id);
 
         FlyingDTO dto = new FlyingDTO();
         dto.setFlightId(flight.getFlightId());

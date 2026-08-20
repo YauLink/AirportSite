@@ -24,7 +24,10 @@ spec:
             - name: SPRING_DATASOURCE_USERNAME
               value: "postgres"
             - name: SPRING_DATASOURCE_PASSWORD
-              value: ${POSTGRES_PASSWORD}
+              valueFrom:
+                secretKeyRef:
+                  name: airportsite-secrets
+                  key: postgres-password
           resources:
             requests:
               memory: "512Mi"
