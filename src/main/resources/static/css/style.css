@@ -9,6 +9,14 @@
     --danger: #dc3545;
     --danger-hover: #bb2d3b;
 
+    --success: #15803d;
+    --success-background: #f0fdf4;
+    --success-border: #bbf7d0;
+
+    --error-text: #991b1b;
+    --error-background: #fef2f2;
+    --error-border: #fecaca;
+
     --background: #f8fafc;
     --surface: #ffffff;
 
@@ -17,7 +25,7 @@
 
     --border: #e5e7eb;
 
-    --shadow: 0 2px 8px rgba(0,0,0,.08);
+    --shadow: 0 2px 8px rgba(0, 0, 0, .08);
     --radius: 12px;
 
     --space-xs: 8px;
@@ -33,6 +41,7 @@
 
 body {
     margin: 0;
+
     background: var(--background);
     color: var(--text);
 
@@ -55,9 +64,13 @@ body {
 .container {
     width: min(1100px, 92%);
     margin: 40px auto;
+
     background: var(--surface);
+
     border-radius: var(--radius);
+
     padding: var(--space-lg);
+
     box-shadow: var(--shadow);
 }
 
@@ -72,14 +85,61 @@ body {
 
 .header h1 {
     margin: 0;
+
     font-size: 42px;
     font-weight: 700;
 }
 
 .subtitle {
     margin-top: 10px;
+
     color: var(--text-light);
+
     font-size: 17px;
+}
+
+/* ===========================================================
+   NAVIGATION
+   =========================================================== */
+
+.navbar {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+
+    flex-wrap: wrap;
+
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+
+    border-bottom: 1px solid var(--border);
+}
+
+.navbar a {
+    padding: 8px 14px;
+
+    border-radius: 8px;
+
+    color: var(--text-light);
+
+    font-weight: 600;
+
+    transition:
+        background .2s,
+        color .2s;
+}
+
+.navbar a:hover {
+    background: #eef5ff;
+    color: var(--primary);
+}
+
+.navbar a.active {
+    background: var(--primary);
+    color: white;
 }
 
 /* ===========================================================
@@ -106,6 +166,11 @@ p {
     margin-top: 0;
 }
 
+small {
+    color: var(--text-light);
+    font-size: 13px;
+}
+
 a {
     text-decoration: none;
     color: inherit;
@@ -116,11 +181,42 @@ a {
    =========================================================== */
 
 .card {
-    background: white;
+    background: var(--surface);
+
     border: 1px solid var(--border);
+
     border-radius: var(--radius);
+
     padding: var(--space-md);
+
     margin-bottom: var(--space-lg);
+}
+
+.info-card {
+    background: #f8fafc;
+
+    border: 1px solid var(--border);
+
+    border-radius: 10px;
+
+    padding: 20px;
+
+    transition:
+        transform .2s,
+        box-shadow .2s;
+}
+
+.info-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.info-card h3 {
+    font-size: 18px;
+}
+
+.info-card p {
+    color: var(--text-light);
 }
 
 /* ===========================================================
@@ -129,13 +225,16 @@ a {
 
 .button-group {
     display: flex;
+
     flex-wrap: wrap;
+
     gap: 12px;
 }
 
 button,
 .btn {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
 
@@ -157,12 +256,13 @@ button,
         transform .15s,
         box-shadow .2s;
 
-    box-shadow: 0 2px 6px rgba(37,99,235,.20);
+    box-shadow: 0 2px 6px rgba(37, 99, 235, .20);
 }
 
 button:hover,
 .btn:hover {
     background: var(--primary-hover);
+
     transform: translateY(-1px);
 }
 
@@ -171,10 +271,45 @@ button:active,
     transform: scale(.98);
 }
 
-/* Outline button */
+/* ===========================================================
+   BUTTON FOCUS
+   =========================================================== */
+
+button:focus-visible,
+.btn:focus-visible,
+.pagination a:focus-visible,
+.navbar a:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, .25);
+    outline-offset: 2px;
+}
+
+/* ===========================================================
+   DISABLED BUTTONS
+   =========================================================== */
+
+button:disabled,
+.btn:disabled {
+    opacity: .6;
+
+    cursor: not-allowed;
+
+    transform: none;
+
+    box-shadow: none;
+}
+
+button:disabled:hover,
+.btn:disabled:hover {
+    background: var(--primary);
+}
+
+/* ===========================================================
+   OUTLINE BUTTON
+   =========================================================== */
 
 .btn-secondary {
-    background: white;
+    background: var(--surface);
+
     color: var(--primary);
 
     border: 1px solid var(--primary);
@@ -186,7 +321,9 @@ button:active,
     background: #eef5ff;
 }
 
-/* Danger */
+/* ===========================================================
+   DANGER BUTTON
+   =========================================================== */
 
 .btn-danger {
     background: var(--danger);
@@ -196,37 +333,21 @@ button:active,
     background: var(--danger-hover);
 }
 
+.btn-danger:disabled:hover {
+    background: var(--danger);
+}
+
 /* ===========================================================
    INFORMATION GRID
    =========================================================== */
 
 .info-grid {
-
     display: grid;
 
     grid-template-columns:
-        repeat(auto-fit, minmax(230px,1fr));
+        repeat(auto-fit, minmax(230px, 1fr));
 
     gap: 20px;
-}
-
-.info-card {
-
-    background: #f8fafc;
-
-    border: 1px solid var(--border);
-
-    border-radius: 10px;
-
-    padding: 20px;
-}
-
-.info-card h3 {
-    font-size: 18px;
-}
-
-.info-card p {
-    color: var(--text-light);
 }
 
 /* ===========================================================
@@ -235,24 +356,27 @@ button:active,
 
 .form-wrapper {
     max-width: 700px;
+
     margin: auto;
 }
 
 form {
-
-    background: white;
+    background: var(--surface);
 
     border: 1px solid var(--border);
 
     border-radius: var(--radius);
 
     padding: var(--space-md);
-
 }
 
 .form-actions {
     display: flex;
+
     justify-content: center;
+
+    gap: 12px;
+
     margin-top: 24px;
 }
 
@@ -262,14 +386,15 @@ form {
 
 label {
     display: block;
+
     margin-bottom: 8px;
+
     font-weight: 600;
 }
 
 input,
 select,
 textarea {
-
     width: 100%;
 
     padding: 11px 14px;
@@ -279,17 +404,21 @@ textarea {
     border-radius: 8px;
 
     font-size: 15px;
+
+    transition:
+        border-color .2s,
+        box-shadow .2s,
+        background-color .2s;
 }
 
 input:focus,
 select:focus,
 textarea:focus {
-
     outline: none;
 
     border-color: var(--primary);
 
-    box-shadow: 0 0 0 3px rgba(37,99,235,.15);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .15);
 }
 
 /* ===========================================================
@@ -298,10 +427,15 @@ textarea:focus {
 
 .table-wrapper {
     overflow-x: auto;
+
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-wrapper table {
+    min-width: 700px;
 }
 
 table {
-
     width: 100%;
 
     border-collapse: collapse;
@@ -315,7 +449,6 @@ table {
 
 th,
 td {
-
     padding: 14px;
 
     border: 1px solid var(--border);
@@ -324,7 +457,6 @@ td {
 }
 
 th {
-
     background: #f3f4f6;
 
     font-weight: 600;
@@ -339,7 +471,6 @@ tbody tr:hover {
 }
 
 .empty-message {
-
     padding: 30px;
 
     color: var(--text-light);
@@ -354,11 +485,9 @@ tbody tr:hover {
    =========================================================== */
 
 .button-row {
-
     display: flex;
 
     justify-content: space-between;
-
     align-items: center;
 
     flex-wrap: wrap;
@@ -373,7 +502,6 @@ tbody tr:hover {
    =========================================================== */
 
 .pagination {
-
     display: flex;
 
     justify-content: center;
@@ -382,7 +510,6 @@ tbody tr:hover {
 }
 
 .pagination-inner {
-
     display: flex;
 
     gap: 8px;
@@ -391,23 +518,24 @@ tbody tr:hover {
 }
 
 .pagination a {
-
     padding: 8px 14px;
 
     border-radius: 6px;
 
     background: #f3f4f6;
+
+    transition:
+        background .2s,
+        color .2s;
 }
 
 .pagination a:hover {
-
     background: var(--primary);
 
     color: white;
 }
 
 .pagination .active {
-
     background: var(--primary);
 
     color: white;
@@ -418,7 +546,6 @@ tbody tr:hover {
    =========================================================== */
 
 .error {
-
     color: var(--danger);
 
     margin-top: 6px;
@@ -427,10 +554,37 @@ tbody tr:hover {
 }
 
 .invalid-input {
-
     border-color: var(--danger) !important;
 
     background: #fff5f5 !important;
+}
+
+/* ===========================================================
+   ALERTS
+   =========================================================== */
+
+.alert {
+    border-radius: 8px;
+
+    padding: 12px 16px;
+
+    margin-bottom: 20px;
+}
+
+.alert-error {
+    color: var(--error-text);
+
+    background: var(--error-background);
+
+    border: 1px solid var(--error-border);
+}
+
+.alert-success {
+    color: var(--success);
+
+    background: var(--success-background);
+
+    border: 1px solid var(--success-border);
 }
 
 /* ===========================================================
@@ -438,7 +592,6 @@ tbody tr:hover {
    =========================================================== */
 
 footer {
-
     margin-top: var(--space-lg);
 
     padding-top: var(--space-md);
@@ -460,12 +613,24 @@ footer {
 
     .container {
         width: calc(100% - 30px);
+
         padding: 20px;
+
         margin: 15px auto;
     }
 
     .header h1 {
         font-size: 32px;
+    }
+
+    .navbar {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .navbar a {
+        text-align: center;
     }
 
     .button-group {
@@ -477,8 +642,13 @@ footer {
         width: 100%;
     }
 
+    .form-actions {
+        flex-direction: column;
+    }
+
     .button-row {
         flex-direction: column;
+
         align-items: stretch;
     }
 
