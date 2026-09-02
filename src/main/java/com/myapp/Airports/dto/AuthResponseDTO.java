@@ -13,11 +13,14 @@ public class AuthResponseDTO {
     @Size(max = 100, message = "Full name must be up to 100 characters")
     private String fullName;
 
+    private String message;
+
     public AuthResponseDTO() {}
 
-    public AuthResponseDTO(Long userId, String fullName) {
+    public AuthResponseDTO(Long userId, String fullName, String message) {
         this.userId = userId;
         this.fullName = fullName;
+        this.message = message;
     }
 
     public Long getUserId() { return userId; }
@@ -25,4 +28,7 @@ public class AuthResponseDTO {
 
     public void setUserId(Long userId) { this.userId = userId; }
     public void setFullName(String fullName) { this.fullName = fullName; }
+
+    public String getMessage() {return message;}
+    public void setMessage(String message) {this.message = message;}
 }

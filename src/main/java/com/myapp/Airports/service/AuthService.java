@@ -28,7 +28,7 @@ public class AuthService implements IAuthService {
 
         try {
             return restTemplate.postForObject(
-                    "http://user-service/api/auth/login",
+                    "http://localhost:8083/api/auth/login",
                     request,
                     AuthResponseDTO.class);
 
