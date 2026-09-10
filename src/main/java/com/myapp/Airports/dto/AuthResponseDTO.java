@@ -15,20 +15,61 @@ public class AuthResponseDTO {
 
     private String message;
 
+    private String token;
+
     public AuthResponseDTO() {}
 
-    public AuthResponseDTO(Long userId, String fullName, String message) {
+    public AuthResponseDTO(
+            Long userId,
+            String fullName,
+            String message) {
+
         this.userId = userId;
         this.fullName = fullName;
         this.message = message;
     }
 
-    public Long getUserId() { return userId; }
-    public String getFullName() { return fullName; }
+    public AuthResponseDTO(
+            Long userId,
+            String fullName,
+            String message,
+            String token) {
 
-    public void setUserId(Long userId) { this.userId = userId; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+        this.userId = userId;
+        this.fullName = fullName;
+        this.message = message;
+        this.token = token;
+    }
 
-    public String getMessage() {return message;}
-    public void setMessage(String message) {this.message = message;}
+    public Long getUserId() {
+        return userId;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }
