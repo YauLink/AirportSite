@@ -22,22 +22,32 @@ public class AuthService implements IAuthService {
     }
 
     @Override
-    public AuthResponseDTO login(String username, String password) {
+    public AuthResponseDTO login(
+            String username,
+            String password) {
 
         AuthRequestDTO request = new AuthRequestDTO(username, password);
 
         try {
+
             return restTemplate.postForObject(
                     "http://localhost:8083/api/auth/login",
                     request,
-                    AuthResponseDTO.class);
+                    AuthResponseDTO.class
+            );
 
         } catch (RestClientResponseException e) {
 
-            HttpStatusCode status = e.getStatusCode();
+            HttpStatusCode status =
+                    e.getStatusCode();
 
-            if (status.value() == 401 || status.value() == 404) {
-                throw new UserNotFoundException("Invalid username or password", true);
+            if (status.value() == 401
+                    || status.value() == 404) {
+
+                throw new UserNotFoundException(
+                        "Invalid username or password",
+                        true
+                );
             }
 
             throw e;
