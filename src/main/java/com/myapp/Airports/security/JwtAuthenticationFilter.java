@@ -23,8 +23,6 @@ import com.myapp.Airports.service.JwtService;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    private static final String COOKIE_NAME = "AIRPORTS_JWT";
-
     private final JwtService jwtService;
 
     public JwtAuthenticationFilter(JwtService jwtService) {
@@ -84,14 +82,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authorization != null
                 && authorization.startsWith("Bearer ")) {
             return authorization.substring(7);
-        }
-
-        if (request.getCookies() != null) {
-            for (Cookie cookie : request.getCookies()) {
-                if (COOKIE_NAME.equals(cookie.getName())) {
-                    return cookie.getValue();
-                }
-            }
         }
 
         return null;

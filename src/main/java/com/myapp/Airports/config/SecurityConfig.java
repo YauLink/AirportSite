@@ -23,64 +23,45 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**")
-                )
+                        .ignoringRequestMatchers("/api/**"))
 
                 .formLogin(form -> form
                         .failureUrl("/login?error=true")
                         .defaultSuccessUrl("/admin/dashboard", true)
                         .usernameParameter("login")
-                        .passwordParameter("password")
-                )
+                        .passwordParameter("password"))
 
-                .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
-                )
+                .logout(logout -> logout.logoutUrl("/logout").logoutSuccessUrl("/login?logout=true"))
 
-                .exceptionHandling(ex -> ex
-                        .accessDeniedPage("/access_denied")
-                )
+                .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers(
-                                "/login/**",
-                                "/user/login"
-                        ).permitAll()
+                        .requestMatchers("/login/**", "/user/login").permitAll()
+                        .requestMatchers("/api/user/login").permitAll()
+                        .requestMatchers("/api/user/login")
+                        .permitAll()
 
-                        .requestMatchers(
-                                "/api/user/login"
-                        ).permitAll()
+                        .requestMatchers("/api/user/**")
+                        .hasAuthority("USER")
 
-                        .requestMatchers(
-                                "/user/cabinet",
-                                "/user/logout",
-                                "/api/user/**"
-                        ).authenticated()
+                        .requestMatchers("/api/admin/**")
+                        .hasAuthority("ADMIN")
 
                         .requestMatchers("/admin/**")
                         .hasAuthority("ADMIN")
 
-                        .requestMatchers(
-                                HttpMethod.POST,
-                                "/airports"
-                        )
-                        .hasAuthority("ADMIN")
-
-                        .anyRequest()
-                        .permitAll()
-                )
+                        .requestMatchers(HttpMethod.POST, "/airports").hasAuthority("ADMIN")
+                        .requestMatchers("/tickets/**").hasAuthority("ADMIN")
+                        .anyRequest().permitAll())
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class
-                );
+                        UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
