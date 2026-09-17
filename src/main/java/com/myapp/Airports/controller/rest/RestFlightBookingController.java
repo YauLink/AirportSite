@@ -43,9 +43,6 @@ public class RestFlightBookingController {
         this.flyingService = flyingService;
     }
 
-    /**
-     * STEP 1: confirm selected flights.
-     */
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmBooking(
             @RequestBody List<Integer> flightIds,
@@ -70,9 +67,6 @@ public class RestFlightBookingController {
         );
     }
 
-    /**
-     * STEP 2: create booking.
-     */
     @PostMapping("/book")
     public ResponseEntity<?> bookFlights(HttpSession session) {
 

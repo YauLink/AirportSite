@@ -38,9 +38,6 @@ public class FlightBookingController {
         this.flyingService = flyingService;
     }
 
-    /**
-     * STEP 1: go to confirm page
-     */
     @PostMapping("/confirm")
     public String confirmBooking(@RequestParam("flightIds") List<Integer> flightIds,
                                  HttpSession session,
@@ -64,9 +61,6 @@ public class FlightBookingController {
         return "user/booking_form";
     }
 
-    /**
-     * STEP 2: final booking
-     */
     @PostMapping("/book")
     public String bookFlights(HttpSession session) {
 
@@ -86,7 +80,6 @@ public class FlightBookingController {
 
         List<Flying> flights = flyingService.findAllByIds(flightIds);
 
-        // simple price calculation (replace later)
         BigDecimal total = flights.stream()
                 .map(f -> BigDecimal.valueOf(100)) // placeholder price
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -113,7 +106,6 @@ public class FlightBookingController {
                 amounts
         );
 
-        // cleanup session
         session.removeAttribute("SELECTED_FLIGHTS");
 
         return "redirect:/user/cabinet";

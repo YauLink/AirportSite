@@ -38,10 +38,8 @@ public class FilterController {
             HttpServletRequest request,
             Model model) {
 
-        // Add airports
         model.addAttribute("airports", airportView.getAll());
 
-        // Add logged-in user from session
         model.addAttribute("loggedInUser", request.getSession().getAttribute("USER_ID"));
 
         String normalizedOut = (airportOut == null || airportOut.isBlank()) ? null : airportOut;
