@@ -51,8 +51,7 @@ public class BookingService {
 
     @CacheEvict(
             value = {"bookings", "booking"},
-            allEntries = true
-    )
+            allEntries = true)
     public void updateBooking(
             String bookRef,
             Booking updatedBooking) {
@@ -62,8 +61,7 @@ public class BookingService {
 
     @CacheEvict(
             value = {"bookings", "booking"},
-            allEntries = true
-    )
+            allEntries = true)
     public Booking updateBookingAndReturn(
             String bookRef,
             Booking updatedBooking) {
@@ -85,8 +83,7 @@ public class BookingService {
 
     @CacheEvict(
             value = {"bookings", "booking"},
-            allEntries = true
-    )
+            allEntries = true)
     public void cancelBooking(String bookRef) {
 
         Booking booking = findByBookRef(bookRef);
@@ -96,8 +93,7 @@ public class BookingService {
 
     @CacheEvict(
             value = {"bookings", "booking"},
-            allEntries = true
-    )
+            allEntries = true)
     public Booking save(Booking booking) {
 
         return bookingRepository.save(booking);
@@ -105,8 +101,7 @@ public class BookingService {
 
     @CacheEvict(
             value = {"bookings", "booking"},
-            allEntries = true
-    )
+            allEntries = true)
     public void delete(String bookRef) {
 
         Booking booking = findByBookRef(bookRef);
@@ -116,8 +111,7 @@ public class BookingService {
 
     @CacheEvict(
             value = {"bookings", "booking"},
-            allEntries = true
-    )
+            allEntries = true)
     public void assignSeat(
             String bookRef,
             String seatNo) {
