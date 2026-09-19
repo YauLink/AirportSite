@@ -58,16 +58,14 @@ public class TicketService {
 
     @CacheEvict(
             value = {"tickets", "ticket"},
-            allEntries = true
-    )
+            allEntries = true)
     public Ticket save(Ticket ticket) {
         return ticketRepo.save(ticket);
     }
 
     @CacheEvict(
             value = {"tickets", "ticket"},
-            allEntries = true
-    )
+            allEntries = true)
     public void delete(String ticketNo) {
 
         Ticket ticket = findById(ticketNo);
