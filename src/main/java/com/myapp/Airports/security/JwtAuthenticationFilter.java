@@ -1,6 +1,8 @@
 package com.myapp.Airports.security;
 
 import com.myapp.Airports.model.JwtUserPrincipal;
+import com.myapp.Airports.service.JwtService;
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
@@ -16,12 +18,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Collections;
-
-import com.myapp.Airports.service.JwtService;
+import java.util.List;
+import java.util.Set;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    private static final String JWT_COOKIE = "AIRPORTS_JWT";
 
     private final JwtService jwtService;
 
@@ -43,19 +46,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .getContext()
                 .getAuthentication() == null) {
 
-            if (jwtService.isTokenValid(token)) {
-
+            try {
                 JwtUserPrincipal user = jwtService.extractUser(token);
-
-                String authority = user.getRole();
+                String authority = normalizeAuthority(user.getRole());
 
                 UsernamePasswordAuthenticationToken authentication =
                         new UsernamePasswordAuthenticationToken(
                                 user,
                                 null,
-                                Collections.singletonList(
-                                        new SimpleGrantedAuthority(authority)
-                                )
+                                List.of(new SimpleGrantedAuthority(authority))
                         );
 
                 authentication.setDetails(
@@ -64,10 +63,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 );
 
                 SecurityContext context = SecurityContextHolder.createEmptyContext();
-
                 context.setAuthentication(authentication);
-
                 SecurityContextHolder.setContext(context);
+
+            } catch (JwtException | IllegalArgumentException ex) {
+                SecurityContextHolder.clearContext();
             }
         }
 
@@ -80,10 +80,38 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 request.getHeader("Authorization");
 
         if (authorization != null
-                && authorization.startsWith("Bearer ")) {
-            return authorization.substring(7);
+                && authorization.regionMatches(true, 0, "Bearer ", 0, 7)) {
+            String token = authorization.substring(7).trim();
+            if (!token.isBlank()) {
+                return token;
+            }
+        }
+
+        if (request.getCookies() != null) {
+            for (Cookie cookie : request.getCookies()) {
+                if (JWT_COOKIE.equals(cookie.getName())
+                        && !cookie.getValue().isBlank()) {
+                    return cookie.getValue();
+                }
+            }
         }
 
         return null;
+    }
+
+    private String normalizeAuthority(String role) {
+        if (role == null || role.isBlank()) {
+            throw new IllegalArgumentException("JWT role is missing");
+        }
+
+        String normalized = role.startsWith("ROLE_")
+                ? role.substring("ROLE_".length())
+                : role;
+
+        if (!Set.of("USER", "ADMIN").contains(normalized)) {
+            throw new IllegalArgumentException("Unsupported JWT role");
+        }
+
+        return normalized;
     }
 }
