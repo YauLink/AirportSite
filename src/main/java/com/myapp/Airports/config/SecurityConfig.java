@@ -27,7 +27,7 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/api/**"))
+                        .ignoringRequestMatchers("/api/auth/login", "/api/user/login"))
 
                 .formLogin(form -> form
                         .failureUrl("/login?error=true")
@@ -43,8 +43,6 @@ public class SecurityConfig {
 
                         .requestMatchers("/login/**", "/user/login").permitAll()
                         .requestMatchers("/api/user/login").permitAll()
-                        .requestMatchers("/api/user/login")
-                        .permitAll()
 
                         .requestMatchers("/api/user/**")
                         .hasAuthority("USER")
