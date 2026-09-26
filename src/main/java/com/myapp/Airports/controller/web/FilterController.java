@@ -1,10 +1,11 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.model.Flying;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
 
-import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -35,12 +36,21 @@ public class FilterController {
             @RequestParam(name = "page", defaultValue = "1") int currentPage,
             @RequestParam(name = "airport_out", required = false) String airportOut,
             @RequestParam(name = "airport_in", required = false) String airportIn,
-            HttpServletRequest request,
+            Authentication authentication,
             Model model) {
 
         model.addAttribute("airports", airportView.getAll());
 
-        model.addAttribute("loggedInUser", request.getSession().getAttribute("USER_ID"));
+        Object principal = authentication == null
+                ? null
+                : authentication.getPrincipal();
+
+        model.addAttribute(
+                "loggedInUser",
+                principal instanceof JwtUserPrincipal user
+                        ? user.getUserId()
+                        : null
+        );
 
         String normalizedOut = (airportOut == null || airportOut.isBlank()) ? null : airportOut;
         String normalizedIn = (airportIn == null || airportIn.isBlank()) ? null : airportIn;

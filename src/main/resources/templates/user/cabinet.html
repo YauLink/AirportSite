@@ -12,7 +12,10 @@
   <header class="header">
     <h1>👤 User Cabinet</h1>
     <div class="actions">
-      <a th:href="@{/user/logout}" class="btn btn-danger">Logout</a>
+      <form th:action="@{/user/logout}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <button type="submit" class="btn btn-danger">Logout</button>
+      </form>
     </div>
   </header>
 
@@ -29,26 +32,24 @@
       <tr>
         <th>Ticket No</th>
         <th>Booking Ref</th>
-        <th>Flight ID</th>
-        <th>Fare</th>
-        <th>Amount</th>
+        <th>Passenger</th>
+        <th>Contact data</th>
       </tr>
       </thead>
 
       <tbody>
 
-      <tr th:if="${#lists.isEmpty(ticketFlights)}">
-        <td colspan="5" class="empty-message">
+      <tr th:if="${#lists.isEmpty(tickets)}">
+        <td colspan="4" class="empty-message">
           You don't have any tickets.
         </td>
       </tr>
 
-      <tr th:each="tf : ${ticketFlights}">
-        <td th:text="${tf.ticket.ticketNo}"></td>
-        <td th:text="${tf.ticket.booking.bookRef}"></td>
-        <td th:text="${tf.id.flightId}"></td>
-        <td th:text="${tf.fareConditions}"></td>
-        <td th:text="${tf.amount}"></td>
+      <tr th:each="ticket : ${tickets}">
+        <td th:text="${ticket.ticketNo}"></td>
+        <td th:text="${ticket.booking.bookRef}"></td>
+        <td th:text="${ticket.passengerName}"></td>
+        <td th:text="${ticket.contactData}"></td>
       </tr>
 
       </tbody>

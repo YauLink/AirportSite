@@ -2,6 +2,7 @@ package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Flying;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
 import com.myapp.Airports.service.TicketBookingService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -20,6 +22,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -57,10 +60,12 @@ class FlightBookingControllerTest {
         when(flyingService.findAllByIds(List.of(1, 2)))
                 .thenReturn(List.of(new Flying(), new Flying()));
 
+        JwtUserPrincipal user = new JwtUserPrincipal(123L, "john", "John Doe", "USER");
+
         mockMvc.perform(post("/user/book")
                         .with(csrf())
-                        .sessionAttr("USER_ID", "123")
-                        .sessionAttr("USER_NAME", "John Doe")
+                        .with(authentication(new UsernamePasswordAuthenticationToken(
+                                user, null, List.of())))
                         .sessionAttr("SELECTED_FLIGHTS", List.of(1, 2)))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/cabinet"));

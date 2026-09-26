@@ -1,7 +1,9 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.dto.AuthResponseDTO;
+import com.myapp.Airports.exceptions.UserNotFoundException;
 import com.myapp.Airports.model.Booking;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.model.TicketFlight;
 import com.myapp.Airports.model.TicketFlightId;
@@ -12,12 +14,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -46,6 +50,7 @@ class AuthControllerTest {
         AuthResponseDTO authResponse = new AuthResponseDTO();
         authResponse.setUserId(123L);
         authResponse.setFullName("John Doe");
+        authResponse.setToken("test.jwt.token");
 
         when(authService.login("john", "pass"))
                 .thenReturn(authResponse);
@@ -56,14 +61,13 @@ class AuthControllerTest {
                         .param("password", "pass"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/user/cabinet"))
-                .andExpect(request().sessionAttribute("USER_ID", 123L))
-                .andExpect(request().sessionAttribute("USER_NAME", "John Doe"));
+                .andExpect(cookie().httpOnly("AIRPORTS_JWT", true));
     }
 
     @Test
     void shouldReturnLoginPageWithErrorWhenAuthFails() throws Exception {
         when(authService.login(anyString(), anyString()))
-                .thenThrow(new RuntimeException("Auth failed"));
+                .thenThrow(new UserNotFoundException("Auth failed", true));
 
         mockMvc.perform(post("/user/login")
                         .with(csrf())
@@ -90,9 +94,12 @@ class AuthControllerTest {
         when(ticketService.findAllByUserId("123"))
                 .thenReturn(tickets);
 
+        JwtUserPrincipal user = new JwtUserPrincipal(123L, "john", "John Doe", "USER");
+
         mockMvc.perform(get("/user/cabinet")
-                        .sessionAttr("USER_ID", 123L)
-                        .sessionAttr("USER_NAME", "John Doe"))
+                        .with(authentication(
+                                new UsernamePasswordAuthenticationToken(
+                                        user, null, List.of()))))
                 .andExpect(status().isOk())
                 .andExpect(view().name("user/cabinet"))
                 .andExpect(model().attribute("fullName", "John Doe"))
@@ -108,8 +115,9 @@ class AuthControllerTest {
 
     @Test
     void shouldLogoutAndRedirect() throws Exception {
-        mockMvc.perform(get("/user/logout"))
+        mockMvc.perform(post("/user/logout").with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/user/login"));
+                .andExpect(redirectedUrl("/user/login"))
+                .andExpect(cookie().maxAge("AIRPORTS_JWT", 0));
     }
 }
