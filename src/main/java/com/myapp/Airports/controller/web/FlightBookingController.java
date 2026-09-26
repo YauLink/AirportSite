@@ -2,10 +2,12 @@ package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Flying;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
 import com.myapp.Airports.service.TicketBookingService;
 import org.springframework.stereotype.Controller;
+import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,14 +43,16 @@ public class FlightBookingController {
     @PostMapping("/confirm")
     public String confirmBooking(@RequestParam("flightIds") List<Integer> flightIds,
                                  HttpSession session,
+                                 Authentication authentication,
                                  Model model) {
 
-        String passengerId = (String) session.getAttribute("USER_ID");
-        String passengerName = (String) session.getAttribute("USER_NAME");
+        JwtUserPrincipal user = currentUser(authentication);
 
-        if (passengerId == null || passengerName == null) {
+        if (user == null) {
             return "redirect:/user/login";
         }
+
+        String passengerName = user.getFullName();
 
         List<Flying> flights = flyingService.findAllByIds(flightIds);
 
@@ -62,14 +66,17 @@ public class FlightBookingController {
     }
 
     @PostMapping("/book")
-    public String bookFlights(HttpSession session) {
+    public String bookFlights(HttpSession session,
+                              Authentication authentication) {
 
-        String passengerId = (String) session.getAttribute("USER_ID");
-        String passengerName = (String) session.getAttribute("USER_NAME");
+        JwtUserPrincipal user = currentUser(authentication);
 
-        if (passengerId == null || passengerName == null) {
+        if (user == null) {
             return "redirect:/user/login";
         }
+
+        String passengerId = String.valueOf(user.getUserId());
+        String passengerName = user.getFullName();
 
         List<Integer> flightIds =
                 (List<Integer>) session.getAttribute("SELECTED_FLIGHTS");
@@ -109,5 +116,15 @@ public class FlightBookingController {
         session.removeAttribute("SELECTED_FLIGHTS");
 
         return "redirect:/user/cabinet";
+    }
+
+    private JwtUserPrincipal currentUser(Authentication authentication) {
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal() instanceof JwtUserPrincipal user)) {
+            return null;
+        }
+
+        return user;
     }
 }

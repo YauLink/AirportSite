@@ -6,7 +6,7 @@ import com.myapp.Airports.model.*;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.TicketService;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -32,6 +32,12 @@ public class AuthController {
 
     private final AuthService authService;
     private final TicketService ticketService;
+
+    @Value("${jwt.expiration:3600000}")
+    private long jwtExpiration;
+
+    @Value("${security.jwt.cookie-secure:true}")
+    private boolean secureCookie;
 
     public AuthController(
             AuthService authService,
@@ -61,19 +67,10 @@ public class AuthController {
                             password
                     );
 
-            ResponseCookie cookie =
-                    ResponseCookie
-                            .from(JWT_COOKIE, auth.getToken())
-                            .httpOnly(true)
-                            .secure(false)
-                            .path("/")
-                            .maxAge(Duration.ofHours(1))
-                            .sameSite("Lax")
-                            .build();
-
             response.addHeader(
                     HttpHeaders.SET_COOKIE,
-                    cookie.toString()
+                    jwtCookie(auth.getToken(), Duration.ofMillis(jwtExpiration))
+                            .toString()
             );
 
             return "redirect:/user/cabinet";
@@ -94,16 +91,13 @@ public class AuthController {
             Authentication authentication,
             Model model) {
 
-        if (!(authentication
-                .getPrincipal()
-                instanceof JwtUserPrincipal)) {
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal()
+                instanceof JwtUserPrincipal user)) {
 
             return "redirect:/user/login";
         }
-
-        JwtUserPrincipal user =
-                (JwtUserPrincipal)
-                        authentication.getPrincipal();
 
         String passengerId =
                 String.valueOf(user.getUserId());
@@ -124,25 +118,26 @@ public class AuthController {
         return "user/cabinet";
     }
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     public String logout(
             HttpServletResponse response) {
 
-        ResponseCookie cookie =
-                ResponseCookie
-                        .from(JWT_COOKIE, "")
-                        .httpOnly(true)
-                        .secure(false)
-                        .path("/")
-                        .maxAge(Duration.ZERO)
-                        .sameSite("Lax")
-                        .build();
-
         response.addHeader(
                 HttpHeaders.SET_COOKIE,
-                cookie.toString()
+                jwtCookie("", Duration.ZERO).toString()
         );
 
         return "redirect:/user/login";
+    }
+
+    private ResponseCookie jwtCookie(String token, Duration maxAge) {
+        return ResponseCookie
+                .from(JWT_COOKIE, token)
+                .httpOnly(true)
+                .secure(secureCookie)
+                .path("/")
+                .maxAge(maxAge)
+                .sameSite("Lax")
+                .build();
     }
 }
