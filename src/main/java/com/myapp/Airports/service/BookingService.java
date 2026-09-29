@@ -3,14 +3,19 @@ package com.myapp.Airports.service;
 import com.myapp.Airports.exceptions.BookingNotFoundException;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.TicketFlight;
+import com.myapp.Airports.model.BoardingPass;
+import com.myapp.Airports.model.BoardingPassId;
 import com.myapp.Airports.storage.api.IBookingRepository;
+import com.myapp.Airports.storage.api.IBoardingPassRepository;
 import com.myapp.Airports.storage.api.ITicketFlightRepository;
+import com.myapp.Airports.storage.api.IFlyingsRepository;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,13 +27,22 @@ public class BookingService {
 
     private final IBookingRepository bookingRepository;
     private final ITicketFlightRepository ticketFlightRepository;
+    private final IBoardingPassRepository boardingPassRepository;
+    private final IFlyingsRepository flyingRepository;
+    private final BoardingPassService boardingPassService;
 
     public BookingService(
             IBookingRepository bookingRepository,
-            ITicketFlightRepository ticketFlightRepository) {
+            ITicketFlightRepository ticketFlightRepository,
+            IBoardingPassRepository boardingPassRepository,
+            IFlyingsRepository flyingRepository,
+            BoardingPassService boardingPassService) {
 
         this.bookingRepository = bookingRepository;
         this.ticketFlightRepository = ticketFlightRepository;
+        this.boardingPassRepository = boardingPassRepository;
+        this.flyingRepository = flyingRepository;
+        this.boardingPassService = boardingPassService;
     }
 
     @Cacheable(value = "bookings")
@@ -112,6 +126,7 @@ public class BookingService {
     @CacheEvict(
             value = {"bookings", "booking"},
             allEntries = true)
+    @Transactional
     public void assignSeat(
             String bookRef,
             String seatNo) {
@@ -122,7 +137,30 @@ public class BookingService {
             throw new BookingNotFoundException(bookRef);
         }
 
+        ticketFlights.sort(java.util.Comparator.comparing(TicketFlight::getFlightId));
+
         for (TicketFlight ticketFlight : ticketFlights) {
+            Integer flightId = ticketFlight.getFlightId();
+            // Serialize all seat allocations for this flight. This also makes
+            // max(boarding_no)+1 safe; the database unique constraints remain
+            // the final protection against races or legacy callers.
+            flyingRepository.findByIdForUpdate(flightId)
+                    .orElseThrow(() -> new BookingNotFoundException(bookRef));
+
+            BoardingPassId passId = new BoardingPassId();
+            passId.setTicketNo(ticketFlight.getTicketNo());
+            passId.setFlightId(flightId);
+
+            BoardingPass pass = boardingPassRepository.findById(passId)
+                    .orElseGet(() -> {
+                        BoardingPass created = new BoardingPass();
+                        created.setId(passId);
+                        created.setBoardingNo(boardingPassRepository
+                                .findMaxBoardingNoByFlightId(flightId) + 1);
+                        return created;
+                    });
+            pass.setSeatNo(seatNo);
+            boardingPassService.create(pass);
             ticketFlight.setSeatNo(seatNo);
         }
 

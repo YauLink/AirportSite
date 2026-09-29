@@ -20,7 +20,10 @@ public class BoardingPassService {
     public BoardingPass create(BoardingPass bp) {
 
         try {
-            return repository.save(bp);
+            // save() may defer the INSERT until transaction commit.  Flush here so
+            // the database's unique (flight_id, seat_no) constraint is handled at
+            // the allocation boundary, not after the caller has returned.
+            return repository.saveAndFlush(bp);
 
         } catch (DataIntegrityViolationException e) {
             throw new SeatUnavailableException("Seat already taken for this flight");
