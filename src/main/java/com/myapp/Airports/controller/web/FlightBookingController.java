@@ -59,7 +59,6 @@ public class FlightBookingController {
         model.addAttribute("flights", flights);
         model.addAttribute("passengerName", passengerName);
 
-        // store for final step
         session.setAttribute("SELECTED_FLIGHTS", flightIds);
 
         return "user/booking_form";
