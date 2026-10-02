@@ -15,20 +15,15 @@
 
     <div class="form-wrapper">
 
-        <form th:action="@{/bookings/assign}" method="post">
+        <div class="error" th:if="${error}" th:text="${error}"></div>
+        <div class="success" th:if="${success}" th:text="${success}"></div>
 
-            <input type="hidden"
-                   name="bookingRef"
-                   th:value="${bookingRef}">
-
-            <input type="hidden"
-                   name="flightId"
-                   th:value="${flightId}">
+        <form th:action="@{'/bookings/assign/' + ${bookingRef}}" method="post">
 
             <div class="form-group">
                 <label>Available Seats</label>
 
-                <select name="seatNo">
+                <select name="seatNo" th:disabled="${#lists.isEmpty(seats)}">
 
                     <option th:each="seat : ${seats}"
                             th:value="${seat.seatNo}"
@@ -38,6 +33,10 @@
                 </select>
 
             </div>
+
+            <p th:if="${#lists.isEmpty(seats)}">
+                No seats are currently available for this flight.
+            </p>
 
             <div class="button-row">
 
@@ -50,7 +49,8 @@
 
                 <div class="button-center">
                     <button type="submit"
-                            class="btn">
+                            class="btn"
+                            th:disabled="${#lists.isEmpty(seats)}">
                         Confirm Seat
                     </button>
                 </div>
@@ -61,10 +61,6 @@
 
         </form>
 
-        <div class="error"
-             th:if="${error}"
-             th:text="${error}">
-        </div>
     </div>
 </div>
 </body>

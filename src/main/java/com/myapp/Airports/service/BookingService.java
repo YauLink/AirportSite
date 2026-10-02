@@ -167,6 +167,13 @@ public class BookingService {
         ticketFlightRepository.saveAll(ticketFlights);
     }
 
+    public Integer findFirstFlightIdByBookingRef(String bookRef) {
+        return ticketFlightRepository.findByBookingRef(bookRef).stream()
+                .map(TicketFlight::getFlightId)
+                .findFirst()
+                .orElseThrow(() -> new BookingNotFoundException(bookRef));
+    }
+
     public List<Booking> findByFlightId(Integer flightId) {
 
         return ticketFlightRepository.findBookingsByFlight(flightId);
