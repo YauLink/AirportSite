@@ -4,6 +4,7 @@ import com.myapp.Airports.dto.BookingDTO;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import com.myapp.Airports.exceptions.SeatUnavailableException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,18 @@ public class BookingControllerTest {
     }
 
     @Test
+    public void testShowSeatSelectionForBooking() throws Exception {
+        Mockito.when(bookingService.findFirstFlightIdByBookingRef("REF123")).thenReturn(1);
+        Mockito.when(seatService.findAvailableForFlight(1)).thenReturn(List.of());
+
+        mockMvc.perform(get("/bookings/select-seat/REF123"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bookings/seats"))
+                .andExpect(model().attribute("bookingRef", "REF123"))
+                .andExpect(model().attribute("flightId", 1));
+    }
+
+    @Test
     public void testAssignSeat() throws Exception {
         mockMvc.perform(post("/bookings/assign/REF123")
                         .param("seatNo", "12A"))
@@ -61,6 +74,17 @@ public class BookingControllerTest {
                 .andExpect(redirectedUrl("/bookings/list"));
 
         Mockito.verify(bookingService).assignSeat("REF123", "12A");
+    }
+
+    @Test
+    public void testAssignSeatRedirectsBackWhenSeatWasTaken() throws Exception {
+        Mockito.doThrow(new SeatUnavailableException("12A"))
+                .when(bookingService).assignSeat("REF123", "12A");
+
+        mockMvc.perform(post("/bookings/assign/REF123")
+                        .param("seatNo", "12A"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bookings/select-seat/REF123"));
     }
 
     @Test

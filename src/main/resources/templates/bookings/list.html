@@ -16,6 +16,9 @@
         <h1>📖 Booking List</h1>
     </header>
 
+    <div class="success" th:if="${success}" th:text="${success}"></div>
+    <div class="error" th:if="${error}" th:text="${error}"></div>
+
     <div class="table-wrapper">
         <table>
             <thead>
