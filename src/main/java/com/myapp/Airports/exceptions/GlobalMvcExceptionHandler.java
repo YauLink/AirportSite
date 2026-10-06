@@ -4,7 +4,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-@ControllerAdvice
+@ControllerAdvice(basePackages = "com.myapp.Airports.controller.web")
 public class GlobalMvcExceptionHandler {
 
     @ExceptionHandler(FlightNotFoundException.class)
@@ -49,6 +49,51 @@ public class GlobalMvcExceptionHandler {
         model.addAttribute("errorMessage", ex.getMessage());
 
         return "error/404";
+    }
+
+    @ExceptionHandler(SeatUnavailableException.class)
+    public String handleSeatUnavailable(
+            SeatUnavailableException ex,
+            Model model) {
+
+        model.addAttribute("errorTitle", "Seat Unavailable");
+        model.addAttribute("errorMessage", ex.getMessage());
+
+        return "error/409";
+    }
+
+    @ExceptionHandler({InvalidBookingStateException.class, IllegalArgumentException.class})
+    public String handleBadRequest(
+            RuntimeException ex,
+            Model model) {
+
+        model.addAttribute("errorTitle", "Invalid Request");
+        model.addAttribute("errorMessage", ex.getMessage());
+
+        return "error/400";
+    }
+
+    @ExceptionHandler(UserNotAuthenticatedException.class)
+    public String handleUnauthenticated(
+            UserNotAuthenticatedException ex,
+            Model model) {
+
+        model.addAttribute("errorTitle", "Authentication Required");
+        model.addAttribute("errorMessage", ex.getMessage());
+
+        return "error/401";
+    }
+
+    @ExceptionHandler({EntityAlreadyExistsException.class, UserNotFoundException.class})
+    public String handleConflictOrUserNotFound(
+            RuntimeException ex,
+            Model model) {
+
+        model.addAttribute("errorTitle", ex instanceof UserNotFoundException
+                ? "User Not Found" : "Already Exists");
+        model.addAttribute("errorMessage", ex.getMessage());
+
+        return ex instanceof UserNotFoundException ? "error/404" : "error/409";
     }
 
     @ExceptionHandler(Exception.class)
