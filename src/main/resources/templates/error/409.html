@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title th:text="${errorTitle}">Request Conflict</title></head>
+<body>
+<h1 th:text="${errorTitle}">Request Conflict</h1>
+<p th:text="${errorMessage}">The requested resource is unavailable.</p>
+<a th:href="@{/bookings/list}">Back to bookings</a>
+</body>
+</html>

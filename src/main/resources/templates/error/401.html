@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title th:text="${errorTitle}">Authentication Required</title></head>
+    <body>
+        <h1 th:text="${errorTitle}">Authentication Required</h1>
+        <p th:text="${errorMessage}">Please sign in to continue.</p>
+        <a th:href="@{/login}">Go to login</a>
+    </body>
+</html>

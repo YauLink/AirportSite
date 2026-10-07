@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head><meta charset="UTF-8"><title th:text="${errorTitle}">Invalid Request</title></head>
+<body>
+<h1 th:text="${errorTitle}">Invalid Request</h1>
+<p th:text="${errorMessage}">The request could not be processed.</p>
+<a th:href="@{/}">Back to home</a>
+</body>
+</html>
