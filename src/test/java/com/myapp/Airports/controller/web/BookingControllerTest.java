@@ -10,7 +10,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -71,7 +70,8 @@ public class BookingControllerTest {
         mockMvc.perform(post("/bookings/assign/REF123")
                         .param("seatNo", "12A"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/bookings/list"));
+                .andExpect(redirectedUrl("/bookings/list"))
+                .andExpect(flash().attribute("success", "Seat assigned successfully."));
 
         Mockito.verify(bookingService).assignSeat("REF123", "12A");
     }
@@ -84,7 +84,8 @@ public class BookingControllerTest {
         mockMvc.perform(post("/bookings/assign/REF123")
                         .param("seatNo", "12A"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/bookings/select-seat/REF123"));
+                .andExpect(redirectedUrl("/bookings/select-seat/REF123"))
+                .andExpect(flash().attribute("error", "That seat was just taken. Please choose another seat."));
     }
 
     @Test
