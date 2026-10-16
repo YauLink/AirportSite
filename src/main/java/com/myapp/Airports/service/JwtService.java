@@ -67,9 +67,9 @@ public class JwtService {
     public boolean isTokenValid(String token) {
 
         try {
-            extractClaims(token);
+            extractUser(token);
             return true;
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return false;
         }
     }

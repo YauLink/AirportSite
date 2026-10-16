@@ -26,7 +26,7 @@ class GlobalMvcExceptionHandlerTest {
         Model model = new ExtendedModelMap();
 
         String view = handler.handleMalformedRequest(
-                new org.springframework.web.bind.MissingServletRequestParameterException("seatNo", String.class),
+                new org.springframework.web.bind.MissingServletRequestParameterException("seatNo", "String"),
                 model);
 
         assertEquals("error/400", view);

@@ -12,9 +12,11 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.function.Executable;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -29,7 +31,9 @@ class BoardingPassConcurrencyTest {
         CountDownLatch bothReachedInsert = new CountDownLatch(2);
         when(repository.saveAndFlush(any(BoardingPass.class))).thenAnswer(invocation -> {
             bothReachedInsert.countDown();
-            bothReachedInsert.await();
+            if (!bothReachedInsert.await(5, TimeUnit.SECONDS)) {
+                throw new AssertionError("Both concurrent inserts did not reach the repository");
+            }
             throw new DataIntegrityViolationException("boarding_passes_flight_id_seat_no_key");
         });
 
@@ -42,8 +46,10 @@ class BoardingPassConcurrencyTest {
             Future<Throwable> result1 = executor.submit(() -> failureOf(() -> service.create(first)));
             Future<Throwable> result2 = executor.submit(() -> failureOf(() -> service.create(second)));
 
-            assertEquals("Seat already taken for this flight", result1.get().getMessage());
-            assertEquals("Seat already taken for this flight", result2.get().getMessage());
+            assertEquals("Seat already taken for this flight",
+                    result1.get(5, TimeUnit.SECONDS).getMessage());
+            assertEquals("Seat already taken for this flight",
+                    result2.get(5, TimeUnit.SECONDS).getMessage());
         } finally {
             executor.shutdownNow();
         }
@@ -52,7 +58,7 @@ class BoardingPassConcurrencyTest {
     }
 
     private Throwable failureOf(Runnable operation) {
-        return assertThrows(RuntimeException.class, operation);
+        return assertThrows(RuntimeException.class, (Executable) operation::run);
     }
 
     private BoardingPass pass(String ticketNo) {
