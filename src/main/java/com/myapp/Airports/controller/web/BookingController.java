@@ -1,6 +1,7 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.dto.BookingDTO;
+import com.myapp.Airports.exceptions.SeatUnavailableException;
 import com.myapp.Airports.mapper.BookingMapper;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Seat;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.ui.Model;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -82,13 +84,35 @@ public class BookingController {
     @GetMapping("/seats/{flight_id}")
     public String showSeatSelection(@PathVariable Integer flight_id, Model model) {
         List<Seat> availableSeats = seatService.findAvailableForFlight(flight_id);
+        model.addAttribute("flightId", flight_id);
         model.addAttribute("seats", availableSeats);
         return "bookings/seats";
     }
 
+    @GetMapping("/select-seat/{ref}")
+    public String showSeatSelectionForBooking(
+            @PathVariable String ref,
+            Model model) {
+
+        Integer flightId = bookingService.findFirstFlightIdByBookingRef(ref);
+        model.addAttribute("bookingRef", ref);
+        model.addAttribute("flightId", flightId);
+        model.addAttribute("seats", seatService.findAvailableForFlight(flightId));
+        return "bookings/seats";
+    }
+
     @PostMapping("/assign/{ref}")
-    public String assignSeat(@PathVariable String ref, @RequestParam("seatNo") String seatNo) {
-        bookingService.assignSeat(ref, seatNo);
-        return "redirect:/bookings/list";
+    public String assignSeat(
+            @PathVariable String ref,
+            @RequestParam("seatNo") String seatNo,
+            RedirectAttributes redirectAttributes) {
+        try {
+            bookingService.assignSeat(ref, seatNo);
+            redirectAttributes.addFlashAttribute("success", "Seat assigned successfully.");
+            return "redirect:/bookings/list";
+        } catch (SeatUnavailableException ex) {
+            redirectAttributes.addFlashAttribute("error", "That seat was just taken. Please choose another seat.");
+            return "redirect:/bookings/select-seat/" + ref;
+        }
     }
 }

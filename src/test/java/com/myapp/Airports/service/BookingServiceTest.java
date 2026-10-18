@@ -4,6 +4,8 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.TicketFlight;
 import com.myapp.Airports.storage.api.IBookingRepository;
 import com.myapp.Airports.storage.api.ITicketFlightRepository;
+import com.myapp.Airports.storage.api.IBoardingPassRepository;
+import com.myapp.Airports.storage.api.IFlyingsRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -30,6 +32,15 @@ class BookingServiceTest {
 
     @Mock
     private ITicketFlightRepository ticketFlightRepository;
+
+    @Mock
+    private IBoardingPassRepository boardingPassRepository;
+
+    @Mock
+    private IFlyingsRepository flyingRepository;
+
+    @Mock
+    private BoardingPassService boardingPassService;
 
     @InjectMocks
     private BookingService bookingService;
@@ -122,9 +133,13 @@ class BookingServiceTest {
 
     @Test
     void testAssignSeat() {
-        TicketFlight tf1 = new TicketFlight();
-        TicketFlight tf2 = new TicketFlight();
+        TicketFlight tf1 = ticketFlight("T1", 1);
+        TicketFlight tf2 = ticketFlight("T2", 2);
         List<TicketFlight> flights = Arrays.asList(tf1, tf2);
+
+        when(flyingRepository.findByIdForUpdate(1)).thenReturn(Optional.of(new com.myapp.Airports.model.Flying()));
+        when(flyingRepository.findByIdForUpdate(2)).thenReturn(Optional.of(new com.myapp.Airports.model.Flying()));
+        when(boardingPassRepository.findMaxBoardingNoByFlightId(anyInt())).thenReturn(0);
 
         when(ticketFlightRepository.findByBookingRef("REF123")).thenReturn(flights);
 
@@ -133,6 +148,13 @@ class BookingServiceTest {
         assertEquals("12A", tf1.getSeatNo());
         assertEquals("12A", tf2.getSeatNo());
         verify(ticketFlightRepository).saveAll(flights);
+        verify(boardingPassService, times(2)).create(any());
+    }
+
+    private TicketFlight ticketFlight(String ticketNo, int flightId) {
+        TicketFlight flight = new TicketFlight();
+        flight.setId(new com.myapp.Airports.model.TicketFlightId(ticketNo, flightId));
+        return flight;
     }
 
     @Test

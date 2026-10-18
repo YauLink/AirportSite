@@ -47,9 +47,29 @@ dependencies {
 	testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
 	testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 	systemProperty 'spring.profiles.active', 'test'
+	def envFile = file('.env')
+	if (envFile.exists()) {
+		envFile.eachLine { line ->
+			def trimmed = line.trim()
+			if (!trimmed.isEmpty() && !trimmed.startsWith('#') && trimmed.contains('=')) {
+				def separator = trimmed.indexOf('=')
+				def key = trimmed.substring(0, separator).trim()
+				def value = trimmed.substring(separator + 1).trim()
+				if ((value.startsWith('"') && value.endsWith('"'))
+						|| (value.startsWith("'") && value.endsWith("'"))) {
+					value = value.substring(1, value.length() - 1)
+				}
+				systemProperty key, value
+			}
+		}
+	}
 }

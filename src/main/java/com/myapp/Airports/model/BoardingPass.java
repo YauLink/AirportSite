@@ -10,7 +10,10 @@ import jakarta.persistence.*;
  * </p>
  */
 @Entity
-@Table(name = "boarding_passes", schema = "bookings")
+@Table(name = "boarding_passes", schema = "bookings", uniqueConstraints = {
+        @UniqueConstraint(name = "boarding_passes_flight_id_boarding_no_key", columnNames = {"flight_id", "boarding_no"}),
+        @UniqueConstraint(name = "boarding_passes_flight_id_seat_no_key", columnNames = {"flight_id", "seat_no"})
+})
 public class BoardingPass {
 
     @EmbeddedId

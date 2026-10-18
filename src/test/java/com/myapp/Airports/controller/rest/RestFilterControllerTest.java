@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -107,9 +108,9 @@ class RestFilterControllerTest {
         verify(flyingsView).getList(filterCaptor.capture());
 
         IFlyingsView.FlyingFilter filter = filterCaptor.getValue();
-        assert filter.getAirportOut().equals("AAA");
-        assert filter.getAirportIn().equals("BBB");
-        assert filter.getPage() == 1;
+        assertEquals("AAA", filter.getAirportOut());
+        assertEquals("BBB", filter.getAirportIn());
+        assertEquals(1, filter.getPage());
     }
 
     @Test

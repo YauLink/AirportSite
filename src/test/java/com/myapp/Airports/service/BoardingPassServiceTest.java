@@ -25,19 +25,19 @@ class BoardingPassServiceTest {
     void shouldCreateBoardingPass() {
         BoardingPass bp = new BoardingPass();
 
-        when(repository.save(bp)).thenReturn(bp);
+        when(repository.saveAndFlush(bp)).thenReturn(bp);
 
         BoardingPass result = service.create(bp);
 
         assertNotNull(result);
-        verify(repository).save(bp);
+        verify(repository).saveAndFlush(bp);
     }
 
     @Test
     void shouldThrowExceptionWhenSeatAlreadyTaken() {
         BoardingPass bp = new BoardingPass();
 
-        when(repository.save(bp))
+        when(repository.saveAndFlush(bp))
                 .thenThrow(new DataIntegrityViolationException("duplicate"));
 
         RuntimeException exception = assertThrows(
@@ -47,6 +47,6 @@ class BoardingPassServiceTest {
 
         assertEquals("Seat already taken for this flight", exception.getMessage());
 
-        verify(repository).save(bp);
+        verify(repository).saveAndFlush(bp);
     }
 }

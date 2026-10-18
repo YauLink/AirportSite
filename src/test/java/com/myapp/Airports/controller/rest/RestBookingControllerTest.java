@@ -1,4 +1,4 @@
-package com.myapp.Airports.api;
+package com.myapp.Airports.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

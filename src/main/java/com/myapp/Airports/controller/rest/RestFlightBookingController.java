@@ -4,6 +4,7 @@ import com.myapp.Airports.exceptions.InvalidBookingStateException;
 import com.myapp.Airports.exceptions.UserNotAuthenticatedException;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Flying;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
 import com.myapp.Airports.service.TicketBookingService;
@@ -11,6 +12,7 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -43,20 +45,19 @@ public class RestFlightBookingController {
         this.flyingService = flyingService;
     }
 
-    /**
-     * STEP 1: confirm selected flights.
-     */
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmBooking(
             @RequestBody List<Integer> flightIds,
-            HttpSession session) {
+            HttpSession session,
+            Authentication authentication) {
 
-        String passengerId = (String) session.getAttribute("USER_ID");
-        String passengerName = (String) session.getAttribute("USER_NAME");
+        JwtUserPrincipal user = currentUser(authentication);
 
-        if (passengerId == null || passengerName == null) {
+        if (user == null) {
             throw new UserNotAuthenticatedException("User not authenticated");
         }
+
+        String passengerName = user.getFullName();
 
         List<Flying> flights = flyingService.findAllByIds(flightIds);
 
@@ -70,18 +71,18 @@ public class RestFlightBookingController {
         );
     }
 
-    /**
-     * STEP 2: create booking.
-     */
     @PostMapping("/book")
-    public ResponseEntity<?> bookFlights(HttpSession session) {
+    public ResponseEntity<?> bookFlights(HttpSession session,
+                                         Authentication authentication) {
 
-        String passengerId = (String) session.getAttribute("USER_ID");
-        String passengerName = (String) session.getAttribute("USER_NAME");
+        JwtUserPrincipal user = currentUser(authentication);
 
-        if (passengerId == null || passengerName == null) {
+        if (user == null) {
             throw new UserNotAuthenticatedException("User not authenticated");
         }
+
+        String passengerId = String.valueOf(user.getUserId());
+        String passengerName = user.getFullName();
 
         @SuppressWarnings("unchecked")
         List<Integer> flightIds =
@@ -134,5 +135,15 @@ public class RestFlightBookingController {
                         booking.getBookRef(),
                         "total", total)
         );
+    }
+
+    private JwtUserPrincipal currentUser(Authentication authentication) {
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal() instanceof JwtUserPrincipal user)) {
+            return null;
+        }
+
+        return user;
     }
 }

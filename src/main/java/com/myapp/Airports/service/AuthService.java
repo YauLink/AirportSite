@@ -5,6 +5,7 @@ import com.myapp.Airports.dto.AuthResponseDTO;
 import com.myapp.Airports.exceptions.UserNotFoundException;
 import com.myapp.Airports.storage.api.IAuthService;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
@@ -16,28 +17,42 @@ import org.springframework.web.client.RestTemplate;
 public class AuthService implements IAuthService {
 
     private final RestTemplate restTemplate;
+    private final String authUrl;
 
-    public AuthService(RestTemplate restTemplate) {
+    public AuthService(
+            RestTemplate restTemplate,
+            @Value("${user-management.auth-url}") String authUrl) {
         this.restTemplate = restTemplate;
+        this.authUrl = authUrl;
     }
 
     @Override
-    public AuthResponseDTO login(String username, String password) {
+    public AuthResponseDTO login(
+            String username,
+            String password) {
 
         AuthRequestDTO request = new AuthRequestDTO(username, password);
 
         try {
+
             return restTemplate.postForObject(
-                    "http://localhost:8083/api/auth/login",
+                    authUrl,
                     request,
-                    AuthResponseDTO.class);
+                    AuthResponseDTO.class
+            );
 
         } catch (RestClientResponseException e) {
 
-            HttpStatusCode status = e.getStatusCode();
+            HttpStatusCode status =
+                    e.getStatusCode();
 
-            if (status.value() == 401 || status.value() == 404) {
-                throw new UserNotFoundException("Invalid username or password", true);
+            if (status.value() == 401
+                    || status.value() == 404) {
+
+                throw new UserNotFoundException(
+                        "Invalid username or password",
+                        true
+                );
             }
 
             throw e;

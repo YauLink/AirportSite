@@ -4,12 +4,12 @@ import com.myapp.Airports.dto.BookingDTO;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import com.myapp.Airports.exceptions.SeatUnavailableException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -54,13 +54,38 @@ public class BookingControllerTest {
     }
 
     @Test
+    public void testShowSeatSelectionForBooking() throws Exception {
+        Mockito.when(bookingService.findFirstFlightIdByBookingRef("REF123")).thenReturn(1);
+        Mockito.when(seatService.findAvailableForFlight(1)).thenReturn(List.of());
+
+        mockMvc.perform(get("/bookings/select-seat/REF123"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("bookings/seats"))
+                .andExpect(model().attribute("bookingRef", "REF123"))
+                .andExpect(model().attribute("flightId", 1));
+    }
+
+    @Test
     public void testAssignSeat() throws Exception {
         mockMvc.perform(post("/bookings/assign/REF123")
                         .param("seatNo", "12A"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/bookings/list"));
+                .andExpect(redirectedUrl("/bookings/list"))
+                .andExpect(flash().attribute("success", "Seat assigned successfully."));
 
         Mockito.verify(bookingService).assignSeat("REF123", "12A");
+    }
+
+    @Test
+    public void testAssignSeatRedirectsBackWhenSeatWasTaken() throws Exception {
+        Mockito.doThrow(new SeatUnavailableException("12A"))
+                .when(bookingService).assignSeat("REF123", "12A");
+
+        mockMvc.perform(post("/bookings/assign/REF123")
+                        .param("seatNo", "12A"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/bookings/select-seat/REF123"))
+                .andExpect(flash().attribute("error", "That seat was just taken. Please choose another seat."));
     }
 
     @Test
