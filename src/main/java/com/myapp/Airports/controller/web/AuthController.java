@@ -5,11 +5,16 @@ import com.myapp.Airports.exceptions.UserNotFoundException;
 import com.myapp.Airports.model.*;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.TicketService;
-import jakarta.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Duration;
 import java.util.List;
 
 /**
@@ -23,10 +28,21 @@ import java.util.List;
 @RequestMapping("/user")
 public class AuthController {
 
+    private static final String JWT_COOKIE = "AIRPORTS_JWT";
+
     private final AuthService authService;
     private final TicketService ticketService;
 
-    public AuthController(AuthService authService, TicketService ticketService) {
+    @Value("${jwt.expiration:3600000}")
+    private long jwtExpiration;
+
+    @Value("${security.jwt.cookie-secure:true}")
+    private boolean secureCookie;
+
+    public AuthController(
+            AuthService authService,
+            TicketService ticketService) {
+
         this.authService = authService;
         this.ticketService = ticketService;
     }
@@ -37,45 +53,91 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String login(@RequestParam String username,
-                        @RequestParam String password,
-                        HttpSession session,
-                        Model model) {
-        try {
-            AuthResponseDTO auth = authService.login(username, password);
+    public String login(
+            @RequestParam String username,
+            @RequestParam String password,
+            HttpServletResponse response,
+            Model model) {
 
-            session.setAttribute("USER_ID", auth.getUserId());
-            session.setAttribute("USER_NAME", auth.getFullName());
+        try {
+
+            AuthResponseDTO auth =
+                    authService.login(
+                            username,
+                            password
+                    );
+
+            response.addHeader(
+                    HttpHeaders.SET_COOKIE,
+                    jwtCookie(auth.getToken(), Duration.ofMillis(jwtExpiration))
+                            .toString()
+            );
 
             return "redirect:/user/cabinet";
 
         } catch (UserNotFoundException ex) {
-            model.addAttribute("error", ex.getMessage());
+
+            model.addAttribute(
+                    "error",
+                    ex.getMessage()
+            );
+
             return "user/login";
         }
     }
 
     @GetMapping("/cabinet")
-    public String cabinet(HttpSession session, Model model) {
-        Object userIdObj = session.getAttribute("USER_ID");
+    public String cabinet(
+            Authentication authentication,
+            Model model) {
 
-        if (userIdObj == null) {
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal()
+                instanceof JwtUserPrincipal user)) {
+
             return "redirect:/user/login";
         }
 
-        String passengerId = String.valueOf(userIdObj);
+        String passengerId =
+                String.valueOf(user.getUserId());
 
-        List<Ticket> tickets = ticketService.findAllByUserId(passengerId);
+        List<Ticket> tickets =
+                ticketService.findAllByUserId(passengerId);
 
-        model.addAttribute("fullName", session.getAttribute("USER_NAME"));
-        model.addAttribute("tickets", tickets);
+        model.addAttribute(
+                "fullName",
+                user.getFullName()
+        );
+
+        model.addAttribute(
+                "tickets",
+                tickets
+        );
 
         return "user/cabinet";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
+    @PostMapping("/logout")
+    public String logout(
+            HttpServletResponse response) {
+
+        response.addHeader(
+                HttpHeaders.SET_COOKIE,
+                jwtCookie("", Duration.ZERO).toString()
+        );
+
         return "redirect:/user/login";
+    }
+
+    private ResponseCookie jwtCookie(String token, Duration maxAge) {
+        return ResponseCookie
+                .from(JWT_COOKIE, token)
+                .httpOnly(true)
+                .secure(secureCookie)
+                .path("/")
+                .maxAge(maxAge)
+                .sameSite("Lax")
+                .build();
     }
 }

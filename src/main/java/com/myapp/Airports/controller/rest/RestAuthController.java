@@ -40,9 +40,6 @@ public class RestAuthController {
         );
 
         if (auth.getUserId() == null) {
-            if (auth.getMessage() == null || auth.getMessage().isBlank()) {
-                auth.setMessage("Invalid username or password");
-            }
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body(auth);
         }

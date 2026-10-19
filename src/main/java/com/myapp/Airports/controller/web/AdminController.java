@@ -41,26 +41,6 @@ public class AdminController {
         return "admin/index";
     }
 
-    @GetMapping(value = "/login",produces = {"text/html"})
-    protected String login(@RequestParam String username,
-                           @RequestParam String password,
-                           HttpSession session,
-                           Model model) {
-        try {
-            //Call the Authentification Service which calls the User Management REST API
-            AuthResponseDTO auth = authService.login(username, password);
-
-            session.setAttribute("USER_ID", auth.getUserId());
-            session.setAttribute("USER_NAME", auth.getFullName());
-
-            return "redirect:/dashboard";
-
-        } catch (Exception e) {
-            model.addAttribute("error", "Invalid username or password");
-            return "login";
-        }
-    }
-
     @GetMapping(value = "/dashboard",produces = {"text/html"})
     protected String dashboard(Model model) {
         return "admin/dashboard";

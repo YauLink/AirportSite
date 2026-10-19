@@ -11,6 +11,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
@@ -125,7 +126,7 @@ class TicketBookingServiceTest {
 
         TicketFlight ticketFlight = captor.getValue();
 
-        assert ticketFlight.getFareConditions().equals("Economy");
-        assert ticketFlight.getAmount().equals(new BigDecimal("100.00"));
+        assertEquals("Economy", ticketFlight.getFareConditions());
+        assertEquals(new BigDecimal("100.00"), ticketFlight.getAmount());
     }
 }

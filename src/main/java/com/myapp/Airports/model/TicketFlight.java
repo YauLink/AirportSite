@@ -73,4 +73,12 @@ public class TicketFlight {
     public void setFlight(Flying flight) {
         this.flight = flight;
     }
+
+    public Integer getFlightId() {
+        return id == null ? null : id.getFlightId();
+    }
+
+    public String getTicketNo() {
+        return id == null ? null : id.getTicketNo();
+    }
 }
