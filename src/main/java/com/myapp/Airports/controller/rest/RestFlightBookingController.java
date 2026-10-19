@@ -55,7 +55,7 @@ public class RestFlightBookingController {
         String passengerName = (String) session.getAttribute("USER_NAME");
 
         if (passengerId == null || passengerName == null) {
-            throw new UserNotAuthenticatedException("User not authenticated");
+            throw new UserNotAuthenticatedException("User is not authenticated");
         }
 
         List<Flying> flights = flyingService.findAllByIds(flightIds);
@@ -80,7 +80,7 @@ public class RestFlightBookingController {
         String passengerName = (String) session.getAttribute("USER_NAME");
 
         if (passengerId == null || passengerName == null) {
-            throw new UserNotAuthenticatedException("User not authenticated");
+            throw new UserNotAuthenticatedException("User is not authenticated");
         }
 
         @SuppressWarnings("unchecked")

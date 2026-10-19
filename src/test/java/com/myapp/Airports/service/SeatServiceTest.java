@@ -84,11 +84,11 @@ class SeatServiceTest {
 
     @Test
     void delete_ShouldCallRepository() {
-        doNothing().when(seatRepository).deleteById(seatId);
+        when(seatRepository.findById(seatId)).thenReturn(Optional.of(seat));
 
         seatService.delete(seatId);
 
-        verify(seatRepository, times(1)).deleteById(seatId);
+        verify(seatRepository, times(1)).delete(seat);
     }
 
     @Test

@@ -92,11 +92,18 @@ class TicketServiceCacheTest {
 
     @Test
     void delete_ShouldEvictCache() {
-        doNothing().when(ticketRepo).deleteById("TICK1");
+        when(ticketRepo.findAll()).thenReturn(List.of(ticket1));
+        when(ticketRepo.findById("TICK1")).thenReturn(Optional.of(ticket1));
 
         ticketService.findAll();
+        ticketService.findById("TICK1");
+        assertNotNull(cacheManager.getCache("tickets").get(SimpleKey.EMPTY));
+        assertNotNull(cacheManager.getCache("ticket").get("TICK1"));
+
         ticketService.delete("TICK1");
-        assertNull(cacheManager.getCache("tickets").get(""));
+        verify(ticketRepo).delete(ticket1);
+        assertNull(cacheManager.getCache("tickets").get(SimpleKey.EMPTY));
+        assertNull(cacheManager.getCache("ticket").get("TICK1"));
     }
 
     @Test

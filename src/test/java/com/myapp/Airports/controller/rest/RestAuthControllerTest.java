@@ -1,6 +1,7 @@
 package com.myapp.Airports.controller.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.myapp.Airports.dto.AuthRequestDTO;
 import com.myapp.Airports.dto.AuthResponseDTO;
 import com.myapp.Airports.dto.CabinetResponseDTO;
 import com.myapp.Airports.model.Ticket;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpSession;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -54,25 +56,25 @@ class RestAuthControllerTest {
                 .thenReturn(responseDTO);
 
         mockMvc.perform(post("/api/user/login")
-                        .param("username", "john")
-                        .param("password", "1234"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new AuthRequestDTO("john", "1234"))))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.userId").value(1L))
                 .andExpect(jsonPath("$.fullName").value("John Doe"));
     }
 
     @Test
-    @DisplayName("Should return bad request for invalid login")
+    @DisplayName("Should return unauthorized for invalid login")
     void shouldReturnBadRequestForInvalidLogin() throws Exception {
 
         Mockito.when(authService.login(anyString(), anyString()))
-                .thenThrow(new RuntimeException());
+                .thenReturn(new AuthResponseDTO());
 
         mockMvc.perform(post("/api/user/login")
-                        .param("username", "wrong")
-                        .param("password", "wrong"))
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string("Invalid username or password"));
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(new AuthRequestDTO("wrong", "wrong"))))
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("Invalid username or password"));
     }
 
     @Test
@@ -101,7 +103,8 @@ class RestAuthControllerTest {
 
         mockMvc.perform(get("/api/user/cabinet"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(content().string("Unauthorized"));
+                .andExpect(jsonPath("$.code").value("UNAUTHENTICATED"))
+                .andExpect(jsonPath("$.message").value("User is not authenticated"));
     }
 
     @Test

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.myapp.Airports.controller.rest.RestBookingController;
 import com.myapp.Airports.dto.BookingDTO;
+import com.myapp.Airports.exceptions.BookingNotFoundException;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.mapper.BookingMapper;
 import com.myapp.Airports.service.BookingService;
@@ -99,7 +100,8 @@ class RestBookingControllerTest {
 
     @Test
     void testGetBooking_NotFound() throws Exception {
-        when(bookingService.findByBookRef("ZZZ999")).thenReturn(null);
+        when(bookingService.findByBookRef("ZZZ999"))
+                .thenThrow(new BookingNotFoundException("ZZZ999"));
 
         mockMvc.perform(get("/api/bookings/ZZZ999"))
                 .andExpect(status().isNotFound());

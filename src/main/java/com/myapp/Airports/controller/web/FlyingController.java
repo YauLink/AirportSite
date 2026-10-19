@@ -58,6 +58,10 @@ public class FlyingController {
     public String showEditForm(@PathVariable("id") Integer id, Model model) {
         Flying flight = flyingService.findById(id);
 
+        if (flight == null) {
+            return "redirect:/flights";
+        }
+
         FlyingDTO dto = FlyingMapper.toDto(flight);
 
         model.addAttribute("flyingDTO", dto);

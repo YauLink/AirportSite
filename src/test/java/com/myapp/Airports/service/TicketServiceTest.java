@@ -76,8 +76,12 @@ class TicketServiceTest {
 
     @Test
     void testDelete() {
+        Ticket ticket = new Ticket();
+        ticket.setTicketNo("T123");
+        when(ticketRepo.findById("T123")).thenReturn(Optional.of(ticket));
+
         ticketService.delete("T123");
-        verify(ticketRepo).deleteById("T123");
+        verify(ticketRepo).delete(ticket);
     }
 
     @Test

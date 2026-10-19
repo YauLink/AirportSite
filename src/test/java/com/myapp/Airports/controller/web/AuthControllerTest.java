@@ -1,6 +1,7 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.dto.AuthResponseDTO;
+import com.myapp.Airports.exceptions.UserNotFoundException;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.model.TicketFlight;
@@ -63,7 +64,7 @@ class AuthControllerTest {
     @Test
     void shouldReturnLoginPageWithErrorWhenAuthFails() throws Exception {
         when(authService.login(anyString(), anyString()))
-                .thenThrow(new RuntimeException("Auth failed"));
+                .thenThrow(new UserNotFoundException("Auth failed", true));
 
         mockMvc.perform(post("/user/login")
                         .with(csrf())

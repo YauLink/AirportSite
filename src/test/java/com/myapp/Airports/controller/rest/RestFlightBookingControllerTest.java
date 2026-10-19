@@ -70,8 +70,8 @@ class RestFlightBookingControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("[1]"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.error")
-                        .value("User not authenticated"));
+                .andExpect(jsonPath("$.code").value("UNAUTHENTICATED"))
+                .andExpect(jsonPath("$.message").value("User is not authenticated"));
 
         verifyNoInteractions(flyingService);
     }
@@ -114,8 +114,8 @@ class RestFlightBookingControllerTest {
 
         mockMvc.perform(post("/api/user/book"))
                 .andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.error")
-                        .value("User not authenticated"));
+                .andExpect(jsonPath("$.code").value("UNAUTHENTICATED"))
+                .andExpect(jsonPath("$.message").value("User is not authenticated"));
 
         verifyNoInteractions(bookingService);
     }
@@ -130,8 +130,8 @@ class RestFlightBookingControllerTest {
         mockMvc.perform(post("/api/user/book")
                         .session(session))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.error")
-                        .value("No flights selected"));
+                .andExpect(jsonPath("$.code").value("INVALID_BOOKING_STATE"))
+                .andExpect(jsonPath("$.message").value("No flights selected"));
 
         verifyNoInteractions(bookingService);
     }

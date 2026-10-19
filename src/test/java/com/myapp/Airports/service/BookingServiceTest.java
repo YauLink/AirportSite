@@ -99,8 +99,11 @@ class BookingServiceTest {
 
     @Test
     void testCancelBooking() {
+        Booking booking = new Booking();
+        when(bookingRepository.findById("REF123")).thenReturn(Optional.of(booking));
+
         bookingService.cancelBooking("REF123");
-        verify(bookingRepository).deleteById("REF123");
+        verify(bookingRepository).delete(booking);
     }
 
     @Test
@@ -116,8 +119,11 @@ class BookingServiceTest {
 
     @Test
     void testDelete() {
+        Booking booking = new Booking();
+        when(bookingRepository.findById("REF123")).thenReturn(Optional.of(booking));
+
         bookingService.delete("REF123");
-        verify(bookingRepository).deleteById("REF123");
+        verify(bookingRepository).delete(booking);
     }
 
     @Test
