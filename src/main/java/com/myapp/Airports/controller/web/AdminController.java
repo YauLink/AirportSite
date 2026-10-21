@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 /**
- * MVC controller responsible for admin cabinet.
+ * MVC controller responsible for the administrator cabinet.
  * <p>
  * Provides endpoints for creating and retrieving information about flights and logs.
  * </p>

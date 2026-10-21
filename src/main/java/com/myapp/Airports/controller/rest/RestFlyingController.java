@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * REST controller responsible for managing flights.
  * <p>
- * Provides endpoints for creating and retrieving flights information.
+ * Provides endpoints for creating and retrieving flight information.
  * </p>
  */
 @RestController

@@ -15,6 +15,13 @@ import com.myapp.Airports.dto.CabinetResponseDTO;
 
 import java.util.List;
 
+/**
+ * REST controller responsible for user authentication and account data.
+ * <p>
+ * Provides endpoints for login, logout, and retrieving the authenticated
+ * user's ticket cabinet.
+ * </p>
+ */
 @RestController
 @RequestMapping("/api/user")
 public class RestAuthController {

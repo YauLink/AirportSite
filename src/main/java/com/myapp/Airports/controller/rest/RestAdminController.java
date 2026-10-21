@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * REST controller responsible for admin cabinet.
+ * REST controller responsible for the administrator cabinet.
  * <p>
  * Provides endpoints for creating and retrieving information about flights and logs.
  * </p>

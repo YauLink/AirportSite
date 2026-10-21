@@ -6,6 +6,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+/**
+ * Repository for boarding passes and boarding-number queries.
+ */
 public interface IBoardingPassRepository extends JpaRepository<BoardingPass, BoardingPassId> {
 
     @Query("select coalesce(max(bp.boardingNo), 0) from BoardingPass bp where bp.id.flightId = :flightId")

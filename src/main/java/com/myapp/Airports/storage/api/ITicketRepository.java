@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * Repository for persisting and querying flight tickets.
+ */
 public interface ITicketRepository extends JpaRepository<Ticket, String> {
     @Query("SELECT t FROM Ticket t " +
             "JOIN TicketFlight tf ON t = tf.ticket " +

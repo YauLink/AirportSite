@@ -11,6 +11,9 @@ import jakarta.persistence.LockModeType;
 
 import java.util.List;
 
+/**
+ * Repository for flights and route-based flight queries.
+ */
 public interface IFlyingsRepository extends JpaRepository<Flying, Integer> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

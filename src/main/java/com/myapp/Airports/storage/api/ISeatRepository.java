@@ -8,6 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * Repository for aircraft seats and seat availability queries.
+ */
 public interface ISeatRepository extends JpaRepository<Seat, SeatId> {
 
     @Query(value = """

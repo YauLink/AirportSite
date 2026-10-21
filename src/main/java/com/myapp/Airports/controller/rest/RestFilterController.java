@@ -13,6 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * REST controller responsible for flight and airport filtering.
+ * <p>
+ * Provides endpoints for retrieving airports and flights that match the
+ * requested route filters.
+ * </p>
+ */
 @RestController
 @RequestMapping("/api/filters")
 public class RestFilterController {

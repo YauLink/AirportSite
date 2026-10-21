@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 /**
  * Represents a flight in the system.
  * <p>
- * Each flight contains info about schedule, aircraft and flight data as id and number
+ * Each flight contains schedule, aircraft, airport, and identifying data.
  * </p>
  */
 @Entity(name = "Flying")

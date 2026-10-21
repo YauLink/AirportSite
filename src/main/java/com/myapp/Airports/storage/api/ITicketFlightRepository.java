@@ -9,6 +9,9 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
+/**
+ * Repository for ticket-flight associations and their related bookings.
+ */
 public interface ITicketFlightRepository extends JpaRepository<TicketFlight, TicketFlightId> {
 
     @Query("SELECT DISTINCT t.booking " +

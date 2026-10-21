@@ -10,6 +10,12 @@ import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
 
+/**
+ * Creates and validates the claims contained in JSON Web Tokens.
+ * <p>
+ * The signing key is initialized from the configured application secret.
+ * </p>
+ */
 @Service
 public class JwtService {
 

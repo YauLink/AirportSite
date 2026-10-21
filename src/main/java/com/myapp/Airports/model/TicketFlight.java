@@ -5,6 +5,12 @@ import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
+/**
+ * Represents the association between a ticket and a booked flight.
+ * <p>
+ * Stores the fare and amount for a ticket on a particular flight.
+ * </p>
+ */
 @Entity
 @Table(name = "ticket_flights", schema = "bookings")
 public class TicketFlight {

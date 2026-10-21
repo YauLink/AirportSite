@@ -9,6 +9,12 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Coordinates creation of bookings, tickets, and ticket-flight associations.
+ * <p>
+ * Uses a transaction so all records for a booking are created together.
+ * </p>
+ */
 @Service
 public class TicketBookingService {
 

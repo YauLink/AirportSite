@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * Handles aircraft operations for flights.
+ * Handles aircraft persistence and lookup operations.
  */
 @Service
 public class AircraftService {

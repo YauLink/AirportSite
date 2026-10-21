@@ -1,5 +1,12 @@
 package com.myapp.Airports.model;
 
+/**
+ * Authenticated user data extracted from a JSON Web Token.
+ * <p>
+ * Provides the identity and role information used by the application security
+ * layer.
+ * </p>
+ */
 public class JwtUserPrincipal {
 
     private final Long userId;

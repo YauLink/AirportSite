@@ -17,7 +17,7 @@ import java.util.Optional;
 /**
  * MVC controller responsible for managing flights.
  * <p>
- * Provides endpoints for creating and retrieving flights information.
+ * Provides endpoints for creating and retrieving flight information.
  * </p>
  */
 @Controller

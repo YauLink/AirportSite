@@ -7,6 +7,9 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Handles boarding-pass creation and retrieval for booked flights.
+ */
 @Service
 public class BoardingPassService {
 

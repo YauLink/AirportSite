@@ -6,6 +6,13 @@ import jakarta.persistence.Embeddable;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Composite identifier for the relationship between a ticket and a flight.
+ * <p>
+ * Combines the ticket number and flight identifier used by the ticket-flight
+ * join entity.
+ * </p>
+ */
 @Embeddable
 public class TicketFlightId implements Serializable {
 

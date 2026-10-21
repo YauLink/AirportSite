@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * Handles flights operations for flights.
+ * Handles flight persistence, lookup, filtering, and updates.
  */
 @Service
 public class FlyingService {
