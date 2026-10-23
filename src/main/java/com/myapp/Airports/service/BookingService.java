@@ -56,10 +56,25 @@ public class BookingService {
         return bookingRepository.findAll(req);
     }
 
+    @Cacheable(value = "bookings", key = "'passenger:' + #passengerId + ':' + #page + ':' + #size")
+    public Page<Booking> findAllByPassengerId(String passengerId, int page, int size) {
+        PageRequest req = PageRequest.of(
+                page,
+                size,
+                Sort.by("bookDate").descending());
+        return bookingRepository.findAllByPassengerId(passengerId, req);
+    }
+
     @Cacheable(value = "booking", key = "#bookRef")
     public Booking findByBookRef(String bookRef) {
 
         return bookingRepository.findById(bookRef)
+                .orElseThrow(() -> new BookingNotFoundException(bookRef));
+    }
+
+    @Cacheable(value = "booking", key = "#bookRef + ':passenger:' + #passengerId")
+    public Booking findByBookRefAndPassengerId(String bookRef, String passengerId) {
+        return bookingRepository.findByBookRefAndPassengerId(bookRef, passengerId)
                 .orElseThrow(() -> new BookingNotFoundException(bookRef));
     }
 

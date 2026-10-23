@@ -22,6 +22,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.myapp.Airports.model.JwtUserPrincipal;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -33,6 +37,7 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
@@ -73,15 +78,23 @@ class RestBookingControllerTest {
         );
     }
 
+    private Authentication userAuthentication() {
+        return new UsernamePasswordAuthenticationToken(
+                new JwtUserPrincipal(1L, "john", "John Doe", "USER"),
+                null,
+                List.of(new SimpleGrantedAuthority("USER")));
+    }
+
     @Test
     void testGetAllBookings() throws Exception {
         Booking b = bookingEntity();
         Page<Booking> page = new PageImpl<>(List.of(b));
-        when(bookingService.findAll(0, 10)).thenReturn(page);
+        when(bookingService.findAllByPassengerId("1", 0, 10)).thenReturn(page);
 
         mockMvc.perform(get("/api/bookings")
                         .param("page", "0")
-                        .param("size", "10"))
+                        .param("size", "10")
+                        .with(authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].bookRef").value("ABC123"))
                 .andExpect(jsonPath("$.content[0].totalAmount").value(150.00));
@@ -90,9 +103,10 @@ class RestBookingControllerTest {
     @Test
     void testGetBooking() throws Exception {
         Booking b = bookingEntity();
-        when(bookingService.findByBookRef("ABC123")).thenReturn(b);
+        when(bookingService.findByBookRefAndPassengerId("ABC123", "1")).thenReturn(b);
 
-        mockMvc.perform(get("/api/bookings/ABC123"))
+        mockMvc.perform(get("/api/bookings/ABC123")
+                        .with(authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookRef").value("ABC123"))
                 .andExpect(jsonPath("$.totalAmount").value(150.00));
@@ -100,10 +114,11 @@ class RestBookingControllerTest {
 
     @Test
     void testGetBooking_NotFound() throws Exception {
-        when(bookingService.findByBookRef("ZZZ999"))
+        when(bookingService.findByBookRefAndPassengerId("ZZZ999", "1"))
                 .thenThrow(new BookingNotFoundException("ZZZ999"));
 
-        mockMvc.perform(get("/api/bookings/ZZZ999"))
+        mockMvc.perform(get("/api/bookings/ZZZ999")
+                        .with(authentication(userAuthentication())))
                 .andExpect(status().isNotFound());
     }
 

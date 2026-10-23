@@ -40,22 +40,21 @@ public class SecurityConfig {
                 .exceptionHandling(ex -> ex.accessDeniedPage("/access_denied"))
 
                 .authorizeHttpRequests(auth -> auth
-
-                        .requestMatchers("/login/**", "/user/login").permitAll()
-                        .requestMatchers("/api/user/login").permitAll()
-
-                        .requestMatchers("/api/user/**")
+                        .requestMatchers("/", "/error", "/access_denied", "/css/**",
+                                "/login/**", "/user/login", "/api/user/login").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/airports", "/flights",
+                                "/filters", "/api/flights/**", "/api/filters").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/bookings/**")
+                        .hasAnyAuthority("USER", "ADMIN")
+                        .requestMatchers("/api/user/**", "/user/**")
                         .hasAuthority("USER")
-
-                        .requestMatchers("/api/admin/**")
+                        .requestMatchers("/api/admin/**", "/admin/**")
                         .hasAuthority("ADMIN")
-
-                        .requestMatchers("/admin/**")
+                        .requestMatchers("/api/bookings/**", "/bookings/**", "/api/tickets/**", "/tickets/**",
+                                "/flights/new/**", "/flights/edit/**", "/flights/delete/**")
                         .hasAuthority("ADMIN")
-
                         .requestMatchers(HttpMethod.POST, "/airports").hasAuthority("ADMIN")
-                        .requestMatchers("/tickets/**").hasAuthority("ADMIN")
-                        .anyRequest().permitAll())
+                        .anyRequest().authenticated())
 
                 .addFilterBefore(
                         jwtAuthenticationFilter,

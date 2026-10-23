@@ -3,12 +3,14 @@ package com.myapp.Airports.controller.rest;
 import com.myapp.Airports.dto.BookingDTO;
 import com.myapp.Airports.mapper.BookingMapper;
 import com.myapp.Airports.model.Booking;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -36,10 +38,13 @@ public class RestBookingController {
     @GetMapping
     public ResponseEntity<Page<BookingDTO>> getAllBookings(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "30") int size) {
+            @RequestParam(defaultValue = "30") int size,
+            Authentication authentication) {
 
-        Page<BookingDTO> bookings =
-                bookingService.findAll(page, size)
+        Page<Booking> source = isAdmin(authentication)
+                ? bookingService.findAll(page, size)
+                : bookingService.findAllByPassengerId(currentUser(authentication), page, size);
+        Page<BookingDTO> bookings = source
                         .map(BookingMapper::toDto);
 
         return ResponseEntity.ok(bookings);
@@ -47,10 +52,12 @@ public class RestBookingController {
 
     @GetMapping("/{ref}")
     public ResponseEntity<BookingDTO> getBooking(
-            @PathVariable String ref) {
+            @PathVariable String ref,
+            Authentication authentication) {
 
-        Booking booking =
-                bookingService.findByBookRef(ref);
+        Booking booking = isAdmin(authentication)
+                ? bookingService.findByBookRef(ref)
+                : bookingService.findByBookRefAndPassengerId(ref, currentUser(authentication));
 
         return ResponseEntity.ok(
                 BookingMapper.toDto(booking)
@@ -101,5 +108,17 @@ public class RestBookingController {
 
         bookingService.cancelBooking(ref);
         return ResponseEntity.noContent().build();
+    }
+
+    private boolean isAdmin(Authentication authentication) {
+        return authentication != null && authentication.getAuthorities().stream()
+                .anyMatch(authority -> "ADMIN".equals(authority.getAuthority()));
+    }
+
+    private String currentUser(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof JwtUserPrincipal user)) {
+            throw new org.springframework.security.access.AccessDeniedException("Authenticated user is required");
+        }
+        return String.valueOf(user.getUserId());
     }
 }

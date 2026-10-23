@@ -51,7 +51,8 @@ public class RestFlightBookingController {
             @RequestBody List<Integer> flightIds,
             HttpSession session) {
 
-        String passengerId = (String) session.getAttribute("USER_ID");
+        Object userId = session.getAttribute("USER_ID");
+        String passengerId = userId == null ? null : String.valueOf(userId);
         String passengerName = (String) session.getAttribute("USER_NAME");
 
         if (passengerId == null || passengerName == null) {
@@ -76,7 +77,8 @@ public class RestFlightBookingController {
     @PostMapping("/book")
     public ResponseEntity<?> bookFlights(HttpSession session) {
 
-        String passengerId = (String) session.getAttribute("USER_ID");
+        Object userId = session.getAttribute("USER_ID");
+        String passengerId = userId == null ? null : String.valueOf(userId);
         String passengerName = (String) session.getAttribute("USER_NAME");
 
         if (passengerId == null || passengerName == null) {
