@@ -5,6 +5,7 @@ import com.myapp.Airports.dto.AuthRequestDTO;
 import com.myapp.Airports.dto.AuthResponseDTO;
 import com.myapp.Airports.dto.CabinetResponseDTO;
 import com.myapp.Airports.model.Ticket;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.TicketService;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +20,9 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import java.util.List;
 
@@ -43,6 +47,13 @@ class RestAuthControllerTest {
 
     @MockBean
     private TicketService ticketService;
+
+    private Authentication userAuthentication() {
+        return new UsernamePasswordAuthenticationToken(
+                new JwtUserPrincipal(1L, "john", "John Doe", "USER"),
+                null,
+                List.of());
+    }
 
     @Test
     @DisplayName("Should login successfully")
@@ -81,17 +92,13 @@ class RestAuthControllerTest {
     @DisplayName("Should return cabinet information")
     void shouldReturnCabinetInformation() throws Exception {
 
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("USER_ID", 1L);
-        session.setAttribute("USER_NAME", "John Doe");
-
         Ticket ticket = new Ticket();
 
         Mockito.when(ticketService.findAllByUserId("1"))
                 .thenReturn(List.of(ticket));
 
         mockMvc.perform(get("/api/user/cabinet")
-                        .session(session))
+                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value("John Doe"))
                 .andExpect(jsonPath("$.tickets").isArray());
@@ -111,12 +118,10 @@ class RestAuthControllerTest {
     @DisplayName("Should logout successfully")
     void shouldLogoutSuccessfully() throws Exception {
 
-        MockHttpSession session = new MockHttpSession();
-        session.setAttribute("USER_ID", 1L);
-
         mockMvc.perform(post("/api/user/logout")
-                        .session(session))
+                        .session(new MockHttpSession()))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Logged out"));
+                .andExpect(content().string("Logged out"))
+                .andExpect(cookie().maxAge("AIRPORTS_JWT", 0));
     }
 }

@@ -11,6 +11,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import com.myapp.Airports.model.JwtUserPrincipal;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -49,11 +51,12 @@ public class RestFlightBookingController {
     @PostMapping("/confirm")
     public ResponseEntity<?> confirmBooking(
             @RequestBody List<Integer> flightIds,
-            HttpSession session) {
+            HttpSession session,
+            Authentication authentication) {
 
-        Object userId = session.getAttribute("USER_ID");
-        String passengerId = userId == null ? null : String.valueOf(userId);
-        String passengerName = (String) session.getAttribute("USER_NAME");
+        JwtUserPrincipal user = currentUser(authentication);
+        String passengerId = user == null ? null : String.valueOf(user.getUserId());
+        String passengerName = user == null ? null : user.getFullName();
 
         if (passengerId == null || passengerName == null) {
             throw new UserNotAuthenticatedException("User not authenticated");
@@ -75,11 +78,12 @@ public class RestFlightBookingController {
      * STEP 2: create booking.
      */
     @PostMapping("/book")
-    public ResponseEntity<?> bookFlights(HttpSession session) {
+    public ResponseEntity<?> bookFlights(HttpSession session,
+                                         Authentication authentication) {
 
-        Object userId = session.getAttribute("USER_ID");
-        String passengerId = userId == null ? null : String.valueOf(userId);
-        String passengerName = (String) session.getAttribute("USER_NAME");
+        JwtUserPrincipal user = currentUser(authentication);
+        String passengerId = user == null ? null : String.valueOf(user.getUserId());
+        String passengerName = user == null ? null : user.getFullName();
 
         if (passengerId == null || passengerName == null) {
             throw new UserNotAuthenticatedException("User not authenticated");
@@ -136,5 +140,14 @@ public class RestFlightBookingController {
                         booking.getBookRef(),
                         "total", total)
         );
+    }
+
+    private JwtUserPrincipal currentUser(Authentication authentication) {
+        if (authentication == null
+                || !authentication.isAuthenticated()
+                || !(authentication.getPrincipal() instanceof JwtUserPrincipal user)) {
+            return null;
+        }
+        return user;
     }
 }

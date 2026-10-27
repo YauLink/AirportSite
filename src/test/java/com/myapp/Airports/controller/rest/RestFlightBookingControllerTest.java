@@ -3,6 +3,7 @@ package com.myapp.Airports.controller.rest;
 import com.myapp.Airports.controller.rest.RestFlightBookingController;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Flying;
+import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
 import com.myapp.Airports.service.TicketBookingService;
@@ -14,6 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import java.util.List;
 
@@ -38,12 +42,17 @@ class RestFlightBookingControllerTest {
     @MockBean
     private FlyingService flyingService;
 
+    private Authentication userAuthentication() {
+        return new UsernamePasswordAuthenticationToken(
+                new JwtUserPrincipal(1L, "john", "John Smith", "USER"),
+                null,
+                List.of());
+    }
+
     @Test
     void shouldConfirmBooking() throws Exception {
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("USER_ID", "P001");
-        session.setAttribute("USER_NAME", "John Smith");
 
         Flying flight = new Flying();
         flight.setFlightId(1);
@@ -54,6 +63,7 @@ class RestFlightBookingControllerTest {
 
         mockMvc.perform(post("/api/user/confirm")
                         .session(session)
+                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("[1]"))
                 .andExpect(status().isOk())
@@ -80,8 +90,6 @@ class RestFlightBookingControllerTest {
     void shouldBookFlights() throws Exception {
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("USER_ID", "P001");
-        session.setAttribute("USER_NAME", "John Smith");
         session.setAttribute("SELECTED_FLIGHTS", List.of(1));
 
         Flying flight = new Flying();
@@ -91,7 +99,8 @@ class RestFlightBookingControllerTest {
                 .thenReturn(List.of(flight));
 
         mockMvc.perform(post("/api/user/book")
-                        .session(session))
+                        .session(session)
+                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message")
                         .value("Booking created successfully"))
@@ -101,7 +110,7 @@ class RestFlightBookingControllerTest {
         verify(ticketBookingService)
                 .createBookingWithTickets(
                         any(Booking.class),
-                        eq("P001"),
+                        eq("1"),
                         eq("John Smith"),
                         eq("{}"),
                         eq(List.of(1)),
@@ -124,11 +133,10 @@ class RestFlightBookingControllerTest {
     void shouldReturnBadRequestWhenNoFlightsSelected() throws Exception {
 
         MockHttpSession session = new MockHttpSession();
-        session.setAttribute("USER_ID", "P001");
-        session.setAttribute("USER_NAME", "John Smith");
 
         mockMvc.perform(post("/api/user/book")
-                        .session(session))
+                        .session(session)
+                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication())))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_BOOKING_STATE"))
                 .andExpect(jsonPath("$.message").value("No flights selected"));

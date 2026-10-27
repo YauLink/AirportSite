@@ -1,6 +1,5 @@
 package com.myapp.Airports.dto;
 
-import com.myapp.Airports.model.Ticket;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -12,9 +11,9 @@ public class CabinetResponseDTO {
     @Size(max = 100, message = "Full name must be up to 100 characters")
     private String fullName;
 
-    private List<Ticket> tickets;
+    private List<CabinetTicketDTO> tickets;
 
-    public CabinetResponseDTO(String fullName, List<Ticket> tickets) {
+    public CabinetResponseDTO(String fullName, List<CabinetTicketDTO> tickets) {
         this.fullName = fullName;
         this.tickets = tickets;
     }
@@ -23,7 +22,7 @@ public class CabinetResponseDTO {
         return fullName;
     }
 
-    public List<Ticket> getTickets() {
+    public List<CabinetTicketDTO> getTickets() {
         return tickets;
     }
 }
