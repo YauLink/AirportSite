@@ -18,12 +18,15 @@ public class AuthService implements IAuthService {
 
     private final RestTemplate restTemplate;
     private final String authUrl;
+    private final LoginRateLimiter loginRateLimiter;
 
     public AuthService(
             RestTemplate restTemplate,
-            @Value("${user-management.auth-url}") String authUrl) {
+            @Value("${user-management.auth-url}") String authUrl,
+            LoginRateLimiter loginRateLimiter) {
         this.restTemplate = restTemplate;
         this.authUrl = authUrl;
+        this.loginRateLimiter = loginRateLimiter;
     }
 
     @Override
@@ -31,15 +34,26 @@ public class AuthService implements IAuthService {
             String username,
             String password) {
 
+        loginRateLimiter.checkAllowed(username);
         AuthRequestDTO request = new AuthRequestDTO(username, password);
 
         try {
 
-            return restTemplate.postForObject(
+            AuthResponseDTO response = restTemplate.postForObject(
                     authUrl,
                     request,
                     AuthResponseDTO.class
             );
+            if (response == null) {
+                loginRateLimiter.recordFailure(username);
+                throw new UserNotFoundException("Invalid username or password", true);
+            }
+            if (response.getUserId() == null) {
+                loginRateLimiter.recordFailure(username);
+            } else {
+                loginRateLimiter.reset(username);
+            }
+            return response;
 
         } catch (RestClientResponseException e) {
 
@@ -48,6 +62,7 @@ public class AuthService implements IAuthService {
 
             if (status.value() == 401
                     || status.value() == 404) {
+                loginRateLimiter.recordFailure(username);
 
                 throw new UserNotFoundException(
                         "Invalid username or password",

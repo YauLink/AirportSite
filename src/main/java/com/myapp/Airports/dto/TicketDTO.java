@@ -14,7 +14,7 @@ public class TicketDTO {
     private String ticketNo;
 
     @NotBlank(message = "Booking reference is required")
-    @Size(max = 6, message = "Booking reference must be up to 6 characters")
+    @Size(max = 32, message = "Booking reference must be up to 32 characters")
     @ManyToOne(optional = false)
     private Booking booking;
 

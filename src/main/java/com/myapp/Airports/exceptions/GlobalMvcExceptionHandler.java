@@ -103,6 +103,16 @@ public class GlobalMvcExceptionHandler {
         return "error/401";
     }
 
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(TooManyLoginAttemptsException.class)
+    public String handleTooManyLoginAttempts(
+            TooManyLoginAttemptsException ex,
+            Model model) {
+        model.addAttribute("errorTitle", "Too Many Login Attempts");
+        model.addAttribute("errorMessage", ex.getMessage());
+        return "user/login";
+    }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(EntityAlreadyExistsException.class)
     public String handleAlreadyExists(EntityAlreadyExistsException ex, Model model) {

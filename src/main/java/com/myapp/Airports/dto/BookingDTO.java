@@ -12,7 +12,7 @@ import jakarta.validation.constraints.Size;
 public class BookingDTO {
 
     @NotBlank(message = "Booking reference is required")
-    @Size(max = 6, message = "Booking reference must be up to 6 characters")
+    @Size(max = 32, message = "Booking reference must be up to 32 characters")
     private String bookRef;
 
     @NotNull(message = "Booking date is required")

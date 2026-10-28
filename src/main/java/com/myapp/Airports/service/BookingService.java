@@ -18,12 +18,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.security.SecureRandom;
 
 /**
  * Handles booking operations for flights.
  */
 @Service
 public class BookingService {
+
+    private static final String BOOKING_REF_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
+    private static final int BOOKING_REF_LENGTH = 32;
+    private static final int BOOKING_REF_ATTEMPTS = 5;
+    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final IBookingRepository bookingRepository;
     private final ITicketFlightRepository ticketFlightRepository;
@@ -54,6 +60,21 @@ public class BookingService {
                 Sort.by("bookDate").descending());
 
         return bookingRepository.findAll(req);
+    }
+
+    public String generateBookRef() {
+        for (int attempt = 0; attempt < BOOKING_REF_ATTEMPTS; attempt++) {
+            StringBuilder ref = new StringBuilder(BOOKING_REF_LENGTH);
+            for (int i = 0; i < BOOKING_REF_LENGTH; i++) {
+                ref.append(BOOKING_REF_ALPHABET.charAt(
+                        SECURE_RANDOM.nextInt(BOOKING_REF_ALPHABET.length())));
+            }
+            String candidate = ref.toString();
+            if (!bookingRepository.existsById(candidate)) {
+                return candidate;
+            }
+        }
+        throw new IllegalStateException("Could not allocate a unique booking reference");
     }
 
     @Cacheable(value = "bookings", key = "'passenger:' + #passengerId + ':' + #page + ':' + #size")

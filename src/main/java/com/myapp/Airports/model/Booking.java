@@ -19,7 +19,7 @@ import java.util.List;
 public class Booking {
 
     @Id
-    @Column(name = "book_ref", nullable = false)
+    @Column(name = "book_ref", nullable = false, length = 32)
     private String bookRef;
 
     @Column(name = "book_date", nullable = false)

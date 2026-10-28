@@ -42,6 +42,11 @@ public class GlobalRestExceptionHandler {
         return error(HttpStatus.UNAUTHORIZED, "UNAUTHENTICATED", ex.getMessage());
     }
 
+    @ExceptionHandler(TooManyLoginAttemptsException.class)
+    public ResponseEntity<ApiError> handleTooManyLoginAttempts(TooManyLoginAttemptsException ex) {
+        return error(HttpStatus.TOO_MANY_REQUESTS, "TOO_MANY_LOGIN_ATTEMPTS", ex.getMessage());
+    }
+
     @ExceptionHandler(InvalidBookingStateException.class)
     public ResponseEntity<ApiError> handleInvalidBookingState(InvalidBookingStateException ex) {
         return error(HttpStatus.BAD_REQUEST, "INVALID_BOOKING_STATE", ex.getMessage());

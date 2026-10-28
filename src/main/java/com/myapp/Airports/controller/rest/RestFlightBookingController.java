@@ -18,7 +18,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * REST controller responsible for flight booking operations.
@@ -109,7 +108,7 @@ public class RestFlightBookingController {
                 );
 
         Booking booking = new Booking();
-        booking.setBookRef(UUID.randomUUID().toString().substring(0, 6).toUpperCase());
+        booking.setBookRef(bookingService.generateBookRef());
         booking.setBookDate(LocalDateTime.now());
         booking.setTotalAmount(total);
 
