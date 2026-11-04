@@ -15,7 +15,7 @@ public class Seat {
     @EmbeddedId
     private SeatId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("aircraftCode")
     @JoinColumn(name = "aircraft_code")
     private Aircraft aircraft;

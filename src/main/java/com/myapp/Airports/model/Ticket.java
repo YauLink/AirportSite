@@ -19,7 +19,7 @@ public class Ticket {
     @Column(name = "ticket_no", nullable = false, length = 13)
     private String ticketNo;
 
-    @ManyToOne(optional = false)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "book_ref", referencedColumnName = "book_ref")
     private Booking booking;
 

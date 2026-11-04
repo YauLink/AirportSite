@@ -1,8 +1,5 @@
 package com.myapp.Airports.dto;
 
-import com.myapp.Airports.model.Booking;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
@@ -15,8 +12,7 @@ public class TicketDTO {
 
     @NotBlank(message = "Booking reference is required")
     @Size(max = 32, message = "Booking reference must be up to 32 characters")
-    @ManyToOne(optional = false)
-    private Booking booking;
+    private String bookingRef;
 
     @NotBlank(message = "Passenger ID is required")
     private String passengerId;
@@ -29,9 +25,9 @@ public class TicketDTO {
 
     public TicketDTO() {}
 
-    public TicketDTO(String ticketNo, Booking booking, String passengerId, String passengerName, String contactData) {
+    public TicketDTO(String ticketNo, String bookingRef, String passengerId, String passengerName, String contactData) {
         this.ticketNo = ticketNo;
-        this.booking = booking;
+        this.bookingRef = bookingRef;
         this.passengerId = passengerId;
         this.passengerName = passengerName;
         this.contactData = contactData;
@@ -45,12 +41,12 @@ public class TicketDTO {
         this.ticketNo = ticketNo;
     }
 
-    public Booking getBooking() {
-        return booking;
+    public String getBookingRef() {
+        return bookingRef;
     }
 
-    public void setBooking(Booking booking) {
-        this.booking = booking;
+    public void setBookingRef(String bookingRef) {
+        this.bookingRef = bookingRef;
     }
 
     public String getPassengerId() {

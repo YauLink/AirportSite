@@ -34,7 +34,7 @@ public class TicketService {
 
     @Cacheable(value = "tickets")
     public List<Ticket> findAll() {
-        return ticketRepo.findAll();
+        return ticketRepo.findAllWithBooking();
     }
 
     @Cacheable(value = "tickets")
@@ -47,7 +47,7 @@ public class TicketService {
     @Cacheable(value = "ticket", key = "#ticketNo")
     public Ticket findById(String ticketNo) {
 
-        return ticketRepo.findById(ticketNo)
+        return ticketRepo.findByIdWithBooking(ticketNo)
                 .orElseThrow(() -> new TicketNotFoundException(ticketNo));
     }
 
@@ -61,6 +61,13 @@ public class TicketService {
             allEntries = true)
     public Ticket save(Ticket ticket) {
         return ticketRepo.save(ticket);
+    }
+
+    @CacheEvict(
+            value = {"tickets", "ticket"},
+            allEntries = true)
+    public List<Ticket> saveAll(List<Ticket> tickets) {
+        return ticketRepo.saveAll(tickets);
     }
 
     @CacheEvict(

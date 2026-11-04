@@ -37,7 +37,7 @@ public class Flying implements Serializable{
     @Column(name = "status")
     private String status; //Flight status
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "aircraft_code", insertable = false, updatable = false)
     private Aircraft aircraft;
 

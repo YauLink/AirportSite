@@ -9,7 +9,7 @@ public class TicketMapper {
     public static TicketDTO toDto (Ticket ticket) {
         TicketDTO dto = new TicketDTO();
         dto.setTicketNo(ticket.getTicketNo());
-        dto.setBooking(ticket.getBooking());
+        dto.setBookingRef(ticket.getBooking() == null ? null : ticket.getBooking().getBookRef());
         dto.setPassengerId(ticket.getPassengerId());
         dto.setPassengerName(ticket.getPassengerName());
         dto.setContactData(ticket.getContactData());
@@ -19,7 +19,11 @@ public class TicketMapper {
     public static Ticket toEntity(TicketDTO dto) {
         Ticket ticket = new Ticket();
         ticket.setTicketNo(dto.getTicketNo());
-        ticket.setBooking(dto.getBooking());
+        if (dto.getBookingRef() != null) {
+            Booking booking = new Booking();
+            booking.setBookRef(dto.getBookingRef());
+            ticket.setBooking(booking);
+        }
         ticket.setPassengerId(dto.getPassengerId());
         ticket.setPassengerName(dto.getPassengerName());
         ticket.setContactData(dto.getContactData());

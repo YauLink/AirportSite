@@ -45,8 +45,7 @@ class TicketBookingServiceTest {
         Flying flight2 = new Flying();
         flight2.setFlightId(2);
 
-        when(flyingService.findById(1)).thenReturn(flight1);
-        when(flyingService.findById(2)).thenReturn(flight2);
+        when(flyingService.findAllByIds(List.of(1, 2))).thenReturn(List.of(flight1, flight2));
 
         List<Integer> flightIds = List.of(1, 2);
         List<String> fares = List.of("Economy", "Business");
@@ -65,9 +64,9 @@ class TicketBookingServiceTest {
                 amounts
         );
 
-        verify(ticketService, times(2)).save(any(Ticket.class));
+        verify(ticketService).saveAll(anyList());
 
-        verify(ticketFlightRepository, times(2)).save(any(TicketFlight.class));
+        verify(ticketFlightRepository).saveAll(anyList());
     }
 
     @Test
@@ -104,7 +103,7 @@ class TicketBookingServiceTest {
         Flying flight = new Flying();
         flight.setFlightId(1);
 
-        when(flyingService.findById(1)).thenReturn(flight);
+        when(flyingService.findAllByIds(List.of(1))).thenReturn(List.of(flight));
 
         List<Integer> flightIds = List.of(1);
         List<String> fares = List.of("Economy");

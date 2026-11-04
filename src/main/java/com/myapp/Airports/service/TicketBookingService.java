@@ -7,7 +7,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * Coordinates creation of bookings, tickets, and ticket-flight associations.
@@ -62,11 +65,19 @@ public class TicketBookingService {
             throw new IllegalArgumentException("Each flight must have a fare and amount");
         }
 
+        List<Flying> flights = flyingService.findAllByIds(flightIds.stream().distinct().toList());
+        Map<Integer, Flying> flightsById = flights.stream()
+                .collect(Collectors.toMap(Flying::getFlightId, Function.identity()));
+        List<Ticket> tickets = new java.util.ArrayList<>(flightIds.size());
+        List<TicketFlight> ticketFlights = new java.util.ArrayList<>(flightIds.size());
+
         for (int i = 0; i < flightIds.size(); i++) {
 
             Integer flightId = flightIds.get(i);
-
-            Flying flight = flyingService.findById(flightId);
+            Flying flight = flightsById.get(flightId);
+            if (flight == null) {
+                throw new IllegalArgumentException("One or more flights were not found");
+            }
 
             Ticket ticket = new Ticket();
 
@@ -76,7 +87,7 @@ public class TicketBookingService {
             ticket.setPassengerName(passengerName);
             ticket.setContactData(contactData);
 
-            ticketService.save(ticket);
+            tickets.add(ticket);
 
             TicketFlight tf = new TicketFlight();
 
@@ -89,8 +100,11 @@ public class TicketBookingService {
             tf.setFlight(flight);
             tf.setFareConditions(fares.get(i));
             tf.setAmount(amounts.get(i));
-            ticketFlightRepository.save(tf);
+            ticketFlights.add(tf);
         }
+
+        ticketService.saveAll(tickets);
+        ticketFlightRepository.saveAll(ticketFlights);
     }
 
 
