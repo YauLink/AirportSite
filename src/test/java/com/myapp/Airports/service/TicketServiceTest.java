@@ -37,28 +37,28 @@ class TicketServiceTest {
     void testFindAll() {
         Ticket t1 = new Ticket();
         Ticket t2 = new Ticket();
-        when(ticketRepo.findAll()).thenReturn(Arrays.asList(t1, t2));
+        when(ticketRepo.findAllWithBooking()).thenReturn(Arrays.asList(t1, t2));
 
         List<Ticket> tickets = ticketService.findAll();
 
         assertEquals(2, tickets.size());
-        verify(ticketRepo, times(1)).findAll();
+        verify(ticketRepo, times(1)).findAllWithBooking();
     }
 
     @Test
     void testFindById_found() {
         Ticket ticket = new Ticket();
-        when(ticketRepo.findById("T123")).thenReturn(Optional.of(ticket));
+        when(ticketRepo.findByIdWithBooking("T123")).thenReturn(Optional.of(ticket));
 
         Ticket result = ticketService.findById("T123");
 
         assertNotNull(result);
-        verify(ticketRepo).findById("T123");
+        verify(ticketRepo).findByIdWithBooking("T123");
     }
 
     @Test
     void testFindById_notFound() {
-        when(ticketRepo.findById("T404")).thenReturn(Optional.empty());
+        when(ticketRepo.findByIdWithBooking("T404")).thenReturn(Optional.empty());
 
         assertThrows(RuntimeException.class, () -> ticketService.findById("T404"));
     }
@@ -78,7 +78,7 @@ class TicketServiceTest {
     void testDelete() {
         Ticket ticket = new Ticket();
         ticket.setTicketNo("T123");
-        when(ticketRepo.findById("T123")).thenReturn(Optional.of(ticket));
+        when(ticketRepo.findByIdWithBooking("T123")).thenReturn(Optional.of(ticket));
 
         ticketService.delete("T123");
         verify(ticketRepo).delete(ticket);

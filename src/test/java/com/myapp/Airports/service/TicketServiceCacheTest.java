@@ -54,34 +54,34 @@ class TicketServiceCacheTest {
     @Test
     void findAll_ShouldUseCache() {
         List<Ticket> tickets = List.of(ticket1, ticket2);
-        when(ticketRepo.findAll()).thenReturn(tickets);
+        when(ticketRepo.findAllWithBooking()).thenReturn(tickets);
 
         List<Ticket> firstCall = ticketService.findAll();
         assertEquals(2, firstCall.size());
-        verify(ticketRepo, times(1)).findAll();
+        verify(ticketRepo, times(1)).findAllWithBooking();
 
         List<Ticket> secondCall = ticketService.findAll();
         assertEquals(2, secondCall.size());
-        verify(ticketRepo, times(1)).findAll();
+        verify(ticketRepo, times(1)).findAllWithBooking();
     }
 
     @Test
     void findById_ShouldUseCache() {
-        when(ticketRepo.findById("TICK1")).thenReturn(Optional.of(ticket1));
+        when(ticketRepo.findByIdWithBooking("TICK1")).thenReturn(Optional.of(ticket1));
 
         Ticket firstCall = ticketService.findById("TICK1");
         assertEquals("TICK1", firstCall.getTicketNo());
-        verify(ticketRepo, times(1)).findById("TICK1");
+        verify(ticketRepo, times(1)).findByIdWithBooking("TICK1");
 
         Ticket secondCall = ticketService.findById("TICK1");
         assertEquals("TICK1", secondCall.getTicketNo());
-        verify(ticketRepo, times(1)).findById("TICK1");
+        verify(ticketRepo, times(1)).findByIdWithBooking("TICK1");
     }
 
     @Test
     void save_ShouldEvictCache() {
         when(ticketRepo.save(ticket1)).thenReturn(ticket1);
-        when(ticketRepo.findAll()).thenReturn(List.of(ticket1));
+        when(ticketRepo.findAllWithBooking()).thenReturn(List.of(ticket1));
 
         ticketService.findAll();
         assertNotNull(cacheManager.getCache("tickets").get(SimpleKey.EMPTY));
@@ -92,8 +92,8 @@ class TicketServiceCacheTest {
 
     @Test
     void delete_ShouldEvictCache() {
-        when(ticketRepo.findAll()).thenReturn(List.of(ticket1));
-        when(ticketRepo.findById("TICK1")).thenReturn(Optional.of(ticket1));
+        when(ticketRepo.findAllWithBooking()).thenReturn(List.of(ticket1));
+        when(ticketRepo.findByIdWithBooking("TICK1")).thenReturn(Optional.of(ticket1));
 
         ticketService.findAll();
         ticketService.findById("TICK1");

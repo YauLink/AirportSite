@@ -67,6 +67,27 @@ class TicketBookingServiceTest {
         verify(ticketService).saveAll(anyList());
 
         verify(ticketFlightRepository).saveAll(anyList());
+        verify(flyingService, times(1)).findAllByIds(List.of(1, 2));
+        verify(flyingService, never()).findById(anyInt());
+    }
+
+    @Test
+    void shouldRejectUnknownFlightAfterBatchLookup() {
+        Booking booking = new Booking();
+        when(flyingService.findAllByIds(List.of(99))).thenReturn(List.of());
+
+        assertThrows(IllegalArgumentException.class, () -> ticketBookingService.createTicketsForBooking(
+                booking,
+                "P1",
+                "John Doe",
+                "{}",
+                List.of(99),
+                List.of("Economy"),
+                List.of(new BigDecimal("100.00"))
+        ));
+
+        verify(ticketService, never()).saveAll(anyList());
+        verify(ticketFlightRepository, never()).saveAll(anyList());
     }
 
     @Test
@@ -109,7 +130,7 @@ class TicketBookingServiceTest {
         List<String> fares = List.of("Economy");
         List<BigDecimal> amounts = List.of(new BigDecimal("100.00"));
 
-        ArgumentCaptor<TicketFlight> captor = ArgumentCaptor.forClass(TicketFlight.class);
+        ArgumentCaptor<List<TicketFlight>> captor = ArgumentCaptor.forClass(List.class);
 
         ticketBookingService.createTicketsForBooking(
                 booking,
@@ -121,9 +142,9 @@ class TicketBookingServiceTest {
                 amounts
         );
 
-        verify(ticketFlightRepository).save(captor.capture());
+        verify(ticketFlightRepository).saveAll(captor.capture());
 
-        TicketFlight ticketFlight = captor.getValue();
+        TicketFlight ticketFlight = captor.getValue().get(0);
 
         assertEquals("Economy", ticketFlight.getFareConditions());
         assertEquals(new BigDecimal("100.00"), ticketFlight.getAmount());
