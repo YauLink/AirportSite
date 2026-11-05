@@ -5,6 +5,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.myapp.Airports.dto.FlyingDTO;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.service.FlyingService;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,6 +39,9 @@ class RestFlyingControllerTest {
 
     @MockBean
     private FlyingService flyingService;
+
+    @MockBean
+    private JwtService jwtService;
 
     private ObjectMapper mapper;
 

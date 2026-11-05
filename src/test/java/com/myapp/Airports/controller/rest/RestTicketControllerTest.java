@@ -5,6 +5,7 @@ import com.myapp.Airports.dto.TicketDTO;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.service.TicketService;
+import com.myapp.Airports.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -40,6 +41,9 @@ class RestTicketControllerTest {
 
     @MockBean
     private TicketService service;
+
+    @MockBean
+    private JwtService jwtService;
 
     private ObjectMapper mapper = new ObjectMapper();
 

@@ -5,6 +5,7 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -35,6 +36,9 @@ class AdminControllerTest {
 
     @MockBean
     private AuthService authService;
+
+    @MockBean
+    private JwtService jwtService;
 
     @Test
     void shouldReturnAdminIndexView() throws Exception {

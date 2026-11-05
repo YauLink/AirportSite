@@ -5,6 +5,7 @@ import com.myapp.Airports.mapper.TicketMapper;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.service.TicketService;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,9 @@ class TicketControllerTest {
 
     @MockBean
     private TicketService service;
+
+    @MockBean
+    private JwtService jwtService;
 
     @Test
     void shouldShowTicketList() throws Exception {

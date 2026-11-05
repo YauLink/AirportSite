@@ -9,7 +9,9 @@ import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.mapper.BookingMapper;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import com.myapp.Airports.model.JwtUserPrincipal;
+import com.myapp.Airports.support.SecurityTestSupport;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -37,13 +41,17 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(RestBookingController.class)
 @AutoConfigureMockMvc(addFilters = false)
 class RestBookingControllerTest {
+
+    @AfterEach
+    void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
+    }
 
     @Autowired
     private MockMvc mockMvc;
@@ -53,6 +61,9 @@ class RestBookingControllerTest {
 
     @MockBean
     private SeatService seatService;
+
+    @MockBean
+    private JwtService jwtService;
 
     private ObjectMapper mapper;
 
@@ -94,7 +105,7 @@ class RestBookingControllerTest {
         mockMvc.perform(get("/api/bookings")
                         .param("page", "0")
                         .param("size", "10")
-                        .with(authentication(userAuthentication())))
+                        .with(SecurityTestSupport.authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.content[0].bookRef").value("ABC123"))
                 .andExpect(jsonPath("$.content[0].totalAmount").value(150.00));
@@ -106,7 +117,7 @@ class RestBookingControllerTest {
         when(bookingService.findByBookRefAndPassengerId("ABC123", "1")).thenReturn(b);
 
         mockMvc.perform(get("/api/bookings/ABC123")
-                        .with(authentication(userAuthentication())))
+                        .with(SecurityTestSupport.authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bookRef").value("ABC123"))
                 .andExpect(jsonPath("$.totalAmount").value(150.00));
@@ -118,7 +129,7 @@ class RestBookingControllerTest {
                 .thenThrow(new BookingNotFoundException("ZZZ999"));
 
         mockMvc.perform(get("/api/bookings/ZZZ999")
-                        .with(authentication(userAuthentication())))
+                        .with(SecurityTestSupport.authentication(userAuthentication())))
                 .andExpect(status().isNotFound());
     }
 

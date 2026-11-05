@@ -4,6 +4,7 @@ import com.myapp.Airports.dto.BookingDTO;
 import com.myapp.Airports.model.Booking;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.SeatService;
+import com.myapp.Airports.service.JwtService;
 import com.myapp.Airports.exceptions.SeatUnavailableException;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -31,6 +32,9 @@ public class BookingControllerTest {
 
     @MockBean
     private SeatService seatService;
+
+    @MockBean
+    private JwtService jwtService;
 
     @Test
     public void testEditBooking() throws Exception {

@@ -25,7 +25,7 @@ import org.springframework.test.web.servlet.MockMvc;
  */
 @SpringBootTest
 @AutoConfigureMockMvc
-@WithMockUser
+@WithMockUser(authorities = "ADMIN")
 class CsrfIntegrationTest {
 
     @Autowired

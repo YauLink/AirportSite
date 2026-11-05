@@ -3,6 +3,7 @@ package com.myapp.Airports.controller.web;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
 import com.myapp.Airports.view.api.IFlyingsView.FlyingFilter;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +31,9 @@ class FilterControllerTest {
 
     @MockBean
     private IFlyingsView flyingsView;
+
+    @MockBean
+    private JwtService jwtService;
 
     @Test
     void shouldShowFilterFormWithoutParams() throws Exception {

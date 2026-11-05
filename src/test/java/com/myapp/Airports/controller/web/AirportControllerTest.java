@@ -1,6 +1,7 @@
 package com.myapp.Airports.controller.web;
 
 import com.myapp.Airports.view.api.IAirportsView;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,6 +24,9 @@ class AirportControllerTest {
 
     @MockBean
     private IAirportsView airportView;
+
+    @MockBean
+    private JwtService jwtService;
 
     @Test
     void shouldReturnAllAirportsView() throws Exception {

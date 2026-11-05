@@ -4,6 +4,7 @@ import com.myapp.Airports.model.Airport;
 import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.view.api.IAirportsView;
 import com.myapp.Airports.view.api.IFlyingsView;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +40,9 @@ class RestFilterControllerTest {
 
     @MockBean
     private IFlyingsView flyingsView;
+
+    @MockBean
+    private JwtService jwtService;
 
     private Airport airportA;
     private Flying flight1;

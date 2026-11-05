@@ -8,7 +8,10 @@ import com.myapp.Airports.model.Ticket;
 import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.TicketService;
+import com.myapp.Airports.service.JwtService;
+import com.myapp.Airports.support.SecurityTestSupport;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
@@ -22,6 +25,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import java.util.List;
@@ -36,6 +40,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 class RestAuthControllerTest {
 
+    @AfterEach
+    void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
+    }
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -47,6 +56,9 @@ class RestAuthControllerTest {
 
     @MockBean
     private TicketService ticketService;
+
+    @MockBean
+    private JwtService jwtService;
 
     private Authentication userAuthentication() {
         return new UsernamePasswordAuthenticationToken(
@@ -98,7 +110,7 @@ class RestAuthControllerTest {
                 .thenReturn(List.of(ticket));
 
         mockMvc.perform(get("/api/user/cabinet")
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication())))
+                        .with(SecurityTestSupport.authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.fullName").value("John Doe"))
                 .andExpect(jsonPath("$.tickets").isArray());

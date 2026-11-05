@@ -9,6 +9,7 @@ import com.myapp.Airports.model.TicketFlight;
 import com.myapp.Airports.model.TicketFlightId;
 import com.myapp.Airports.service.AuthService;
 import com.myapp.Airports.service.TicketService;
+import com.myapp.Airports.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,6 +38,9 @@ class AuthControllerTest {
 
     @MockBean
     private TicketService ticketService;
+
+    @MockBean
+    private JwtService jwtService;
 
     @Test
     void shouldReturnLoginPage() throws Exception {

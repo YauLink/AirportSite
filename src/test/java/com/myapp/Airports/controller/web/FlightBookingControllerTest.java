@@ -5,6 +5,7 @@ import com.myapp.Airports.model.Flying;
 import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
+import com.myapp.Airports.service.JwtService;
 import com.myapp.Airports.service.TicketBookingService;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
@@ -42,6 +43,9 @@ class FlightBookingControllerTest {
 
     @MockBean
     private FlyingService flyingService;
+
+    @MockBean
+    private JwtService jwtService;
 
 
     @Test

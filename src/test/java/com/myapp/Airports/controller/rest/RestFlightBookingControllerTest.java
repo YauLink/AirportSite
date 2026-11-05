@@ -7,7 +7,10 @@ import com.myapp.Airports.model.JwtUserPrincipal;
 import com.myapp.Airports.service.BookingService;
 import com.myapp.Airports.service.FlyingService;
 import com.myapp.Airports.service.TicketBookingService;
+import com.myapp.Airports.service.JwtService;
+import com.myapp.Airports.support.SecurityTestSupport;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,6 +20,7 @@ import org.springframework.mock.web.MockHttpSession;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 
 import java.util.List;
@@ -30,6 +34,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc(addFilters = false)
 class RestFlightBookingControllerTest {
 
+    @AfterEach
+    void clearSecurityContext() {
+        SecurityContextHolder.clearContext();
+    }
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -41,6 +50,9 @@ class RestFlightBookingControllerTest {
 
     @MockBean
     private FlyingService flyingService;
+
+    @MockBean
+    private JwtService jwtService;
 
     private Authentication userAuthentication() {
         return new UsernamePasswordAuthenticationToken(
@@ -63,7 +75,7 @@ class RestFlightBookingControllerTest {
 
         mockMvc.perform(post("/api/user/confirm")
                         .session(session)
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication()))
+                        .with(SecurityTestSupport.authentication(userAuthentication()))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("[1]"))
                 .andExpect(status().isOk())
@@ -97,10 +109,11 @@ class RestFlightBookingControllerTest {
 
         when(flyingService.findAllByIds(List.of(1)))
                 .thenReturn(List.of(flight));
+        when(bookingService.generateBookRef()).thenReturn("BOOK123");
 
         mockMvc.perform(post("/api/user/book")
                         .session(session)
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication())))
+                        .with(SecurityTestSupport.authentication(userAuthentication())))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message")
                         .value("Booking created successfully"))
@@ -136,7 +149,7 @@ class RestFlightBookingControllerTest {
 
         mockMvc.perform(post("/api/user/book")
                         .session(session)
-                        .with(SecurityMockMvcRequestPostProcessors.authentication(userAuthentication())))
+                        .with(SecurityTestSupport.authentication(userAuthentication())))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_BOOKING_STATE"))
                 .andExpect(jsonPath("$.message").value("No flights selected"));
