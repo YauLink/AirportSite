@@ -8,6 +8,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(RestAdminController.class)
 @AutoConfigureMockMvc(addFilters = false)
+@WithMockUser(authorities = "ADMIN")
 class RestAdminControllerTest {
 
     @MockBean
@@ -26,7 +28,7 @@ class RestAdminControllerTest {
 
     @Test
     void shouldReturnDashboardData() throws Exception {
-        mockMvc.perform(get("/api/admin/api/dashboard"))
+        mockMvc.perform(get("/api/admin/dashboard"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.totalUsers").value(3))
                 .andExpect(jsonPath("$.totalFlights").value(3))
@@ -35,7 +37,7 @@ class RestAdminControllerTest {
 
     @Test
     void shouldReturnUsers() throws Exception {
-        mockMvc.perform(get("/api/admin/api/users"))
+        mockMvc.perform(get("/api/admin/users"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0]").value("Alice"))
                 .andExpect(jsonPath("$[1]").value("Bob"))
@@ -44,7 +46,7 @@ class RestAdminControllerTest {
 
     @Test
     void shouldReturnFlights() throws Exception {
-        mockMvc.perform(get("/api/admin/api/flights"))
+        mockMvc.perform(get("/api/admin/flights"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$[0]").value("Flight-101"))
@@ -54,7 +56,7 @@ class RestAdminControllerTest {
 
     @Test
     void shouldReturnSettings() throws Exception {
-        mockMvc.perform(get("/api/admin/api/settings"))
+        mockMvc.perform(get("/api/admin/settings"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.theme").value("dark"))
                 .andExpect(jsonPath("$.notificationsEnabled").value(true));

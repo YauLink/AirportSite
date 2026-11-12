@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.Optional;
 
@@ -23,6 +24,7 @@ import java.util.Optional;
  */
 @Controller
 @RequestMapping(value = "/admin")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class AdminController {
 
     private final FlyingService flyingService;

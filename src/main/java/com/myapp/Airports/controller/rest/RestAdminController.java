@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 import java.util.Map;
@@ -17,9 +18,10 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/api/admin")
+@PreAuthorize("hasAuthority('ADMIN')")
 public class RestAdminController {
 
-    @GetMapping("/api/dashboard")
+    @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboardData() {
         Map<String, Object> data = Map.of(
                 "totalUsers", 3,
@@ -29,19 +31,19 @@ public class RestAdminController {
         return ResponseEntity.ok(data);
     }
 
-    @GetMapping("/api/users")
+    @GetMapping("/users")
     public ResponseEntity<List<String>> getUsers() {
 
         return ResponseEntity.ok(List.of("Alice", "Bob", "Charlie"));
     }
 
-    @GetMapping(value = "/api/flights", produces = "application/json")
+    @GetMapping(value = "/flights", produces = "application/json")
     public ResponseEntity<List<String>> getFlights() {
 
         return ResponseEntity.ok(List.of("Flight-101", "Flight-202", "Flight-303"));
     }
 
-    @GetMapping("/api/settings")
+    @GetMapping("/settings")
     public ResponseEntity<Map<String, Object>> getSettings() {
         Map<String, Object> settings = Map.of(
                 "theme", "dark",
