@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: optional:file:.env[.properties]
   datasource:
     url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DATABASE_TO_LOWER=TRUE;INIT=CREATE SCHEMA IF NOT EXISTS bookings;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
@@ -11,3 +13,12 @@ spring:
     show-sql: false
   cache:
     type: simple
+  flyway:
+    enabled: false
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: 3600000
+
+security:
+  jwt:
+    cookie-secure: false
