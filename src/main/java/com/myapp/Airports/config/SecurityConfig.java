@@ -59,6 +59,10 @@ public class SecurityConfig {
                                 "/login/**", "/user/login", "/api/user/login").permitAll()
                         .requestMatchers(HttpMethod.GET, "/airports", "/flights",
                                 "/filters", "/api/flights/**", "/api/filters").permitAll()
+                        // Flight inventory is public to read, but must be admin-only to mutate.
+                        // Without this rule, POST/PUT/DELETE /api/flights/** fall through to
+                        // anyRequest().authenticated(), allowing ordinary users to modify flights.
+                        .requestMatchers("/api/flights/**").hasAuthority("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/bookings/**")
                         .hasAnyAuthority("USER", "ADMIN")
                         .requestMatchers("/api/user/**", "/user/**")

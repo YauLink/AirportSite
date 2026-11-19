@@ -86,4 +86,14 @@ class CsrfIntegrationTest {
 
         verify(ticketService).delete("T123");
     }
+
+    @Test
+    @WithMockUser(authorities = "USER")
+    void ordinaryUserCannotMutateFlightInventory() throws Exception {
+        mockMvc.perform(post("/api/flights")
+                        .with(csrf())
+                        .contentType("application/json")
+                        .content("{}"))
+                .andExpect(status().isForbidden());
+    }
 }
