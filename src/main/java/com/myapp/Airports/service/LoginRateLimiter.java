@@ -66,7 +66,12 @@ public class LoginRateLimiter {
     }
 
     private String key(String username) {
-        return username == null ? "<blank>" : username.trim().toLowerCase(Locale.ROOT);
+        if (username == null) {
+            return "<blank>";
+        }
+
+        String normalized = username.trim();
+        return normalized.isEmpty() ? "<blank>" : normalized.toLowerCase(Locale.ROOT);
     }
 
     private static final class AttemptWindow {
